@@ -1,0 +1,117 @@
+/* RESET DE ESTILOS PARA ESTA PÁGINA */
+.reader-page-bg {
+  background-color: #0a0a0a !important;
+  /* Negro casi total */
+  color: #e0e0e0 !important;
+  min-height: 100vh !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 120px 20px 100px 20px !important;
+  /* Espacio para Navbar */
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+.article-container {
+  max-width: 800px !important;
+  /* Ancho de lectura óptimo */
+  width: 100% !important;
+  background: transparent !important;
+}
+
+/* CABECERA EDITORIAL */
+.article-header {
+  text-align: center !important;
+  margin-bottom: 60px !important;
+}
+
+.back-link {
+  color: #ff6f61 !important;
+  text-decoration: none !important;
+  font-weight: bold !important;
+  text-transform: uppercase !important;
+  letter-spacing: 2px !important;
+  font-size: 0.8rem !important;
+  display: block !important;
+  margin-bottom: 30px !important;
+}
+
+.category-tag {
+  color: #ff6f61 !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 4px !important;
+  text-transform: uppercase !important;
+  margin-bottom: 15px !important;
+  display: block !important;
+}
+
+.main-title {
+  font-size: clamp(2.5rem, 6vw, 4rem) !important;
+  line-height: 1.1 !important;
+  color: #ffffff !important;
+  margin: 20px 0 !important;
+  font-weight: 800 !important;
+}
+
+.subtitle {
+  font-size: 1.3rem !important;
+  line-height: 1.5 !important;
+  color: #888 !important;
+  max-width: 600px !important;
+  margin: 0 auto 30px auto !important;
+  font-style: italic !important;
+}
+
+/* IMAGEN HERO */
+.main-image {
+  width: 100% !important;
+  margin: 0 0 60px 0 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+.main-image img {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  transition: transform 0.5s ease !important;
+}
+
+/* CUERPO DEL TEXTO (ESTILO LITERARIO) */
+.content-body {
+  font-family: 'Georgia', serif !important;
+  /* Fuente clásica de lectura */
+  font-size: 1.25rem !important;
+  line-height: 2 !important;
+  /* Mucho espacio entre líneas */
+  color: #ccc !important;
+  text-align: left !important;
+}
+
+.content-body p {
+  margin-bottom: 2rem !important;
+}
+
+/* LETRA CAPITULAR (La primera letra grande) */
+.content-body p:first-of-type::first-letter {
+  float: left !important;
+  font-size: 5rem !important;
+  line-height: 0.8 !important;
+  padding-top: 10px !important;
+  padding-right: 15px !important;
+  color: #ff6f61 !important;
+  font-weight: bold !important;
+}
+
+/* FOOTER */
+.article-footer {
+  margin-top: 100px !important;
+  padding-top: 40px !important;
+  border-top: 1px solid #222 !important;
+  text-align: center !important;
+  color: #555 !important;
+  font-size: 0.9rem !important;
+}
