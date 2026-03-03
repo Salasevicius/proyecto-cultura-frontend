@@ -11,7 +11,7 @@ const ArticleDetail = () => {
     window.scrollTo(0, 0);
     const fetchArticle = async () => {
       try {
-        const response = await fetch(`https://proyecto-cultura-backend.onrender.com/api/articles/${id}`);
+        const response = await fetch(`http://127.0.0.1:50000/api/articles/${id}`);
         const result = await response.json();
         if (result.success) {
           setNoticia(result.data);
@@ -48,9 +48,9 @@ const ArticleDetail = () => {
           ))}
         </section>
 
-        <footer className="article-footer">
+        <footer className="article-footer-detail">
           <p>© Proyecto Cultura Rosario - La memoria de la ciudad.</p>
-        </footer>
+        </footer >
       </article>
     </main>
   );

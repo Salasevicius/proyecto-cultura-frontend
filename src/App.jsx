@@ -32,7 +32,7 @@ function AppContent() {
       const category = queryParams.get('category');
 
       // 2. Construimos la URL base con el puerto confirmado (50000)
-      let url = 'https://proyecto-cultura-backend.onrender.com/api/articles';
+      let url = 'http://127.0.0.1:50000/api/articles';
 
       // 3. Si existe una categoría, la adjuntamos a la petición
       if (category) {
@@ -177,7 +177,7 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
     const body = isRegister ? { username, email, password } : { email, password };
 
     try {
-      const response = await fetch(`https://proyecto-cultura-backend.onrender.com${endpoint}`, {
+      const response = await fetch(`http://127.0.0.1:50000${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
@@ -236,7 +236,7 @@ function CreateArticleModal({ onClose, onSuccess }) {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch('https://proyecto-cultura-backend.onrender.com/api/articles', {
+      const response = await fetch('http://127.0.0.1:50000/api/articles', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(formData)
@@ -285,7 +285,7 @@ function EditArticleModal({ noticia, onClose, onSuccess }) {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`https://proyecto-cultura-backend.onrender.com/api/articles/${noticia._id}`, {
+      const response = await fetch(`http://127.0.0.1:50000/api/articles/${noticia._id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(formData)
