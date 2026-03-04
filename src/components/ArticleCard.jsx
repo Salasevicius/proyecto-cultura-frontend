@@ -14,7 +14,7 @@ const ArticleCard = ({ noticia, isLoggedIn, onActionSuccess, onEditClick }) => {
 
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`http://127.0.0.1:50000/api/articles/${noticia._id}`, {
+      const response = await fetch(`${API_URL}/api/articles/${noticia._id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

@@ -14,7 +14,7 @@ const CreateArticleModal = ({ onClose, onSuccess }) => {
     const token = localStorage.getItem('token');
 
     try {
-      const response = await fetch('http://127.0.0.1:50000/api/articles', {
+      const response = await fetch('${API_URL}/api/articles', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -10,6 +10,11 @@ import Footer from './components/Footer';
 import ArticleDetail from './components/ArticleDetail';
 import './styles/index.css';
 
+// Usamos el operador || para que si no hay variable de entorno, use tu local
+const API_URL = window.location.hostname === 'localhost' 
+  ? "http://127.0.0.1:50000" 
+  : "https://proyecto-cultura-backend.onrender.com";
+
 // Componente Wrapper para envolver la lógica que necesita el Router Context
 function AppContent() {
   const [noticias, setNoticias] = useState([]);
@@ -32,7 +37,7 @@ function AppContent() {
       const category = queryParams.get('category');
 
       // 2. Construimos la URL base con el puerto confirmado (50000)
-      let url = 'http://127.0.0.1:50000/api/articles';
+      let url = '${API_URL}/api/articles';
 
       // 3. Si existe una categoría, la adjuntamos a la petición
       if (category) {
@@ -177,7 +182,7 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
     const body = isRegister ? { username, email, password } : { email, password };
 
     try {
-      const response = await fetch(`http://127.0.0.1:50000${endpoint}`, {
+      const response = await fetch(`${API_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
@@ -236,7 +241,7 @@ function CreateArticleModal({ onClose, onSuccess }) {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch('http://127.0.0.1:50000/api/articles', {
+      const response = await fetch('${API_URL}/api/articles', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(formData)
@@ -285,7 +290,7 @@ function EditArticleModal({ noticia, onClose, onSuccess }) {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`http://127.0.0.1:50000/api/articles/${noticia._id}`, {
+      const response = await fetch(`${API_URL}/api/articles/${noticia._id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(formData)
