@@ -9,6 +9,7 @@ import Pagination from './components/Pagination';
 import Footer from './components/Footer';
 import ArticleDetail from './components/ArticleDetail';
 import './styles/index.css';
+import { API_URL } from "./config"; // Asegúrate de que la ruta sea correcta
 
 // Usamos el operador || para que si no hay variable de entorno, use tu local
 const API_URL = window.location.hostname === 'localhost' 

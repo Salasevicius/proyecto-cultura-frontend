@@ -1,6 +1,7 @@
 import React from 'react';
 // Importamos Link para la navegación interna
 import { Link } from 'react-router-dom';
+import { API_URL } from "../config"; // Asegúrate de que la ruta sea correcta
 
 const ArticleCard = ({ noticia, isLoggedIn, onActionSuccess, onEditClick }) => {
   // 1. Obtenemos el ID del usuario logueado desde el storage

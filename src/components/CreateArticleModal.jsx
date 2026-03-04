@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_URL } from "../config"; // Asegúrate de que la ruta sea correcta
 
 const CreateArticleModal = ({ onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
