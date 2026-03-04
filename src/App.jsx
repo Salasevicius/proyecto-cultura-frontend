@@ -37,7 +37,7 @@ function AppContent() {
       const category = queryParams.get('category');
 
       // 2. Construimos la URL base con el puerto confirmado (50000)
-      let url = '${API_URL}/api/articles';
+      let url = `${API_URL}/api/articles`;
 
       // 3. Si existe una categoría, la adjuntamos a la petición
       if (category) {
@@ -48,7 +48,7 @@ function AppContent() {
       const result = await response.json();
 
       if (result.success) {
-        setNoticias(result.data);
+        setNoticias(result.data); 
       }
     } catch (error) {
       console.error("Error al cargar noticias:", error);
@@ -241,7 +241,7 @@ function CreateArticleModal({ onClose, onSuccess }) {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch('${API_URL}/api/articles', {
+      const response = await fetch(`${API_URL}/api/articles`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(formData)
