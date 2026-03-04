@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import "./ArticleDetail.css";
+import { API_URL } from "../config"; // Asegúrate de que la ruta sea correcta
 
 const ArticleDetail = () => {
   const { id } = useParams();
