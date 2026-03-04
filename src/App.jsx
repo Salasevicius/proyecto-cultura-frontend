@@ -9,12 +9,11 @@ import Pagination from './components/Pagination';
 import Footer from './components/Footer';
 import ArticleDetail from './components/ArticleDetail';
 import './styles/index.css';
-import { API_URL } from "./config"; // Asegúrate de que la ruta sea correcta
+import { API_URL } from './config';
+
 
 // Usamos el operador || para que si no hay variable de entorno, use tu local
-const API_URL = window.location.hostname === 'localhost' 
-  ? "http://127.0.0.1:50000" 
-  : "https://proyecto-cultura-backend.onrender.com";
+
 
 // Componente Wrapper para envolver la lógica que necesita el Router Context
 function AppContent() {
