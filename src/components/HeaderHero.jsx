@@ -1,38 +1,67 @@
 import React, { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom'; // Importamos el hook para leer la URL
+
+// 1. Definimos el diccionario de contenidos fuera del componente
+const CATEGORY_CONTENT = {
+  "Destacados": {
+    title: "DESTACADOS",
+    description: "Explora contenido único y fascinante a lo largo de nuestro sitio web. Sumérgete en nuestros artículos destacados y descubre más.",
+    imgLeft: "/bordabehere-rosario.webp",
+    imgRight: "/antonio-berni.webp"
+  },
+  "Microbiografías": {
+    title: "MICROBIOGRAFÍAS",
+    description: "Descubre los artículos biográficos que ofrece Proyecto Cultura. Retratos breves de personalidades que forjaron la identidad y el pulso de nuestra ciudad.",
+    imgLeft: "/felipe-aldana.webp", // Deberás asegurar que estas rutas existan
+    imgRight: "/cachilo-rosario.webp"
+  },
+  "Literarios": {
+    title: "LITERARIOS",
+    description: "Observa nuestra colección de artículos literarios, desde análisis profundos hasta reseñas accesibles. Encuentra información clara y útil sobre textos y autores.",
+    imgLeft: "/images/lit-izq.webp",
+    imgRight: "/images/lit-der.webp"
+  },
+  "Periodísticos": {
+    title: "PERIODÍSTICOS",
+    description: "Encuentra artículos periodísticos con análisis claros y directos sobre las noticias y eventos que han atravesado la ciudad a lo largo de su historia.",
+    imgLeft: "/mafia1930-rosario.webp",
+    imgRight: "castagnino-museo-rosario.webp"
+  },
+  "Opinión": {
+    title: "OPINIÓN",
+    description: "Reflexiones y perspectivas sobre el acontecer cultural y social de Rosario.",
+    imgLeft: "/images/opi-izq.webp",
+    imgRight: "/images/opi-der.webp"
+  }
+};
 
 const HeaderHero = () => {
-  // Creamos las referencias para las imágenes
   const leftImageRef = useRef(null);
   const rightImageRef = useRef(null);
+  
+  // 2. Lógica para detectar la categoría desde la URL (?category=...)
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
+  const currentCategory = queryParams.get('category') || "Destacados";
+
+  // 3. Obtenemos el contenido correspondiente
+  const content = CATEGORY_CONTENT[currentCategory] || CATEGORY_CONTENT["Destacados"];
 
   useEffect(() => {
-    // Función optimizada para el efecto Parallax
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-
-      // Solo aplicamos el efecto si estamos en pantallas de escritorio (opcional)
-      // y si las referencias existen para evitar errores
       if (leftImageRef.current && rightImageRef.current) {
-
-        // Calculamos las posiciones basadas en tu lógica original
         const leftX = -50 + scrollPosition * 0.05;
         const rightX = 50 - scrollPosition * 0.05;
 
-        // Aplicamos el transform directamente al estilo del elemento
-        // Esto es mucho más eficiente que usar estados de React para el scroll
         leftImageRef.current.style.transform = `translate(${leftX}%, -50%) rotate(-10deg)`;
         rightImageRef.current.style.transform = `translate(${rightX}%, -50%) rotate(10deg)`;
       }
     };
 
-    // Escuchamos el evento de scroll
     window.addEventListener('scroll', handleScroll);
-
-    // Limpieza: eliminamos el evento cuando el componente se desmonte
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []); // El array vacío asegura que esto solo se ejecute al montar el componente
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []); 
 
   return (
     <>
@@ -49,24 +78,23 @@ const HeaderHero = () => {
       <section className="presentation-section">
         <div className="presentation-content">
           <div className="presentation-text">
-            <h1 className="presentation-title">Destacados</h1>
+            {/* 4. Usamos las variables del diccionario */}
+            <h1 className="presentation-title">{content.title}</h1>
             <p className="presentation-description">
-              Explora contenido único y fascinante a lo largo de nuestro sitio web.
-              Sumérgete en nuestros artículos destacados y descubre más.
+              {content.description}
             </p>
           </div>
 
-          {/* Asignamos las Refs a las imágenes correspondientes */}
           <img
             ref={leftImageRef}
-            src="/bordabehere-rosario.webp"
-            alt="Imagen Izquierda"
+            src={content.imgLeft} // Imagen dinámica
+            alt={`Imagen Izquierda de ${content.title}`}
             className="presentation-image-left"
           />
           <img
             ref={rightImageRef}
-            src="/antonio-berni.webp"
-            alt="Imagen Derecha"
+            src={content.imgRight} // Imagen dinámica
+            alt={`Imagen Derecha de ${content.title}`}
             className="presentation-image-right"
           />
         </div>
