@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom'; // Importamos el hook para leer la URL
+import { useLocation } from 'react-router-dom';
 
-// 1. Definimos el diccionario de contenidos fuera del componente
 const CATEGORY_CONTENT = {
   "Destacados": {
     title: "DESTACADOS",
@@ -12,7 +11,7 @@ const CATEGORY_CONTENT = {
   "Microbiografías": {
     title: "MICROBIOGRAFÍAS",
     description: "Descubre los artículos biográficos que ofrece Proyecto Cultura. Retratos breves de personalidades que forjaron la identidad y el pulso de nuestra ciudad.",
-    imgLeft: "/felipe-aldana.webp", // Deberás asegurar que estas rutas existan
+    imgLeft: "/felipe-aldana.webp",
     imgRight: "/cachilo-rosario.webp"
   },
   "Literarios": {
@@ -39,12 +38,10 @@ const HeaderHero = () => {
   const leftImageRef = useRef(null);
   const rightImageRef = useRef(null);
   
-  // 2. Lógica para detectar la categoría desde la URL (?category=...)
   const { search } = useLocation();
   const queryParams = new URLSearchParams(search);
   const currentCategory = queryParams.get('category') || "Destacados";
 
-  // 3. Obtenemos el contenido correspondiente
   const content = CATEGORY_CONTENT[currentCategory] || CATEGORY_CONTENT["Destacados"];
 
   useEffect(() => {
@@ -77,25 +74,27 @@ const HeaderHero = () => {
 
       <section className="presentation-section">
         <div className="presentation-content">
-          <div className="presentation-text">
-            {/* 4. Usamos las variables del diccionario */}
-            <h1 className="presentation-title">{content.title}</h1>
-            <p className="presentation-description">
+          {/* Añadimos el key aquí para que toda la caja de texto se anime al cambiar */}
+          <div className="presentation-text" key={currentCategory}>
+            <h1 className="presentation-title fade-in-text">{content.title}</h1>
+            <p className="presentation-description fade-in-text">
               {content.description}
             </p>
           </div>
 
           <img
             ref={leftImageRef}
-            src={content.imgLeft} // Imagen dinámica
+            key={`img-left-${currentCategory}`} // Key única para la imagen izquierda
+            src={content.imgLeft}
             alt={`Imagen Izquierda de ${content.title}`}
-            className="presentation-image-left"
+            className="presentation-image-left fade-in-image"
           />
           <img
             ref={rightImageRef}
-            src={content.imgRight} // Imagen dinámica
+            key={`img-right-${currentCategory}`} // Key única para la imagen derecha
+            src={content.imgRight}
             alt={`Imagen Derecha de ${content.title}`}
-            className="presentation-image-right"
+            className="presentation-image-right fade-in-image"
           />
         </div>
       </section>
