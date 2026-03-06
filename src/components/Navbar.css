@@ -1,0 +1,242 @@
+/* --- ESTILOS DEL MODAL MÓVIL --- */
+@media screen and (max-width: 768px) {
+  /* La Navbar se mantiene fija arriba */
+  .navbar {
+    padding: 10px 20px;
+  }
+
+  /* El Contenedor Modal */
+  .nav-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(10, 10, 25, 0.95); /* Azul muy profundo */
+    backdrop-filter: blur(20px); /* Desenfoque extremo para belleza visual */
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    /* Animación de entrada: Opacidad y escala */
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1050;
+  }
+
+  .nav-modal.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+  }
+
+  /* Lista de enlaces dentro del modal */
+  .nav-links-modal {
+    list-style: none;
+    text-align: center;
+    padding: 0;
+  }
+
+  .modal-label {
+    color: rgba(255, 255, 255, 0.3);
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    margin-bottom: 2rem;
+  }
+
+  .nav-links-modal li {
+    margin: 1.5rem 0;
+    /* Animación de cascada para los ítems */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s ease;
+  }
+
+  .nav-modal.active .nav-links-modal li {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Retraso progresivo en los links para un efecto premium */
+  .nav-links-modal li:nth-child(1) { transition-delay: 0.1s; }
+  .nav-links-modal li:nth-child(2) { transition-delay: 0.2s; }
+  .nav-links-modal li:nth-child(3) { transition-delay: 0.3s; }
+  .nav-links-modal li:nth-child(4) { transition-delay: 0.4s; }
+  .nav-links-modal li:nth-child(5) { transition-delay: 0.5s; }
+  .nav-links-modal li:nth-child(6) { transition-delay: 0.6s; }
+
+  .nav-links-modal li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.8rem; /* Tipografía grande y audaz */
+    font-weight: 700;
+    transition: color 0.3s;
+  }
+
+  .nav-links-modal li a.active {
+    color: #ff6f61;
+  }
+
+  .logout-wrapper {
+    margin-top: 3rem !important;
+  }
+}
+
+/* El botón Hamburguesa debe estar por encima de todo */
+.hamburger {
+  position: relative;
+  z-index: 2000;
+}
+/* --- RESPONSIVIDAD: MENÚ HAMBURGUESA Y MODAL --- */
+
+/* Ocultar hamburguesa en escritorio */
+.hamburger {
+  display: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+  z-index: 2000; /* Por encima del modal */
+  padding: 10px;
+}
+
+.hamburger span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px;
+  background-color: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media screen and (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  /* Animación a X */
+  .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: translateX(-20px); }
+  .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+
+  /* EL MODAL DE PANTALLA COMPLETA */
+  .nav-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(10, 10, 25, 0.98); /* Fondo profundo */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Estado inicial (oculto) */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+    z-index: 1500;
+  }
+
+  .nav-modal.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav-links-modal {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+  }
+
+  .nav-links-modal li {
+    margin: 1.2rem 0;
+    /* Efecto de entrada */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+  }
+
+  /* Cuando el modal se activa, los links suben y aparecen */
+  .nav-modal.active .nav-links-modal li {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* --- ORFEBRERÍA: Animación escalonada --- */
+  .nav-links-modal li:nth-child(1) { transition-delay: 0.1s; }
+  .nav-links-modal li:nth-child(2) { transition-delay: 0.2s; }
+  .nav-links-modal li:nth-child(3) { transition-delay: 0.3s; }
+  .nav-links-modal li:nth-child(4) { transition-delay: 0.4s; }
+  .nav-links-modal li:nth-child(5) { transition-delay: 0.5s; }
+  .nav-links-modal li:nth-child(6) { transition-delay: 0.6s; }
+
+  .nav-links-modal li a {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .nav-links-modal li a.active {
+    color: #ff6f61; /* El naranja de Rosario */
+  }
+  .modal-search-container {
+    margin-top: 2.5rem; /* Espacio después de la última categoría o botón logout */
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+    transition-delay: 0.7s; /* Aparece después de la última categoría */
+  }
+
+  /* Animación cuando el modal está activo */
+  .nav-modal.active .modal-search-container {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .modal-search-form {
+    display: flex;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    padding: 5px 15px;
+    align-items: center;
+  }
+
+  .modal-search-form input {
+    background: none;
+    border: none;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    outline: none;
+    font-size: 1rem;
+  }
+
+  .modal-search-form button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+  }
+}
+
+/* IMPORTANTE: Ocultar el contenedor del buscador en escritorio */
+@media screen and (min-width: 769px) {
+  .modal-search-container {
+    display: none;
+  }
+}
