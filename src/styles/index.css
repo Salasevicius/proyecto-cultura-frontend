@@ -16,46 +16,76 @@ header {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* BARRA DE NAVEGACIÓN NAVBAR */
+/* --- BARRA DE NAVEGACIÓN NAVBAR (ESTILO ESMERILADO) --- */
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0.5rem 2rem; /* Ajuste de aire interno */
+  
+  /* Efecto Glassmorphism */
+  background: rgba(26, 26, 46, 0.75); 
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  
+  /* Bordes de definición */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  
+  /* Mantener en la parte superior */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
 }
 
+/* --- LOGO Y CONTENEDOR DE MARCA --- */
 nav .logo {
   padding: 10px;
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  
+  /* La "mancha de luz" blanca sutil para rescatar el negro de "PROYECTO" */
+  background: radial-gradient(
+    circle, 
+    rgba(255, 255, 255, 0.15) 0%, 
+    rgba(255, 255, 255, 0) 75%
+  );
 }
 
 .logo img {
   width: 170px;
+  /* Si el logo es texto en HTML, aplicarías aquí los colores de marca */
 }
 
+/* --- LINKS DE NAVEGACIÓN --- */
 nav ul {
   list-style: none;
   display: flex;
   margin: 0;
   padding: 0;
+  align-items: center;
 }
 
 nav ul li {
-  margin: 0 1rem;
+  margin: 0 0.8rem;
   position: relative;
 }
 
 nav ul li a {
-  color: white;
+  color: rgba(255, 255, 255, 0.85); /* Blanco suavizado */
   font-size: 0.9rem;
   font-weight: 700;
   text-decoration: none;
-  padding: 10px;
-  transition: color 0.3s;
+  padding: 10px 5px;
+  transition: color 0.3s ease;
 }
 
+/* --- INDICADOR VISUAL (LÍNEA INFERIOR) --- */
 nav ul li a::after {
   content: '';
   position: absolute;
-  bottom: -5px;
+  bottom: -2px;
   left: 0;
   width: 0;
   height: 2px;
@@ -63,28 +93,96 @@ nav ul li a::after {
   transition: width 0.3s ease, background-color 0.3s ease;
 }
 
+/* Efecto Hover */
+nav ul li a:hover {
+  color: #ff6f61;
+}
+
 nav ul li a:hover::after {
   width: 100%;
 }
 
-nav ul li a:hover {
+/* --- CLASE PARA SECCIÓN ACTIVA (Dinámica por React) --- */
+/* Esta clase se activará cuando la categoría coincida */
+nav ul li a.active {
   color: #ff6f61;
 }
+
+nav ul li a.active::after {
+  width: 100%;
+  background-color: #ff6f61;
+}
+
+/* --- BOTÓN DE LOGOUT --- */
 .btn-logout {
-   background-color: #ff6600;
+  background-color: #ff6600;
   color: white;
   border: none;
-  padding: 10px 25px;
+  padding: 8px 20px;
   font-weight: bold;
   cursor: pointer;
   border-radius: 4px;
   transition: background-color 0.3s ease, transform 0.2s ease;
   text-transform: uppercase;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  margin-left: 15px;
 }
+
 .btn-logout:hover {
   background-color: #ea0a0a;
-  transform: scale(1.02);
+  transform: scale(1.05);
+}
+
+/* --- EL CONTENEDOR DEL LOGO (SIN LUZ PROPIA) --- */
+nav .logo {
+  position: relative; 
+  padding: 15px 40px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px; 
+  overflow: visible; 
+  transition: all 0.4s ease;
+}
+
+/* --- EL ÓVALO DE LUZ (PSEUDO-ELEMENTO) --- */
+nav .logo::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120px; 
+  height: 80px;
+  transform: translate(-50%, -50%) scaleX(2.5) scaleY(1);
+  background: radial-gradient(
+    circle at center, 
+    rgba(255, 255, 255, 0.28) 0%,   /* Centro potente para el negro de 'Proyecto' */
+    rgba(255, 255, 255, 0.15) 40%,  /* Expansión media con presencia */
+    rgba(255, 255, 255, 0) 80%      /* Desvanecimiento muy suave antes del borde */
+  );
+  filter: blur(8px);
+  z-index: -1; 
+  transition: all 0.4s ease;
+  opacity: 0.9; 
+}
+
+/* --- EFECTO HOVER POTENCIADO --- */
+nav .logo:hover::before {
+  transform: translate(-50%, -50%) scaleX(2.8) scaleY(1.1);
+  background: radial-gradient(
+    circle at center, 
+    rgba(255, 255, 255, 0.35) 0%, 
+    rgba(255, 255, 255, 0) 85%
+  );
+  filter: blur(10px); 
+  opacity: 1;
+}
+
+/* --- LA IMAGEN DEL LOGO --- */
+.logo img {
+  width: 170px;
+  position: relative;
+  z-index: 1;
 }
 
 /* BIENVENIDOS A LOS ARTÍCULOS DE PROYECTO CULTURA */

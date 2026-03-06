@@ -17,8 +17,8 @@ const CATEGORY_CONTENT = {
   "Literarios": {
     title: "LITERARIOS",
     description: "Observa nuestra colección de artículos literarios, desde análisis profundos hasta reseñas accesibles. Encuentra información clara y útil sobre textos y autores.",
-    imgLeft: "/images/lit-izq.webp",
-    imgRight: "/images/lit-der.webp"
+    imgLeft: "/biblioteca-argentina.webp",
+    imgRight: "monte-caballero.webp"
   },
   "Periodísticos": {
     title: "PERIODÍSTICOS",
@@ -29,8 +29,8 @@ const CATEGORY_CONTENT = {
   "Opinión": {
     title: "OPINIÓN",
     description: "Reflexiones y perspectivas sobre el acontecer cultural y social de Rosario.",
-    imgLeft: "/images/opi-izq.webp",
-    imgRight: "/images/opi-der.webp"
+    imgLeft: "/cementerio-trenes-rosario.webp",
+    imgRight: "inundaciones-rosario.webp"
   }
 };
 
