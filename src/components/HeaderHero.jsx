@@ -4,13 +4,13 @@ import { useLocation } from 'react-router-dom';
 const CATEGORY_CONTENT = {
   "Destacados": {
     title: "DESTACADOS",
-    description: "Explora contenido único y fascinante a lo largo de nuestro sitio web. Sumérgete en nuestros artículos destacados y descubre más.",
+    description: "Explora contenido único y fascinante a lo largo de nuestro sitio web. Sumérgete en nuestros artículos destacados y descubre más sobre Rosario.",
     imgLeft: "/bordabehere-rosario.webp",
     imgRight: "/antonio-berni.webp"
   },
-  "Microbiografías": {
-    title: "MICROBIOGRAFÍAS",
-    description: "Descubre los artículos biográficos que ofrece Proyecto Cultura. Retratos breves de personalidades que forjaron la identidad y el pulso de nuestra ciudad.",
+  "Biografías": {
+    title: "BIOGRAFÍAS",
+    description: "Descubre los artículos biográficos que ofrece Proyecto Cultura. Retratos breves de personalidades que forjaron la identidad de nuestra ciudad.",
     imgLeft: "/felipe-aldana.webp",
     imgRight: "/cachilo-rosario.webp"
   },
@@ -74,9 +74,37 @@ const HeaderHero = () => {
 
       <section className="presentation-section">
         <div className="presentation-content">
-          {/* Añadimos el key aquí para que toda la caja de texto se anime al cambiar */}
           <div className="presentation-text" key={currentCategory}>
-            <h1 className="presentation-title fade-in-text">{content.title}</h1>
+            
+            {/* TÍTULO CON BÓVEDA LEVE Y PROFESIONAL */}
+            <h1 className="presentation-title fade-in-text" style={{ display: 'inline-flex', justifyContent: 'center' }}>
+              {content.title.split("").map((char, i) => {
+                const total = content.title.length;
+                const center = (total - 1) / 2;
+                const dist = i - center;
+                
+                // --- AJUSTES DE CURVATURA SUAVIZADA ---
+                // Bajamos la rotación a 1.5 grados por letra
+                // El multiplicador de caída bajó de 1.2 a 0.4 para ser muy leve
+                const rotate = dist * 1.5; 
+                const translateY = Math.pow(Math.abs(dist), 2) * 0.4; 
+
+                return (
+                  <span 
+                    key={i} 
+                    style={{ 
+                      display: 'inline-block',
+                      transform: `rotate(${rotate}deg) translateY(${translateY}px)`,
+                      transformOrigin: 'bottom center',
+                      whiteSpace: 'pre'
+                    }}
+                  >
+                    {char}
+                  </span>
+                );
+              })}
+            </h1>
+
             <p className="presentation-description fade-in-text">
               {content.description}
             </p>
@@ -84,14 +112,14 @@ const HeaderHero = () => {
 
           <img
             ref={leftImageRef}
-            key={`img-left-${currentCategory}`} // Key única para la imagen izquierda
+            key={`img-left-${currentCategory}`}
             src={content.imgLeft}
             alt={`Imagen Izquierda de ${content.title}`}
             className="presentation-image-left fade-in-image"
           />
           <img
             ref={rightImageRef}
-            key={`img-right-${currentCategory}`} // Key única para la imagen derecha
+            key={`img-right-${currentCategory}`}
             src={content.imgRight}
             alt={`Imagen Derecha de ${content.title}`}
             className="presentation-image-right fade-in-image"

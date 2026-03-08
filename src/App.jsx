@@ -265,7 +265,7 @@ function CreateArticleModal({ onClose, onSuccess }) {
           <textarea placeholder="Contenido" style={{ width: '100%', minHeight: '120px', marginBottom: '1rem', background: '#252525', color: 'white', border: '1px solid #444', padding: '10px' }} onChange={(e) => setFormData({ ...formData, content: e.target.value })} required />
           <select style={{ width: '100%', marginBottom: '1rem', background: '#252525', color: 'white', padding: '10px' }} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
             <option value="Destacados">Destacados</option>
-            <option value="Microbiografías">Microbiografías</option>
+            <option value="Biografías">Biografías</option>
             <option value="Literarios">Literarios</option>
             <option value="Periodísticos">Periodísticos</option>
             <option value="Opinión">Opinión</option>
@@ -314,7 +314,7 @@ function EditArticleModal({ noticia, onClose, onSuccess }) {
           <textarea value={formData.content} style={{ width: '100%', minHeight: '120px', marginBottom: '1rem', background: '#252525', color: 'white', border: '1px solid #444', padding: '10px' }} onChange={(e) => setFormData({ ...formData, content: e.target.value })} required />
           <select value={formData.category} style={{ width: '100%', marginBottom: '1rem', background: '#252525', color: 'white', padding: '10px' }} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
             <option value="Destacados">Destacados</option>
-            <option value="Microbiografías">Microbiografías</option>
+            <option value="Biografías">Biografías</option>
             <option value="Literarios">Literarios</option>
             <option value="Periodísticos">Periodísticos</option>
             <option value="Opinión">Opinión</option>

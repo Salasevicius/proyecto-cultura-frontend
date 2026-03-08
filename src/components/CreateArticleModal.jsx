@@ -61,7 +61,7 @@ const CreateArticleModal = ({ onClose, onSuccess }) => {
           />
           <select onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
             <option value="Destacados">Destacados</option>
-            <option value="Microbiografías">Microbiografías</option>
+            <option value="Biografías">Biografías</option>
             <option value="Literarios">Literarios</option>
             <option value="Periodísticos">Periodísticos</option>
             <option value="Opinión">Opinión</option>

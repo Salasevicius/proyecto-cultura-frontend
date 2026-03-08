@@ -79,8 +79,8 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
             </Link>
           </li>
           <li>
-            <Link to="/?category=Microbiografías" className={getActiveClass('Microbiografías')} onClick={closeMenu}>
-              Microbiografías
+            <Link to="/?category=Biografías" className={getActiveClass('Biografías')} onClick={closeMenu}>
+              Biografías
             </Link>
           </li>
           <li>
