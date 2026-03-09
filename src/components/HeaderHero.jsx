@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
+// 1. Importamos Helmet para el manejo de metadatos dinámicos
+import { Helmet } from 'react-helmet-async';
 
 const CATEGORY_CONTENT = {
   "Destacados": {
@@ -62,13 +64,25 @@ const HeaderHero = () => {
 
   return (
     <>
+      {/* 2. Implementación de Helmet para SEO Dinámico en el <head> */}
+      <Helmet>
+        <title>{`${content.title} | Proyecto Cultura Rosario`}</title>
+        <meta name="description" content={content.description} />
+        {/* Open Graph para redes sociales (opcional pero recomendado) */}
+        <meta property="og:title" content={`${content.title} | Proyecto Cultura Rosario`} />
+        <meta property="og:description" content={content.description} />
+      </Helmet>
+
       <section className="highlighted-news">
         <article>
-          <h2 className="h2articulos">
-            BIENVENIDOS A LOS ARTÍCULOS DE <span className="h2negronaranjanegro">PROYECTO </span>
-            <span className="h2negronaranja">CULTURA</span>
-          </h2>
-          <h3 className="h3articulos">ARTÍCULOS</h3>
+          {/* EL H1 PRINCIPAL: Marca + Objeto + Localización (SEO Master) */}
+          <h1 className="h1-seo-main">
+            BIENVENIDOS A LOS ARTÍCULOS DE 
+            <span className="h2negronaranjanegro"> PROYECTO </span>
+            <span className="h2negronaranja">CULTURA </span>
+            <span className="sr-only"> EN ROSARIO</span>
+          </h1>
+          <h2 className="h3articulos">ARTÍCULOS</h2>
         </article>
       </section>
 
@@ -76,16 +90,13 @@ const HeaderHero = () => {
         <div className="presentation-content">
           <div className="presentation-text" key={currentCategory}>
             
-            {/* TÍTULO CON BÓVEDA LEVE Y PROFESIONAL */}
-            <h1 className="presentation-title fade-in-text" style={{ display: 'inline-flex', justifyContent: 'center' }}>
+            {/* TÍTULO DE CATEGORÍA: Pasa a ser H2 (Sub-tema del H1) */}
+            <h2 className="presentation-title fade-in-text" style={{ display: 'inline-flex', justifyContent: 'center' }}>
               {content.title.split("").map((char, i) => {
                 const total = content.title.length;
                 const center = (total - 1) / 2;
                 const dist = i - center;
                 
-                // --- AJUSTES DE CURVATURA SUAVIZADA ---
-                // Bajamos la rotación a 1.5 grados por letra
-                // El multiplicador de caída bajó de 1.2 a 0.4 para ser muy leve
                 const rotate = dist * 1.5; 
                 const translateY = Math.pow(Math.abs(dist), 2) * 0.4; 
 
@@ -103,7 +114,7 @@ const HeaderHero = () => {
                   </span>
                 );
               })}
-            </h1>
+            </h2>
 
             <p className="presentation-description fade-in-text">
               {content.description}
@@ -114,14 +125,14 @@ const HeaderHero = () => {
             ref={leftImageRef}
             key={`img-left-${currentCategory}`}
             src={content.imgLeft}
-            alt={`Imagen Izquierda de ${content.title}`}
+            alt={`Imagen Izquierda de ${content.title} - Proyecto Cultura Rosario`}
             className="presentation-image-left fade-in-image"
           />
           <img
             ref={rightImageRef}
             key={`img-right-${currentCategory}`}
             src={content.imgRight}
-            alt={`Imagen Derecha de ${content.title}`}
+            alt={`Imagen Derecha de ${content.title} - Proyecto Cultura Rosario`}
             className="presentation-image-right fade-in-image"
           />
         </div>
