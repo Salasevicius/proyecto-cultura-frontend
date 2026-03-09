@@ -1,3 +1,76 @@
+@media (min-width: 1024px) {
+  .navbar-search-desktop {
+    display: block;
+    /* Aumentamos el margen derecho para centrarla más hacia la izquierda */
+    margin-left: auto; 
+    margin-right: 6rem; /* Ajusta este valor según prefieras que se mueva más al centro */
+    transition: all 0.4s ease;
+  }
+
+  .desktop-search-form {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    /* Sombra extremadamente suave para un efecto "papel" */
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04); 
+    border-radius: 30px;
+    padding: 2px; /* Espacio para que el foco no toque los bordes */
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .desktop-search-form:focus-within {
+    border-color: rgba(230, 126, 34, 0.3); /* Naranja muy diluido */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+  }
+
+  .desktop-search-form input {
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 8px 15px 8px 20px;
+    width: 180px; /* Ancho base delicado */
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: #555;
+    letter-spacing: 0.3px;
+    transition: width 0.5s ease;
+  }
+
+  /* Expansión suave al escribir */
+  .desktop-search-form input:focus {
+    width: 240px;
+  }
+
+  .desktop-search-form button.search-button-svg {
+    background: transparent;
+    border: none;
+    color: #e67e22; /* El naranja de Proyecto Cultura */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
+    transition: all 0.3s ease;
+  }
+
+  /* Efecto de "encendido" al pasar el mouse */
+  .desktop-search-form button.search-button-svg:hover {
+    color: #d35400; /* Un naranja más profundo */
+    transform: scale(1.1) rotate(5deg);
+    filter: drop-shadow(0 0 2px rgba(230, 126, 34, 0.2));
+  }
+
+  .desktop-search-form:focus-within button.search-button-svg {
+    opacity: 1;
+  }
+}
+
+
+
+
+
 /* --- ESTILOS DEL MODAL MÓVIL --- */
 @media screen and (max-width: 768px) {
   /* La Navbar se mantiene fija arriba */
