@@ -1,22 +1,123 @@
-
-/* Contenedor de acciones: se asegura de alinear todo a la derecha */
+/* --- ESTRUCTURA BASE Y ALINEACIÓN --- */
 .nav-actions-container {
   display: flex;
   align-items: center;
-  margin-left: auto; /* Empuja todo el grupo a la derecha */
+  margin-left: auto;
 }
 
-/* Ocultar el buscador Desktop TOTALMENTE en móvil */
 .navbar-search-desktop {
-  display: none;
+  position: relative; /* Base para el posicionamiento de la cascada */
+  display: none; /* Se activa en desktop via media query */
 }
 
+/* --- ORFEBRERÍA VISUAL: CASCADA DE RESULTADOS (DROPDOWN) --- */
+.search-dropdown {
+  position: absolute;
+  top: 115%; 
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95); /* Efecto cristal traslúcido */
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(230, 126, 34, 0.2);
+  padding: 8px 0;
+  overflow: hidden;
+  z-index: 3000;
+  animation: fadeInDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.dropdown-item:last-of-type {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background: rgba(230, 126, 34, 0.08);
+  transform: translateX(5px); /* Micro-interacción orgánica */
+}
+
+.dropdown-item img {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-right: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.dropdown-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dropdown-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2c3e50;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-category {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #e67e22;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.view-all-btn {
+  width: calc(100% - 24px);
+  margin: 12px;
+  padding: 10px;
+  background: #fdf2e9;
+  border: none;
+  border-radius: 12px;
+  color: #e67e22;
+  font-size: 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.view-all-btn:hover {
+  background: #e67e22;
+  color: white;
+}
+
+.dropdown-no-results {
+  padding: 25px;
+  text-align: center;
+  color: #7f8c8d;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- CONFIGURACIÓN DESKTOP (1024px+) --- */
 @media (min-width: 1024px) {
   .navbar-search-desktop {
-    display: block;
-    margin-right: 6rem; /* Distancia elegante de la hamburguesa */
+    display: block !important;
+    margin-right: 6rem;
   }
-  /* OCULTAR EL BUSCADOR DEL MODAL EN DESKTOP */
+
   .modal-search-container {
     display: none !important;
   }
@@ -32,7 +133,6 @@
     transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
-  /* ... (Resto de tus estilos de la opción 6 para input y button) ... */
   .desktop-search-form input {
     background: transparent;
     border: none;
@@ -42,6 +142,7 @@
     font-size: 0.85rem;
     transition: width 0.5s ease;
   }
+  
   .desktop-search-form input:focus { width: 250px; }
   
   .search-button-svg {
@@ -53,45 +154,68 @@
   }
 }
 
-/* Asegurar que la hamburguesa sea la reina en móvil */
+/* --- CONFIGURACIÓN MÓVIL Y TABLET --- */
 @media (max-width: 1023px) {
-  .hamburger {
-    /* Esto garantiza que no se mueva de su lugar original */
-    margin-left: 0; 
-  }
-  
   .navbar-search-desktop {
     display: none !important;
   }
+
+  .hamburger {
+    margin-left: 0; 
+  }
+
+  /* Adaptación de la Cascada para Fondo Oscuro (Modal) */
+  .nav-modal .search-dropdown {
+    position: relative;
+    top: 15px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: none;
+    margin: 0 10px;
+    backdrop-filter: blur(10px);
+  }
+
+  .nav-modal .dropdown-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-modal .dropdown-title {
+    color: #ffffff;
+  }
+
+  .nav-modal .dropdown-category {
+    color: #ff8e31;
+  }
+
+  .nav-modal .dropdown-no-results {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .nav-modal .view-all-btn {
+    background: rgba(230, 126, 34, 0.9);
+    color: white;
+  }
 }
 
-
-
-
-
-/* --- ESTILOS DEL MODAL MÓVIL --- */
+/* --- ESTILOS DEL MODAL MÓVIL (768px-) --- */
 @media screen and (max-width: 768px) {
-  /* La Navbar se mantiene fija arriba */
   .navbar {
     padding: 10px 20px;
   }
 
-  /* El Contenedor Modal */
   .nav-modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100vh;
-    background: rgba(10, 10, 25, 0.95); /* Azul muy profundo */
-    backdrop-filter: blur(20px); /* Desenfoque extremo para belleza visual */
+    background: rgba(10, 10, 25, 0.95); 
+    backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    
-    /* Animación de entrada: Opacidad y escala */
     opacity: 0;
     visibility: hidden;
     transform: scale(1.1);
@@ -105,24 +229,14 @@
     transform: scale(1);
   }
 
-  /* Lista de enlaces dentro del modal */
   .nav-links-modal {
     list-style: none;
     text-align: center;
     padding: 0;
   }
 
-  .modal-label {
-    color: rgba(255, 255, 255, 0.3);
-    text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 4px;
-    margin-bottom: 2rem;
-  }
-
   .nav-links-modal li {
     margin: 1.5rem 0;
-    /* Animación de cascada para los ítems */
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.4s ease;
@@ -133,7 +247,7 @@
     transform: translateY(0);
   }
 
-  /* Retraso progresivo en los links para un efecto premium */
+  /* Animación escalonada */
   .nav-links-modal li:nth-child(1) { transition-delay: 0.1s; }
   .nav-links-modal li:nth-child(2) { transition-delay: 0.2s; }
   .nav-links-modal li:nth-child(3) { transition-delay: 0.3s; }
@@ -144,135 +258,25 @@
   .nav-links-modal li a {
     color: white;
     text-decoration: none;
-    font-size: 1.8rem; /* Tipografía grande y audaz */
+    font-size: 1.8rem; 
     font-weight: 700;
-    transition: color 0.3s;
   }
 
   .nav-links-modal li a.active {
     color: #ff6f61;
   }
 
-  .logout-wrapper {
-    margin-top: 3rem !important;
-  }
-}
-
-/* El botón Hamburguesa debe estar por encima de todo */
-.hamburger {
-  position: relative;
-  z-index: 2000;
-}
-/* --- RESPONSIVIDAD: MENÚ HAMBURGUESA Y MODAL --- */
-
-/* Ocultar hamburguesa en escritorio */
-.hamburger {
-  display: none;
-  cursor: pointer;
-  background: none;
-  border: none;
-  z-index: 2000; /* Por encima del modal */
-  padding: 10px;
-}
-
-.hamburger span {
-  display: block;
-  width: 25px;
-  height: 3px;
-  margin: 5px;
-  background-color: white;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@media screen and (max-width: 768px) {
-  .hamburger {
-    display: block;
-  }
-
-  /* Animación a X */
-  .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
-  .hamburger.open span:nth-child(2) { opacity: 0; transform: translateX(-20px); }
-  .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
-
-  /* EL MODAL DE PANTALLA COMPLETA */
-  .nav-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: rgba(10, 10, 25, 0.98); /* Fondo profundo */
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    /* Estado inicial (oculto) */
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s ease;
-    z-index: 1500;
-  }
-
-  .nav-modal.active {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .nav-links-modal {
-    list-style: none;
-    padding: 0;
-    text-align: center;
-  }
-
-  .nav-links-modal li {
-    margin: 1.2rem 0;
-    /* Efecto de entrada */
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.5s ease;
-  }
-
-  /* Cuando el modal se activa, los links suben y aparecen */
-  .nav-modal.active .nav-links-modal li {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* --- ORFEBRERÍA: Animación escalonada --- */
-  .nav-links-modal li:nth-child(1) { transition-delay: 0.1s; }
-  .nav-links-modal li:nth-child(2) { transition-delay: 0.2s; }
-  .nav-links-modal li:nth-child(3) { transition-delay: 0.3s; }
-  .nav-links-modal li:nth-child(4) { transition-delay: 0.4s; }
-  .nav-links-modal li:nth-child(5) { transition-delay: 0.5s; }
-  .nav-links-modal li:nth-child(6) { transition-delay: 0.6s; }
-
-  .nav-links-modal li a {
-    font-size: 1.7rem;
-    font-weight: 800;
-    color: white;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-  }
-
-  .nav-links-modal li a.active {
-    color: #ff6f61; /* El naranja de Rosario */
-  }
   .modal-search-container {
-    margin-top: 2.5rem; /* Espacio después de la última categoría o botón logout */
+    margin-top: 2rem;
     width: 100%;
     padding: 0 20px;
     box-sizing: border-box;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease;
-    transition-delay: 0.7s; /* Aparece después de la última categoría */
+    transition-delay: 0.7s;
   }
 
-  /* Animación cuando el modal está activo */
   .nav-modal.active .modal-search-container {
     opacity: 1;
     transform: translateY(0);
@@ -305,6 +309,29 @@
   }
 }
 
+/* HAMBURGUESA Y ESTADOS */
+.hamburger {
+  position: relative;
+  z-index: 2000;
+  display: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 10px;
+}
 
+.hamburger span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px;
+  background-color: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-
+@media screen and (max-width: 768px) {
+  .hamburger { display: block; }
+  .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: translateX(-20px); }
+  .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+}

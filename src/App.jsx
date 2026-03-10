@@ -35,13 +35,22 @@ function AppContent() {
       // 1. Extraemos los parámetros de búsqueda de la URL (?category=...)
       const queryParams = new URLSearchParams(location.search);
       const category = queryParams.get('category');
+      const search = queryParams.get('search'); // <--- NUEVO: Capturamos el término de búsqueda
 
       // 2. Construimos la URL base con el puerto confirmado (50000)
+
+      // 3. Usamos URLSearchParams para construir la "Query String" de forma segura
+      const apiParams = new URLSearchParams();
       let url = `${API_URL}/api/articles`;
 
-      // 3. Si existe una categoría, la adjuntamos a la petición
-      if (category) {
-        url += `?category=${encodeURIComponent(category)}`;
+      // 4. Si existe una categoría, la adjuntamos a la petición
+      //Si existe search , lo adjuntamos en la petición.
+      if (category) apiParams.append('category', category);
+      if (search) apiParams.append('search', search);
+
+      // 4. Si hay algún parámetro, lo inyectamos con el "?" correcto
+      if (apiParams.toString()) {
+        url += `?${apiParams.toString()}`;
       }
 
       const response = await fetch(url);
@@ -111,9 +120,12 @@ function AppContent() {
                     />
                   ))
                 ) : (
-                  <p style={{ color: 'white', textAlign: 'center', width: '100%', padding: '2rem' }}>
-                    No se encontraron artículos en esta categoría.
-                  </p>
+                  // Mensaje dinámico si no hay resultados
+    <p style={{ color: 'white', textAlign: 'center', width: '100%', padding: '2rem' }}>
+      {new URLSearchParams(location.search).get('search') 
+        ? `No se encontraron resultados para "${new URLSearchParams(location.search).get('search')}"`
+        : "No se encontraron artículos en esta categoría."}
+    </p>
                 )}
               </section>
               <Pagination />
