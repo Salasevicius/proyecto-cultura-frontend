@@ -16,6 +16,52 @@ header {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Skeleton */
+
+.card-footer-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-read {
+  text-decoration: none;
+  color: #ff6f61;
+  font-weight: bold;
+  border: 1px solid #ff6f61;
+  padding: 6px 18px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.btn-read:hover {
+  background: #ff6f61;
+  color: white;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-edit {
+  padding: 5px 10px;
+  cursor: pointer;
+  background: #eee;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.btn-delete {
+  background: #d9534f;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 /* --- BARRA DE NAVEGACIÓN NAVBAR (ESTILO ESMERILADO) --- */
 nav {
   display: flex;

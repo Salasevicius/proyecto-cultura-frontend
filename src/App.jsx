@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import ArticleDetail from './components/ArticleDetail';
 import './styles/index.css';
 import { API_URL } from './config';
+import SkeletonCard from './components/SkeletonCard';
 
 
 // Usamos el operador || para que si no hay variable de entorno, use tu local
@@ -18,6 +19,7 @@ import { API_URL } from './config';
 // Componente Wrapper para envolver la lógica que necesita el Router Context
 function AppContent() {
   const [noticias, setNoticias] = useState([]);
+  const [loading, setLoading] = useState(true); // <-- NUEVO: Empieza en true
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
   const [userName, setUserName] = useState(localStorage.getItem('userName') || '');
   const [showLogin, setShowLogin] = useState(false);
@@ -31,6 +33,7 @@ function AppContent() {
 
   // Función fetchData mejorada con soporte para Query Params
   const fetchData = async () => {
+    setLoading(true); // <--- AGREGA ESTA LÍNEA AQUÍ
     try {
       // 1. Extraemos los parámetros de búsqueda de la URL (?category=...)
       const queryParams = new URLSearchParams(location.search);
@@ -61,6 +64,8 @@ function AppContent() {
       }
     } catch (error) {
       console.error("Error al cargar noticias:", error);
+    } finally {
+      setLoading(false); // <-- NUEVO: Se apaga al terminar (exito o error)
     }
   };
 
@@ -108,26 +113,30 @@ function AppContent() {
                 onCreateClick={() => setShowCreateModal(true)}
               />
 
-              <section className="news-list">
-                {noticias.length > 0 ? (
-                  noticias.map((n) => (
-                    <ArticleCard
-                      key={n._id}
-                      noticia={n}
-                      isLoggedIn={isLoggedIn}
-                      onActionSuccess={fetchData}
-                      onEditClick={handleEditClick}
-                    />
-                  ))
-                ) : (
-                  // Mensaje dinámico si no hay resultados
-    <p style={{ color: 'white', textAlign: 'center', width: '100%', padding: '2rem' }}>
+            <section className="news-list">
+  {loading ? (
+    // Mientras loading sea true, mostramos 6 esqueletos
+    [...Array(6)].map((_, i) => <SkeletonCard key={i} />)
+  ) : noticias.length > 0 ? (
+    // Si terminó de cargar y hay noticias
+    noticias.map((n) => (
+      <ArticleCard
+        key={n._id}
+        noticia={n}
+        isLoggedIn={isLoggedIn}
+        onActionSuccess={fetchData}
+        onEditClick={handleEditClick}
+      />
+    ))
+  ) : (
+    // Si terminó de cargar y NO hay noticias
+    <p className="no-results">
       {new URLSearchParams(location.search).get('search') 
         ? `No se encontraron resultados para "${new URLSearchParams(location.search).get('search')}"`
         : "No se encontraron artículos en esta categoría."}
     </p>
-                )}
-              </section>
+  )}
+</section>
               <Pagination />
             </main>
           </>
