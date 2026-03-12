@@ -1,43 +1,94 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import './Footer.css';
 
-const Footer = () => {
+const Footer = ({ isLoggedIn, onLoginClick, onRegisterClick, onCreateClick }) => {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="footer-principal">
-      <div className="footer-content">
-        <div className="footer-section links">
-          <h2>Mapa del Sitio</h2>
-          <ul>
-            <li><a href="#">Inicio</a></li>
-            <li><a href="#">Secciones</a></li>
-            <li><a href="#">Rosariopedia</a></li>
-            <li><a href="#">Artículos</a></li>
-            <li><a href="#">Novedades</a></li>
-            <li><a href="#">Investigación</a></li>
-            <li><a href="#">Contacto</a></li>
-          </ul>
-        </div>
-
-        <div className="footer-section company-info">
-          <h2>Sobre Nosotros</h2>
-          <p>Somos un grupo de desarrolladores e investigadores que se propone hacer de PROYECTO CULTURA la plataforma web más completa para la difusión del patrimonio cultural de Rosario.</p>
-          <ul>
-            <li><a href="#">CONOCÉ MÁS</a></li>
-          </ul>
-        </div>
-
-        <div className="footer-section social-media">
-          <h2>Síguenos</h2>
-          <div className="social-icons">
-            <a href="#"><img src="/search-icon.svg" alt="Facebook" /></a>
-            <a href="#"><img src="/menu.svg" alt="Twitter" /></a>
-            <a href="#"><img src="/arrowRightCards.svg" alt="Instagram" /></a>
-            <a href="#"><img src="/arrowLeftCards.svg" alt="LinkedIn" /></a>
+    <footer className="footer-final-matrix">
+      <div className="footer-container">
+        
+        <div className="footer-brand-section">
+          <div className="brand-header">
+            <h2 className="brand-logo">PROYECTO <span className="highlight">CULTURA</span></h2>
+          </div>
+          <p className="brand-description">
+            Somos un grupo de desarrolladores e investigadores que se propone hacer de 
+            PROYECTO CULTURA la plataforma web más completa para la difusión del 
+            patrimonio cultural de Rosario.
+          </p>
+          
+          {/* Zona de Acciones de Usuario sincronizada con App.jsx */}
+          <div className="footer-actions-group">
+            {isLoggedIn ? (
+              <button onClick={onCreateClick} className="footer-cta-link btn-as-link">
+                CREAR ARTÍCULO →
+              </button>
+            ) : (
+              <>
+                <button onClick={onLoginClick} className="footer-cta-link btn-as-link">
+                  INICIAR SESIÓN →
+                </button>
+                <button onClick={onRegisterClick} className="footer-cta-link btn-as-link">
+                  REGISTRARSE →
+                </button>
+              </>
+            )}
           </div>
         </div>
-      </div>
 
-      <div className="footer-bottom">
-        <p>© <span className="proyecto">Proyecto </span><span className="cultura">Cultura</span></p>
+        <div className="footer-matrix">
+          {/* 01 // NAVEGACIÓN */}
+          <div className="matrix-item">
+            <span className="matrix-label">01 // NAVEGACIÓN</span>
+            <div className="matrix-links">
+              <Link to="/">Inicio</Link>
+              <Link to="/nosotros">Sobre el Proyecto</Link>
+              <Link to="/novedades">Novedades</Link>
+              <Link to="/contacto">Contacto</Link>
+            </div>
+          </div>
+
+          {/* 02 // ROSARIOPEDIA */}
+          <div className="matrix-item">
+            <span className="matrix-label">02 // ROSARIOPEDIA</span>
+            <div className="matrix-links">
+              {/* Ajustado para usar el filtrado por categorías que ya tienes en App.jsx */}
+              <Link to="/?category=Periodísticos">Explorar Artículos</Link>
+              <Link to="/?category=Biografías">Historias de Barrio</Link>
+              <Link to="/?category=Opinión">Patrimonio Histórico</Link>
+              <Link to="/archivo">Archivo Digital</Link>
+            </div>
+          </div>
+
+          {/* 03 // COMUNIDAD */}
+          <div className="matrix-item">
+            <span className="matrix-label">03 // COMUNIDAD</span>
+            <div className="matrix-links">
+              <Link to="/investigacion">Laboratorio</Link>
+              <Link to="/eventos">Agenda Cultural</Link>
+              <Link to="/faq">FAQ</Link>
+              <Link to="/terminos">Privacidad</Link>
+            </div>
+          </div>
+        </div>
+
+        <div className="footer-metadata">
+          <div className="meta-left">
+            <span>© {currentYear} ROSARIO, ARGENTINA</span>
+          </div>
+          <div className="meta-social">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+            <a href="https://github.com/Salasevicius" target="_blank" rel="noopener noreferrer">GITHUB</a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+          </div>
+          <div className="meta-right">
+            <button className="scroll-top-trigger" onClick={() => window.scrollTo({top:0, behavior:'smooth'})}>
+              VOLVER AL INICIO ▲
+            </button>
+          </div>
+        </div>
       </div>
     </footer>
   );

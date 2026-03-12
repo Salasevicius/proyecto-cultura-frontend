@@ -1,0 +1,170 @@
+.footer-final-matrix {
+  --accent: #ff6161;
+  --bg: #030305;
+  --text-muted: #64748b;
+  --border: rgba(255, 255, 255, 0.05);
+  
+  background-color: var(--bg);
+  color: #fff;
+  padding: 80px 0 40px 0;
+  font-family: 'Montserrat', sans-serif;
+  border-top: 1px solid var(--border);
+  position: relative;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* --- SECCIÓN DE MARCA --- */
+.footer-brand-section {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 40px;
+  margin-bottom: 50px;
+}
+
+.brand-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 20px;
+}
+
+.brand-logo {
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.brand-logo .highlight { color: var(--accent); }
+
+.brand-tag {
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.brand-description {
+  max-width: 700px;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #cbd5e1;
+  font-weight: 300;
+  margin-bottom: 25px;
+}
+
+/* --- BOTONES DE ACCIÓN (LOGIN, REGISTER, CREAR) --- */
+.footer-actions-group {
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.footer-cta-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  transition: all 0.3s;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+/* Reset para botones que disparan modales */
+.btn-as-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.footer-cta-link:hover { 
+  padding-left: 10px; 
+  color: #fff; 
+}
+
+/* --- MATRIZ DE NAVEGACIÓN --- */
+.footer-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 60px;
+  margin-bottom: 80px;
+}
+
+.matrix-label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--accent);
+  margin-bottom: 25px;
+  opacity: 0.8;
+}
+
+.matrix-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.matrix-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+.matrix-links a:hover {
+  color: #fff;
+  transform: translateX(5px);
+}
+
+/* --- METADATA Y SOCIAL --- */
+.footer-metadata {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 30px;
+  border-top: 1px solid var(--border);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #475569;
+  letter-spacing: 1px;
+}
+
+.meta-social { display: flex; gap: 20px; }
+.meta-social a { color: #475569; text-decoration: none; transition: color 0.3s; }
+.meta-social a:hover { color: #fff; }
+
+.scroll-top-trigger {
+  background: none;
+  border: none;
+  color: #475569;
+  font-weight: 800;
+  font-size: 22px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.scroll-top-trigger:hover { color: var(--accent); }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 968px) {
+  .footer-matrix { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .brand-header { flex-direction: column; gap: 10px; }
+}
+
+@media (max-width: 600px) {
+  .footer-matrix { grid-template-columns: 1fr; }
+  .footer-metadata { 
+    flex-direction: column; 
+    gap: 20px; 
+    text-align: center; 
+  }
+}

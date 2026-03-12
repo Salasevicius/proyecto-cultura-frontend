@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Navbar from './components/Navbar';
 import CreatorCTA from './components/CreatorCTA';
 import HeaderHero from './components/HeaderHero';
-import FeaturedArticle from './components/FeaturedArticle'; // Volvemos al componente único
+import FeaturedArticle from './components/FeaturedArticle';
 import ArticleCard from './components/ArticleCard';
 import Pagination from './components/Pagination';
 import Footer from './components/Footer';
@@ -87,11 +87,9 @@ function AppContent() {
       <Routes>
         <Route path="/" element={
           <>
-            {/* 1. PRESENTACIÓN DE MARCA */}
             <HeaderHero />
             
             <main>
-              {/* 2. CTA DE CREADORES */}
               <CreatorCTA
                 isLoggedIn={isLoggedIn}
                 userName={userName}
@@ -101,10 +99,6 @@ function AppContent() {
                 onCreateClick={() => setShowCreateModal(true)}
               />
 
-              {/* 3. NOTA DE TAPA INTEGRADA 
-                  Ahora con su sidebar de "Relacionadas" embebida.
-                  Sin margen superior para continuidad total.
-              */}
               {!location.search && !loading && noticias.length > 0 && (
                 <FeaturedArticle 
                   noticia={noticias[0]} 
@@ -112,14 +106,10 @@ function AppContent() {
                 />
               )}
 
-              {/* 4. GRILLA DE ARTÍCULOS 
-                  Ajustada para comenzar desde el índice 1 y mostrar TODO el resto.
-              */}
               <section className="news-list" style={{ marginTop: location.search ? '2rem' : '0.5rem' }}>
                 {loading ? (
                   [...Array(6)].map((_, i) => <SkeletonCard key={i} />)
                 ) : noticias.length > 0 ? (
-                  /* Mostramos todos excepto el primero que ya es Nota de Tapa en la Home */
                   (location.search ? noticias : noticias.slice(1)).map((n) => (
                     <ArticleCard
                       key={n._id}
@@ -144,9 +134,14 @@ function AppContent() {
         <Route path="/articulo/:id" element={<ArticleDetail />} />
       </Routes>
 
-      <Footer />
+      {/* INTEGRACIÓN DEL FOOTER CON PROPS DE AUTENTICACIÓN Y CRUD */}
+      <Footer 
+        isLoggedIn={isLoggedIn}
+        onLoginClick={() => openAuthModal(false)}
+        onRegisterClick={() => openAuthModal(true)}
+        onCreateClick={() => setShowCreateModal(true)}
+      />
 
-      {/* Modales de Autenticación y CRUD */}
       {showLogin && (
         <AuthModal
           initialRegister={isRegisterMode}
