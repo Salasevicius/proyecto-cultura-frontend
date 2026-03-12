@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-// Importamos useLocation para detectar cambios en la URL (query params)
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import CreatorCTA from './components/CreatorCTA';
 import HeaderHero from './components/HeaderHero';
+import FeaturedArticle from './components/FeaturedArticle'; // Volvemos al componente único
 import ArticleCard from './components/ArticleCard';
 import Pagination from './components/Pagination';
 import Footer from './components/Footer';
@@ -12,14 +12,9 @@ import './styles/index.css';
 import { API_URL } from './config';
 import SkeletonCard from './components/SkeletonCard';
 
-
-// Usamos el operador || para que si no hay variable de entorno, use tu local
-
-
-// Componente Wrapper para envolver la lógica que necesita el Router Context
 function AppContent() {
   const [noticias, setNoticias] = useState([]);
-  const [loading, setLoading] = useState(true); // <-- NUEVO: Empieza en true
+  const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
   const [userName, setUserName] = useState(localStorage.getItem('userName') || '');
   const [showLogin, setShowLogin] = useState(false);
@@ -28,30 +23,21 @@ function AppContent() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [articleToEdit, setArticleToEdit] = useState(null);
 
-  // Hook para detectar cambios en la URL actual
   const location = useLocation();
 
-  // Función fetchData mejorada con soporte para Query Params
   const fetchData = async () => {
-    setLoading(true); // <--- AGREGA ESTA LÍNEA AQUÍ
+    setLoading(true);
     try {
-      // 1. Extraemos los parámetros de búsqueda de la URL (?category=...)
       const queryParams = new URLSearchParams(location.search);
       const category = queryParams.get('category');
-      const search = queryParams.get('search'); // <--- NUEVO: Capturamos el término de búsqueda
+      const search = queryParams.get('search');
 
-      // 2. Construimos la URL base con el puerto confirmado (50000)
-
-      // 3. Usamos URLSearchParams para construir la "Query String" de forma segura
       const apiParams = new URLSearchParams();
       let url = `${API_URL}/api/articles`;
 
-      // 4. Si existe una categoría, la adjuntamos a la petición
-      //Si existe search , lo adjuntamos en la petición.
       if (category) apiParams.append('category', category);
       if (search) apiParams.append('search', search);
 
-      // 4. Si hay algún parámetro, lo inyectamos con el "?" correcto
       if (apiParams.toString()) {
         url += `?${apiParams.toString()}`;
       }
@@ -65,11 +51,10 @@ function AppContent() {
     } catch (error) {
       console.error("Error al cargar noticias:", error);
     } finally {
-      setLoading(false); // <-- NUEVO: Se apaga al terminar (exito o error)
+      setLoading(false);
     }
   };
 
-  // El useEffect ahora "reacciona" cada vez que location.search cambia
   useEffect(() => {
     fetchData();
   }, [location.search]);
@@ -102,8 +87,11 @@ function AppContent() {
       <Routes>
         <Route path="/" element={
           <>
+            {/* 1. PRESENTACIÓN DE MARCA */}
             <HeaderHero />
+            
             <main>
+              {/* 2. CTA DE CREADORES */}
               <CreatorCTA
                 isLoggedIn={isLoggedIn}
                 userName={userName}
@@ -113,30 +101,42 @@ function AppContent() {
                 onCreateClick={() => setShowCreateModal(true)}
               />
 
-            <section className="news-list">
-  {loading ? (
-    // Mientras loading sea true, mostramos 6 esqueletos
-    [...Array(6)].map((_, i) => <SkeletonCard key={i} />)
-  ) : noticias.length > 0 ? (
-    // Si terminó de cargar y hay noticias
-    noticias.map((n) => (
-      <ArticleCard
-        key={n._id}
-        noticia={n}
-        isLoggedIn={isLoggedIn}
-        onActionSuccess={fetchData}
-        onEditClick={handleEditClick}
-      />
-    ))
-  ) : (
-    // Si terminó de cargar y NO hay noticias
-    <p className="no-results">
-      {new URLSearchParams(location.search).get('search') 
-        ? `No se encontraron resultados para "${new URLSearchParams(location.search).get('search')}"`
-        : "No se encontraron artículos en esta categoría."}
-    </p>
-  )}
-</section>
+              {/* 3. NOTA DE TAPA INTEGRADA 
+                  Ahora con su sidebar de "Relacionadas" embebida.
+                  Sin margen superior para continuidad total.
+              */}
+              {!location.search && !loading && noticias.length > 0 && (
+                <FeaturedArticle 
+                  noticia={noticias[0]} 
+                  noticiasSecundarias={noticias.slice(1, 5)} 
+                />
+              )}
+
+              {/* 4. GRILLA DE ARTÍCULOS 
+                  Ajustada para comenzar desde el índice 1 y mostrar TODO el resto.
+              */}
+              <section className="news-list" style={{ marginTop: location.search ? '2rem' : '0.5rem' }}>
+                {loading ? (
+                  [...Array(6)].map((_, i) => <SkeletonCard key={i} />)
+                ) : noticias.length > 0 ? (
+                  /* Mostramos todos excepto el primero que ya es Nota de Tapa en la Home */
+                  (location.search ? noticias : noticias.slice(1)).map((n) => (
+                    <ArticleCard
+                      key={n._id}
+                      noticia={n}
+                      isLoggedIn={isLoggedIn}
+                      onActionSuccess={fetchData}
+                      onEditClick={handleEditClick}
+                    />
+                  ))
+                ) : (
+                  <p className="no-results">
+                    {new URLSearchParams(location.search).get('search') 
+                      ? `No se encontraron resultados para "${new URLSearchParams(location.search).get('search')}"`
+                      : "No se encontraron artículos en esta categoría."}
+                  </p>
+                )}
+              </section>
               <Pagination />
             </main>
           </>
@@ -180,7 +180,6 @@ function AppContent() {
   );
 }
 
-// Componente principal que envuelve todo en el Router
 function App() {
   return (
     <Router>
@@ -189,7 +188,7 @@ function App() {
   );
 }
 
-// --- COMPONENTES INTERNOS (Sin cambios en lógica, solo consistencia de URL) ---
+// --- COMPONENTES INTERNOS (Modales) ---
 
 function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
   const [isRegister, setIsRegister] = useState(initialRegister);

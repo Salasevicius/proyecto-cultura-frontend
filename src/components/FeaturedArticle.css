@@ -1,0 +1,292 @@
+/* --- ESTILOS ORIGINALES DESKTOP (INTACTOS) --- */
+.featured-wrapper {
+  max-width: auto; 
+  max-height: auto;
+  margin: 0;
+  padding: 10px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.featured-main-card {
+  display: flex;
+  background: #111;
+  border: 1px solid #222;
+  position: relative;
+  width: 100%;
+  height: 360px; 
+  overflow: hidden;
+  border-radius: 4px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.featured-content {
+  display: flex;
+  flex: 1;
+  cursor: pointer;
+  min-width: 100%;
+  transition: transform 0.4s ease;
+}
+
+.sidebar-open .featured-content {
+  transform: translateX(-300px);
+}
+
+.featured-img-container {
+  width: 30%;
+  height: 100%;
+  position: relative;
+}
+
+.featured-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-tag {
+  position: absolute;
+  top: 35px;
+  left: 580px;
+  background: #ff6600;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-radius: 1px;
+  padding: 6px;
+}
+
+.featured-text {
+  width: 55%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.feat-cat { color: #ff6600; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; }
+.feat-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin: 0.5rem 0; color: #fff; line-height: 1.2; }
+.feat-desc { color: #ffffffb5; font-size: 0.9rem; line-height: 1.2; font-weight: bolder; }
+
+/* --- NUEVO ESTILO ELEGANTE Y TIPOGRÁFICO PARA EL BOTÓN (FEAT-LINK) --- */
+.feat-link {
+  margin-top: 1.8rem;
+  padding: 0; /* Eliminamos el padding de "caja" */
+  background: transparent; /* Fondo transparente */
+  color: #fff; /* Texto blanco para máxima elegancia */
+  border: none;
+  border-radius: 0;
+  
+  /* Coincidimos con la tipografía Serif del título */
+  font-family: 'Playfair Display', serif; 
+  font-weight: 400; /* Peso más fino y sofisticado */
+  font-size: 1.05rem; /* Un poco más grande para legibilidad tipográfica */
+  font-style: italic; /* Acentúa la elegancia Serif */
+  
+  text-transform: none; /* Eliminamos mayúsculas forzadas */
+  letter-spacing: 0.5px; /* Espaciado sutil */
+  
+  cursor: pointer;
+  width: fit-content;
+  text-decoration: none;
+  display: flex; /* Flex para alinear texto y flecha */
+  align-items: center;
+  gap: 10px; /* Espacio entre texto y flecha */
+  transition: color 0.3s ease;
+}
+
+/* Pseudo-elemento para la flecha elegante (→) */
+.feat-link::after {
+  content: '→';
+  font-family: Arial, sans-serif; /* Fuente sans-serif para una flecha limpia */
+  font-weight: 300;
+  font-size: 1.2rem;
+  color: #ff6600; /* La flecha mantiene el acento naranja */
+  transition: transform 0.3s ease; /* Animación de movimiento */
+}
+
+/* Efectos Hover */
+.feat-link:hover {
+  color: #ff6600; /* El texto cambia suavemente al naranja al pasar el mouse */
+  background: transparent; /* Mantenemos fondo transparente */
+}
+
+.feat-link:hover::after {
+  transform: translateX(6px); /* La flecha se desplaza sutilmente a la derecha */
+}
+
+/* --- FIN DEL NUEVO ESTILO DEL BOTÓN --- */
+
+.featured-sidebar {
+  position: absolute;
+  right: 40px;
+  top: 0;
+  bottom: 0;
+  width: 300px;
+  background: #181818;
+  border-left: 1px solid #333;
+  transform: translateX(100%);
+  transition: transform 0.4s ease;
+  padding: 1.5rem;
+  z-index: 5;
+}
+
+.sidebar-open .featured-sidebar {
+  transform: translateX(0);
+}
+
+.sidebar-subtitle { font-size: 0.85rem; color: #ffffff; letter-spacing: 2px; margin-bottom: 1rem; border-bottom: 1px solid #222; }
+.sidebar-row { margin-bottom: 0.8rem; cursor: pointer; }
+.sidebar-row h4 { font-size: 0.9rem; margin: 2px 0; color: #ffffff; transition: color 0.2s; }
+.sidebar-row:hover h4 { color: #ff6f61; }
+.sidebar-row span { font-size: 0.9rem; color: #ff6600; font-weight: bold; }
+
+.sidebar-toggle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  background: #ff6600;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.toggle-icon { font-size: 1.2rem; margin-bottom: 10px; }
+.toggle-text { writing-mode: vertical-rl; font-size: 0.9rem; font-weight: bold; letter-spacing: 2px; }
+
+/* --- CORRECCIONES PARA MÓVILES (INTACTAS) --- */
+
+@media (max-width: 992px) {
+  .featured-tag {
+    left: 20px;
+    top: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .featured-main-card {
+    flex-direction: column;
+    height: auto;
+    min-height: auto;
+  }
+
+  .featured-content {
+    flex-direction: column;
+    transform: none !important;
+  }
+
+  .featured-img-container {
+    width: 100%;
+    height: 220px;
+  }
+
+  .featured-tag {
+    top: auto;
+    left: auto;
+    top: 195px;
+    left: 0;
+    font-size: 0.7rem;
+  }
+
+  .featured-text {
+    width: 100%;
+    padding: 2rem 1.5rem 80px 1.5rem; 
+    text-align: center;
+    align-items: center;
+  }
+
+  .feat-title {
+    font-size: 1.4rem;
+    max-width: 90%; 
+    padding-right: 50px;
+  }
+
+  .feat-desc {
+    max-width: 85%; 
+    line-height: 1.4;
+    padding-right: 50px;
+    padding-bottom: 10px;
+  }
+  
+  .feat-cat {
+    padding-right: 50px;
+  }
+
+  /* Ajuste del botón en móvil para mantener la centralización */
+  .feat-link {
+    justify-content: center; /* Centralizamos el contenido (texto+flecha) en móvil */
+    cursor: pointer;
+  }
+
+  .sidebar-toggle {
+    width: 100%;
+    height: 55px;
+    top: auto;
+    bottom: 0;
+    flex-direction: row;
+    gap: 12px;
+    z-index: 30; 
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .toggle-text {
+    writing-mode: horizontal-tb;
+    font-size: 0.85rem;
+  }
+
+  .toggle-icon {
+    margin-bottom: 0;
+    transform: rotate(90deg);
+  }
+
+  .featured-sidebar {
+    width: 100%;
+    height: calc(100% - 55px); 
+    right: 0;
+    top: 0;
+    transform: translateY(100%);
+    border-left: none;
+    z-index: 25;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    text-align: center;
+  }
+
+  .sidebar-open .featured-sidebar {
+    transform: translateY(0);
+  }
+
+  .sidebar-subtitle {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sidebar-row {
+    width: 100%;
+    margin-bottom: 1.2rem;
+  }
+
+  .sidebar-open .toggle-icon {
+    transform: rotate(-90deg);
+  }
+}
+
+/* Ajustes finos para pantallas muy pequeñas */
+@media (max-width: 400px) {
+  .feat-title {
+    font-size: 1.3rem;
+  }
+  .feat-desc {
+    max-width: 95%;
+    font-size: 0.85rem;
+  }
+}

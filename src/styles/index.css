@@ -599,7 +599,8 @@ nav .logo:hover::before {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  padding: 20px;
+  padding: 8px;
+  padding-top: 0;
   background-color: #ecf0f1;
 }
 
