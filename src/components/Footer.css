@@ -99,13 +99,14 @@
 
 .matrix-label {
   display: block;
-  font-size: 0.65rem;
+  font-size: 0.85rem;
   font-weight: 900;
   letter-spacing: 2px;
   color: var(--accent);
   margin-bottom: 25px;
   opacity: 0.8;
 }
+
 
 .matrix-links {
   display: flex;
@@ -159,6 +160,12 @@
   .footer-matrix { grid-template-columns: 1fr 1fr; gap: 40px; }
   .brand-header { flex-direction: column; gap: 10px; }
 }
+.footer-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 60px;
+  margin-bottom: 80px;
+}
 
 @media (max-width: 600px) {
   .footer-matrix { grid-template-columns: 1fr; }
@@ -167,4 +174,10 @@
     gap: 20px; 
     text-align: center; 
   }
+  .footer-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  margin-bottom: 10px;
+}
 }

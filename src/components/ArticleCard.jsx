@@ -1,10 +1,32 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { API_URL } from "../config";
 
 const ArticleCard = ({ noticia, isLoggedIn, onActionSuccess, onEditClick }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef(null);
   const currentUserId = localStorage.getItem('userId');
   const isOwner = isLoggedIn && noticia.userId === currentUserId;
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => {
+      if (cardRef.current) observer.disconnect();
+    };
+  }, []);
 
   const handleDelete = async () => {
     if (!window.confirm("¿Estás seguro de que quieres eliminar tu artículo?")) return;
@@ -27,7 +49,10 @@ const ArticleCard = ({ noticia, isLoggedIn, onActionSuccess, onEditClick }) => {
   };
 
   return (
-    <article className="card">
+    <article 
+      ref={cardRef} 
+      className={`card ${isVisible ? 'is-visible' : ''}`}
+    >
       <img src={noticia.imageUrl} alt={noticia.title} className="card-image" />
       <div className="card-content">
         <span className="category-tag">{noticia.category}</span>

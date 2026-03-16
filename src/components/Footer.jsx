@@ -41,7 +41,7 @@ const Footer = ({ isLoggedIn, onLoginClick, onRegisterClick, onCreateClick }) =>
         <div className="footer-matrix">
           {/* 01 // NAVEGACIÓN */}
           <div className="matrix-item">
-            <span className="matrix-label">01 // NAVEGACIÓN</span>
+            <span className="matrix-label">NAVEGACIÓN</span>
             <div className="matrix-links">
               <Link to="/">Inicio</Link>
               <Link to="/nosotros">Sobre el Proyecto</Link>
@@ -52,7 +52,7 @@ const Footer = ({ isLoggedIn, onLoginClick, onRegisterClick, onCreateClick }) =>
 
           {/* 02 // ROSARIOPEDIA */}
           <div className="matrix-item">
-            <span className="matrix-label">02 // ROSARIOPEDIA</span>
+            <span className="matrix-label">ROSARIOPEDIA</span>
             <div className="matrix-links">
               {/* Ajustado para usar el filtrado por categorías que ya tienes en App.jsx */}
               <Link to="/?category=Periodísticos">Explorar Artículos</Link>
@@ -64,7 +64,7 @@ const Footer = ({ isLoggedIn, onLoginClick, onRegisterClick, onCreateClick }) =>
 
           {/* 03 // COMUNIDAD */}
           <div className="matrix-item">
-            <span className="matrix-label">03 // COMUNIDAD</span>
+            <span className="matrix-label">COMUNIDAD</span>
             <div className="matrix-links">
               <Link to="/investigacion">Laboratorio</Link>
               <Link to="/eventos">Agenda Cultural</Link>

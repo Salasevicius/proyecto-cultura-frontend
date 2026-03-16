@@ -1,22 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './FeaturedArticle.css';
 
 const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) observer.disconnect();
+    };
+  }, []);
   
   if (!noticia) return null;
 
   return (
-    <section className="featured-wrapper">
+    <section 
+      className={`featured-wrapper ${isVisible ? 'is-visible' : ''}`} 
+      ref={sectionRef}
+    >
       <div className={`featured-main-card ${isOpen ? 'sidebar-open' : ''}`}>
         
-        {/* Contenido principal: Nota de Tapa */}
         <div className="featured-content" onClick={() => navigate(`/articulo/${noticia._id}`)}>
           <div className="featured-img-container">
             <img src={noticia.imageUrl} alt={noticia.title} />
-            
           </div>
           <div className="featured-text">
             <div className="featured-tag">ARTÍCULO DEL DÍA</div>
@@ -27,7 +50,6 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
           </div>
         </div>
 
-        {/* Apéndice (Sidebar Integrada) */}
         <aside className="featured-sidebar">
           <h3 className="sidebar-subtitle">RELACIONADAS</h3>
           <div className="sidebar-scroll-area">
@@ -40,7 +62,6 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
           </div>
         </aside>
 
-        {/* Botón de Despliegue Lateral */}
         <button 
           className="sidebar-toggle" 
           onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}
