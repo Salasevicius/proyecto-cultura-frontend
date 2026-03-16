@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './FeaturedArticle.css';
+// Importación del componente LazyImage
+import LazyImage from '../components/LazyImage'; 
 
 const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,8 +41,16 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
         
         <div className="featured-content" onClick={() => navigate(`/articulo/${noticia._id}`)}>
           <div className="featured-img-container">
-            <img src={noticia.imageUrl} alt={noticia.title} />
+            {/* Implementación de LazyImage:
+                Mantenemos el src y alt originales. 
+                El estilo y dimensiones se rigen por .featured-img-container
+            */}
+            <LazyImage 
+              src={noticia.imageUrl} 
+              alt={noticia.title} 
+            />
           </div>
+          
           <div className="featured-text">
             <div className="featured-tag">ARTÍCULO DEL DÍA</div>
             <span className="feat-cat">{noticia.category}</span>

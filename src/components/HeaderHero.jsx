@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-// 1. Importamos Helmet para el manejo de metadatos dinámicos
 import { Helmet } from 'react-helmet-async';
+// Importación del nuevo componente modular
+import LazyImage from '../components/LazyImage'; 
 
 const CATEGORY_CONTENT = {
   "Destacados": {
@@ -49,6 +50,7 @@ const HeaderHero = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
+      // Aplicamos la transformación a los contenedores que envuelven el LazyImage
       if (leftImageRef.current && rightImageRef.current) {
         const leftX = -50 + scrollPosition * 0.05;
         const rightX = 50 - scrollPosition * 0.05;
@@ -64,18 +66,15 @@ const HeaderHero = () => {
 
   return (
     <>
-      {/* 2. Implementación de Helmet para SEO Dinámico en el <head> */}
       <Helmet>
         <title>{`${content.title} | Proyecto Cultura Rosario`}</title>
         <meta name="description" content={content.description} />
-        {/* Open Graph para redes sociales (opcional pero recomendado) */}
         <meta property="og:title" content={`${content.title} | Proyecto Cultura Rosario`} />
         <meta property="og:description" content={content.description} />
       </Helmet>
 
       <section className="highlighted-news">
         <article>
-          {/* EL H1 PRINCIPAL: Marca + Objeto + Localización (SEO Master) */}
           <h1 className="h1-seo-main">
             BIENVENIDOS A LOS ARTÍCULOS DE 
             <span className="h2negronaranjanegro"> PROYECTO </span>
@@ -89,14 +88,11 @@ const HeaderHero = () => {
       <section className="presentation-section">
         <div className="presentation-content">
           <div className="presentation-text" key={currentCategory}>
-            
-            {/* TÍTULO DE CATEGORÍA: Pasa a ser H2 (Sub-tema del H1) */}
             <h2 className="presentation-title fade-in-text" style={{ display: 'inline-flex', justifyContent: 'center' }}>
               {content.title.split("").map((char, i) => {
                 const total = content.title.length;
                 const center = (total - 1) / 2;
                 const dist = i - center;
-                
                 const rotate = dist * 1.5; 
                 const translateY = Math.pow(Math.abs(dist), 2) * 0.4; 
 
@@ -121,20 +117,31 @@ const HeaderHero = () => {
             </p>
           </div>
 
-          <img
+          {/* Imagen Izquierda con Lazy Loading y efecto de scroll preservado */}
+          <div
             ref={leftImageRef}
             key={`img-left-${currentCategory}`}
-            src={content.imgLeft}
-            alt={`Imagen Izquierda de ${content.title} - Proyecto Cultura Rosario`}
             className="presentation-image-left fade-in-image"
-          />
-          <img
+          >
+            <LazyImage
+              src={content.imgLeft}
+              alt={`Imagen Izquierda de ${content.title} - Proyecto Cultura Rosario`}
+              className="" 
+            />
+          </div>
+
+          {/* Imagen Derecha con Lazy Loading y efecto de scroll preservado */}
+          <div
             ref={rightImageRef}
             key={`img-right-${currentCategory}`}
-            src={content.imgRight}
-            alt={`Imagen Derecha de ${content.title} - Proyecto Cultura Rosario`}
             className="presentation-image-right fade-in-image"
-          />
+          >
+            <LazyImage
+              src={content.imgRight}
+              alt={`Imagen Derecha de ${content.title} - Proyecto Cultura Rosario`}
+              className=""
+            />
+          </div>
         </div>
       </section>
     </>

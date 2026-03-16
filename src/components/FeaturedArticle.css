@@ -130,3 +130,17 @@
   .sidebar-open .toggle-icon { transform: rotate(-90deg); }
   .sidebar-row h4, .sidebar-row span, .sidebar-subtitle { padding-left: 50px; margin-bottom: 20px; }
 }
+/* Antes tenías .featured-img-container img. 
+   Ahora, para que el hover sea fluido, apunta así: */
+
+.featured-main-card:hover .featured-img-container .lazy-image-wrapper img,
+.featured-main-card:hover .featured-img-container img {
+  transform: scale(1.04);
+  filter: brightness(1.05) contrast(1.2);
+}
+
+/* Asegúrate de que el contenedor de la imagen tenga overflow hidden */
+.featured-img-container {
+  overflow: hidden;
+  position: relative;
+}

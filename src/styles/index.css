@@ -16,6 +16,21 @@ header {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/*  Lazy Image */
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.lazy-image-container.is-loading {
+  background-color: #111;
+}
+.presentation-image-left, .presentation-image-right {
+    overflow: hidden; /* Esto asegura que la imagen no "se salga" de los bordes redondeados */
+    background-color: #1a1a1a; /* Fondo mientras carga */
+}
+
 /* Skeleton */
 
 .card-footer-actions {
