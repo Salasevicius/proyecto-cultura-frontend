@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './FeaturedArticle.css';
-// Importación del componente LazyImage
-import LazyImage from '../components/LazyImage'; 
 
 const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [offset, setOffset] = useState(0);
   const sectionRef = useRef(null);
   const navigate = useNavigate();
 
@@ -15,18 +14,32 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          observer.unobserve(entry.target);
         }
       },
       { threshold: 0.1 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    if (sectionRef.current) observer.observe(sectionRef.current);
+
+    const handleScroll = () => {
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        const scrollPosition = window.innerHeight - rect.top;
+        
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          setOffset(scrollPosition * 0.25); 
+
+          const opacityProgress = Math.min(Math.max(scrollPosition / 400, 0), 1);
+          sectionRef.current.style.setProperty('--shadow-opacity', opacityProgress);
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
 
     return () => {
       if (sectionRef.current) observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
   
@@ -36,21 +49,15 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
     <section 
       className={`featured-wrapper ${isVisible ? 'is-visible' : ''}`} 
       ref={sectionRef}
+      style={{ 
+        '--parallax-offset': `${offset}px` 
+      }}
     >
       <div className={`featured-main-card ${isOpen ? 'sidebar-open' : ''}`}>
-        
         <div className="featured-content" onClick={() => navigate(`/articulo/${noticia._id}`)}>
           <div className="featured-img-container">
-            {/* Implementación de LazyImage:
-                Mantenemos el src y alt originales. 
-                El estilo y dimensiones se rigen por .featured-img-container
-            */}
-            <LazyImage 
-              src={noticia.imageUrl} 
-              alt={noticia.title} 
-            />
+            <img src={noticia.imageUrl} alt={noticia.title} />
           </div>
-          
           <div className="featured-text">
             <div className="featured-tag">ARTÍCULO DEL DÍA</div>
             <span className="feat-cat">{noticia.category}</span>
