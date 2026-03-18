@@ -11,7 +11,7 @@
   z-index: 20; 
 
   /* AJUSTE RADICAL: Mantenemos el valor que te funcionó */
-  margin-bottom: -260px; 
+  margin-bottom: -290px; 
 
   pointer-events: none;
   opacity: 0;
@@ -133,44 +133,203 @@
 
 /* --- MEDIA QUERIES SIN ALTERAR EL FUNCIONAMIENTO --- */
 
-/* Ajuste intermedio para Tablets y Laptops pequeñas */
-@media (max-width: 1100px) {
-  .featured-tag { left: 20px; top: 20px; }
-  .feat-title { font-size: 1.5rem; }
-  .featured-img-container { width: 35%; }
-}
-
-@media (max-width: 992px) { 
-  .featured-tag { left: 20px; top: 20px; } 
-  .featured-wrapper { margin-bottom: -150px; }
-}
+/* --- CORRECCIÓN EDITORIAL DEFINITIVA PARA MÓVIL (768px) --- */
 
 @media (max-width: 768px) {
+  /* 1. EL CONTENEDOR RAIZ: Espaciado equilibrado con las otras secciones */
   .featured-wrapper { 
-    padding-bottom: 0; 
-    padding-top: 60px; 
-    margin-bottom: -100px; 
+    padding: 60px 0 0 0; 
+    margin-bottom: 0 !important; 
+    margin-top: -1px !important;
+    transform: none !important; 
+    opacity: 1 !important;
+    padding-top: 100px;
+    background: linear-gradient(
+      to bottom,
+      #1a1a2e 0%,    /* Unión perfecta con la sección anterior */
+      #161628 5%,   /* Descenso muy lento de saturación */
+      #0d0d17 15%,   /* Transición media */
+      #050509 45%,   /* Penumbra casi total */
+      #000 60%   /* Negro absoluto al llegar al contenido */
+    );
   }
-  .featured-wrapper::before { top: -150px; height: 150px; }
-  .featured-main-card { flex-direction: column; height: auto; }
-  .featured-content { flex-direction: column; transform: none !important; }
-  .featured-img-container { width: 100%; height: 220px; }
-  .featured-tag { top: 195px; left: 0; font-size: 0.7rem; }
-  .featured-text { width: 100%; padding: 2rem 1.5rem 80px 1.5rem; text-align: center; align-items: center; background: #111; }
-  .feat-title, .feat-desc, .feat-cat { padding-right: 50px; }
-  .feat-link { justify-content: center; }
-  .sidebar-toggle { width: 100%; height: 55px; top: auto; bottom: 0; flex-direction: row; gap: 12px; z-index: 30; }
-  .toggle-text { writing-mode: horizontal-tb; }
-  .toggle-icon { transform: rotate(90deg); }
-  .featured-sidebar { width: 100%; height: calc(100% - 55px); right: 0; top: 0; transform: translateY(100%); z-index: 25; text-align: center; }
-  .sidebar-open .featured-sidebar { transform: translateY(0); }
-  .sidebar-open .toggle-icon { transform: rotate(-90deg); }
-  /* Corregido: Quitado padding excesivo en sidebar móvil */
-  .sidebar-row h4, .sidebar-row span, .sidebar-subtitle { padding-left: 0; margin-bottom: 15px; }
+
+  .featured-wrapper::before { display: none !important; }
+
+  /* 2. LA TARJETA: Estructura de Stack Vertical */
+  .featured-main-card { 
+    display: flex;
+    flex-direction: column; 
+    height: auto; 
+    width: 100%;
+    margin: 0;
+    background: #000;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible; /* Fundamental para que el sidebar estire la card */
+  }
+
+  /* 3. IMAGEN: Arriba de todo ocupando el ancho total */
+  .featured-img-container { 
+    width: 100%; 
+    height: 280px; 
+    position: relative;
+    order: 1; 
+  }
+  
+  .featured-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.9);
+  }
+
+  /* TAG NARANJA: Esquina inferior izquierda sobre la imagen */
+  .featured-tag { 
+    position: absolute;
+    top: auto;
+    bottom: 61px; 
+    left: 270px; 
+    background: #ff6600;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 6px 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    z-index: 5;
+  }
+
+  /* 4. BLOQUE DE CONTENIDO: Texto y Botones */
+  .featured-content { 
+    flex-direction: column; 
+    transform: none !important; 
+    cursor: default;
+    order: 2;
+  }
+
+  .featured-text { 
+    width: 100%; 
+    padding: 30px 20px; 
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    background: #000;
+  }
+
+  /* Categoría */
+  .feat-cat { 
+    
+    margin: 0 0 20px 0; 
+    font-size: 1rem;
+    color: #ff6600;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  /* Título Principal */
+  .feat-title { 
+    font-size: 1.85rem; 
+    margin: 0 0 10px 0; 
+    line-height: 1.2;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+  }
+
+  /* Descripción */
+  .feat-desc {
+    margin-bottom: 20px;
+    font-size: 1rem;
+    line-height: 1.5;
+    padding-right: 35px;
+    text-align: justify;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  /* Botón Leer Más (Manteniendo tipografía y flecha) */
+  .feat-link {
+    margin-top: 10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    background: transparent;
+    border: none;
+    padding-left: 130px;
+  }
+
+  .feat-link::after {
+    content: '→';
+    color: #ff6600;
+    font-size: 1.4rem;
+  }
+
+  /* 5. EL TOGGLE (BOTÓN MÁS/CERRAR): Como base de la sección de texto */
+  .sidebar-toggle {
+    position: relative;
+    order: 3;
+    width: 100%;
+    height: 60px;
+    background: #ff6600;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    border: none;
+    z-index: 10;
+  }
+
+  .toggle-text { writing-mode: horizontal-tb; font-size: 0.9rem; font-weight: bold; }
+  .toggle-icon { font-size: 1.1rem; }
+
+  /* 6. SIDEBAR FEATUED: Despliegue armónico debajo de todo */
+  .featured-sidebar {
+    order: 4;
+    position: relative; /* Deja de ser absoluto */
+    width: 100%;
+    right: auto;
+    top: auto;
+    height: 0;
+    opacity: 0;
+    padding: 0 20px;
+    overflow: hidden;
+    background: #0a0a0a;
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    transform: none; /* Quitamos el translateX de desktop */
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .sidebar-open .featured-sidebar { 
+    height: auto;
+    padding: 30px 20px;
+    opacity: 1;
+  }
+
+  /* Estilos internos de las noticias relacionadas en móvil */
+  .sidebar-subtitle {
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+
+  .sidebar-row {
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
+  }
+
+  .sidebar-row span { color: #ff6600; font-size: 0.8rem; }
+  .sidebar-row h4 { color: #fff; margin-top: 5px; font-size: 1.1rem; }
 }
 
-/* Ajuste para móviles muy pequeños */
+/* Ajuste fino para móviles muy pequeños */
 @media (max-width: 480px) {
-  .featured-wrapper { margin-bottom: -50px; }
-  .feat-title { font-size: 1.3rem; }
+  .featured-img-container { height: 240px; }
+  .feat-title { font-size: 1.5rem; }
 }

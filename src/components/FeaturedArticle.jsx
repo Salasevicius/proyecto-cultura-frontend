@@ -22,7 +22,8 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
     if (sectionRef.current) observer.observe(sectionRef.current);
 
     const handleScroll = () => {
-      if (sectionRef.current) {
+      // 1. FILTRO DE DISPOSITIVO: Solo calculamos si la pantalla es Desktop
+      if (window.innerWidth > 768 && sectionRef.current) {
         const rect = sectionRef.current.getBoundingClientRect();
         const scrollPosition = window.innerHeight - rect.top;
         
@@ -32,6 +33,9 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
           const opacityProgress = Math.min(Math.max(scrollPosition / 400, 0), 1);
           sectionRef.current.style.setProperty('--shadow-opacity', opacityProgress);
         }
+      } else if (offset !== 0) {
+        // 2. RESET: Si la pantalla se achica, reseteamos el offset a 0
+        setOffset(0);
       }
     };
 
@@ -41,7 +45,7 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
       if (sectionRef.current) observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [offset]); // Añadimos offset a dependencias para asegurar el reset limpio
   
   if (!noticia) return null;
 
@@ -49,8 +53,9 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
     <section 
       className={`featured-wrapper ${isVisible ? 'is-visible' : ''}`} 
       ref={sectionRef}
+      /* El estilo inline ahora solo aplicará el valor real en Desktop */
       style={{ 
-        '--parallax-offset': `${offset}px` 
+        '--parallax-offset': window.innerWidth > 768 ? `${offset}px` : '0px' 
       }}
     >
       <div className={`featured-main-card ${isOpen ? 'sidebar-open' : ''}`}>
