@@ -1042,6 +1042,8 @@ a.button:hover {
    ========================================================================== */
 
 .dot-nav-container {
+  padding: 0;
+  width: 0.1px;
   position: fixed !important;
   right: 120px !important;
   top: 18% !important;
@@ -1050,6 +1052,7 @@ a.button:hover {
   gap: 40px !important;
   z-index: 9999 !important;
   background: transparent !important;
+  box-shadow: none !important;        /* Quita cualquier sombra del bloque */
 }
 
 .dot-nav-item {
@@ -1092,10 +1095,10 @@ a.button:hover {
 .dot-nav-item.active::after {
   content: '' !important;
   position: absolute !important;
-  width: 25px !important;
-  height: 25px !important;
+  width: 11px !important;
+  height: 15px !important;
   border-radius: 50% !important;
-  border: 1px solid rgba(255, 102, 0, 0.3) !important;
+  border: 1px solid #ff6600 !important;
   animation: pulse-etereo 3s infinite !important;
 }
 
@@ -1107,7 +1110,8 @@ a.button:hover {
 
 .dot-nav-index, .dot-nav-text, .dot-nav-line { display: none !important; }
 
-@media (max-width: 850px) { .dot-nav-container { display: none !important; } }
+@media (max-width: 850px) { .dot-nav-container { display: none !important; } 
+}
 
 
 @media (max-width: 768px) {
