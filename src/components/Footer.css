@@ -1,7 +1,7 @@
 .footer-final-matrix {
   --accent: #ff6161;
   --bg: #030305;
-  --text-muted: #64748b;
+  --text-muted: #b0b5bd;
   --border: rgba(255, 255, 255, 0.05);
   
   background-color: var(--bg);
@@ -99,7 +99,7 @@
 
 .matrix-label {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: bold;
   color: var(--accent);
   margin-bottom: 25px;
@@ -112,6 +112,7 @@
   flex-direction: column;
   text-align: left;
   font-weight: bold;
+  gap: 12px;
 }
 
 .matrix-links a {
@@ -122,7 +123,7 @@
 }
 
 .matrix-links a:hover {
-  color: #fff;
+  color: #ffffffff;
   transform: translateX(5px);
 }
 
@@ -165,6 +166,10 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   margin-bottom: 80px;
+  
+}
+.matrix-links {
+  gap: 15px;
 }
 
 @media (max-width: 600px) {
