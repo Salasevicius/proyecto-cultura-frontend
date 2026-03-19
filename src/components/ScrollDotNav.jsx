@@ -10,8 +10,7 @@ const ScrollDotNav = ({ sections }) => {
   useEffect(() => {
     const observerOptions = {
       root: null,
-      // Radar de detección: actúa cuando el elemento está entre el 20% y el 50% de la pantalla
-      rootMargin: '-20% 0px -50% 0px',
+      rootMargin: '-25% 0px -45% 0px', // Franja de detección optimizada
       threshold: 0
     };
 
@@ -35,10 +34,15 @@ const ScrollDotNav = ({ sections }) => {
 
   const scrollTo = (id) => {
     const targetY = id === 'anchor-top' ? 0 : `#${id}`;
+    
     gsap.to(window, {
-      duration: 1.8, 
-      scrollTo: { y: targetY, autoKill: false },
-      ease: "power4.inOut" 
+      duration: 2.5, // Tiempo extendido para efecto etéreo
+      scrollTo: { 
+        y: targetY, 
+        autoKill: true 
+      },
+      ease: "power4.inOut", // Curva cinemática aceleración/desaceleración lenta
+      overwrite: "auto"
     });
   };
 

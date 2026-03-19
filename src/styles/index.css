@@ -9,7 +9,6 @@ html, body {
   padding: 0;
   color: #333;
   background-color: #000000;
-  scroll-behavior: smooth;
 }
 #root {
   overflow-x: hidden;
@@ -1039,7 +1038,7 @@ a.button:hover {
 }
 
 /* ==========================================================================
-   DOT NAV - LUXURY GLOW SYSTEM (BIDIRECTIONAL)
+   DOT NAV - ETÉREO & CINEMÁTICO
    ========================================================================== */
 
 .dot-nav-container {
@@ -1048,79 +1047,67 @@ a.button:hover {
   top: 18% !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 35px !important;
+  gap: 40px !important;
   z-index: 9999 !important;
   background: transparent !important;
-  pointer-events: all !important;
 }
 
 .dot-nav-item {
   background: transparent !important;
   border: none !important;
   cursor: pointer !important;
-  padding: 10px !important;
+  padding: 12px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   outline: none !important;
-  position: relative !important;
+  transition: transform 0.3s ease !important;
 }
 
-/* Punto Apagado (Referencia Minimal) */
+.dot-nav-item:hover {
+  transform: scale(1.1) !important;
+}
+
 .dot-nav-circle {
-  width: 7px !important;
-  height: 7px !important;
-  background: #ffffff !important;
+  width: 8px !important;
+  height: 8px !important;
+  background: rgba(255, 255, 255, 0.2) !important;
   border-radius: 50% !important;
-  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1) !important;
-  box-shadow: none !important;
+  transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1) !important;
 }
 
-/* --- ESTADO ACTIVO: EL GLOW EXPLOSIVO --- */
+/* ESTADO ACTIVO - EL RESPLANDOR */
 .dot-nav-item.active .dot-nav-circle {
-  width: 11px !important;
-  height: 11px !important;
+  width: 12px !important;
+  height: 12px !important;
   background: #ff6600 !important;
-  transform: scale(1.2) !important;
-  
-  /* Resplandor multicapa */
   box-shadow: 
-    0 0 10px #ff6600, 
-    0 0 25px #ff6600, 
-    0 0 50px rgba(255, 102, 0, 0.7),
-    0 0 80px rgba(255, 102, 0, 0.2) !important;
+    0 0 15px #ff6600, 
+    0 0 40px rgba(255, 102, 0, 0.5),
+    0 0 70px rgba(255, 102, 0, 0.2) !important;
+  opacity: 1 !important;
 }
 
-/* Aura de pulsación activa */
+/* Aura etérea pulsante */
 .dot-nav-item.active::after {
   content: '' !important;
   position: absolute !important;
-  width: 20px !important;
-  height: 20px !important;
+  width: 25px !important;
+  height: 25px !important;
   border-radius: 50% !important;
-  border: 1px solid rgba(255, 102, 0, 0.5) !important;
-  animation: pulse-glow-v4 2.5s infinite !important;
+  border: 1px solid rgba(255, 102, 0, 0.3) !important;
+  animation: pulse-etereo 3s infinite !important;
 }
 
-@keyframes pulse-glow-v4 {
+@keyframes pulse-etereo {
   0% { transform: scale(1); opacity: 0; }
-  50% { opacity: 0.5; }
+  50% { opacity: 0.4; }
   100% { transform: scale(3.5); opacity: 0; }
 }
 
-/* Limpieza total de elementos antiguos */
-.dot-nav-index, .dot-nav-text, .dot-nav-line {
-  display: none !important;
-}
+.dot-nav-index, .dot-nav-text, .dot-nav-line { display: none !important; }
 
-/* Responsive: Ocultar en móviles */
-@media (max-width: 850px) {
-  .dot-nav-container { display: none !important; }
-}
-
-
-
-
+@media (max-width: 850px) { .dot-nav-container { display: none !important; } }
 
 
 @media (max-width: 768px) {

@@ -85,9 +85,7 @@ function AppContent() {
           <>
             <ScrollDotNav sections={sections} />
 
-            {/* SECCIÓN INICIO */}
             <div style={{ position: 'relative' }}>
-              {/* Baliza de 500px para detectar el retorno al inicio */}
               <div id="anchor-top" style={{ position: 'absolute', top: 0, height: '500px', width: '100%', pointerEvents: 'none' }}></div>
               <HeaderHero />
               <CreatorCTA
@@ -100,9 +98,7 @@ function AppContent() {
               />
             </div>
             
-            {/* SECCIÓN ARTÍCULOS */}
             <main style={{ position: 'relative' }}>
-              {/* Baliza de 500px situada a -150px para el aterrizaje perfecto */}
               <div id="anchor-articulos" style={{ position: 'absolute', top: '-150px', height: '500px', width: '100%', pointerEvents: 'none' }}></div>
 
               {!location.search && !loading && noticias.length > 0 && (
@@ -143,6 +139,7 @@ function AppContent() {
         onCreateClick={() => setShowCreateModal(true)}
       />
 
+      {/* Modales internos sin cambios */}
       {showLogin && <AuthModal initialRegister={isRegisterMode} onClose={() => setShowLogin(false)} onLoginSuccess={(id, nom) => { setIsLoggedIn(true); setUserName(nom); setShowLogin(false); }} />}
       {showCreateModal && <CreateArticleModal onClose={() => setShowCreateModal(false)} onSuccess={fetchData} />}
       {showEditModal && articleToEdit && <EditArticleModal noticia={articleToEdit} onClose={() => { setShowEditModal(false); setArticleToEdit(null); }} onSuccess={fetchData} />}
