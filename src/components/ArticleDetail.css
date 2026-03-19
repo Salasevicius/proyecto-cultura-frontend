@@ -89,7 +89,7 @@
 /* --- EL FOLIO (ESTILO ORIGINAL MANTENIDO) --- */
 
 .article-container {
-  max-width: auto;
+  max-width: 1400px;
   width: 100%;
   background-color: var(--pergamino);
   color: var(--tinta-carbon);
