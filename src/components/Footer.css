@@ -99,9 +99,8 @@
 
 .matrix-label {
   display: block;
-  font-size: 0.85rem;
-  font-weight: 900;
-  letter-spacing: 2px;
+  font-size: 0.75rem;
+  font-weight: bold;
   color: var(--accent);
   margin-bottom: 25px;
   opacity: 0.8;
@@ -111,7 +110,8 @@
 .matrix-links {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  text-align: left;
+  font-weight: bold;
 }
 
 .matrix-links a {
@@ -156,14 +156,14 @@
 .scroll-top-trigger:hover { color: var(--accent); }
 
 /* --- RESPONSIVE --- */
-@media (max-width: 968px) {
+@media (max-width: 768px) {
   .footer-matrix { grid-template-columns: 1fr 1fr; gap: 40px; }
   .brand-header { flex-direction: column; gap: 10px; }
 }
 .footer-matrix {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 60px;
+  gap: 10px;
   margin-bottom: 80px;
 }
 

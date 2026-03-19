@@ -57,7 +57,7 @@
   margin: 0 auto;
   text-align: center;
   position: relative;
-  padding: 30px;
+  padding: 80px;
   border: 1px solid rgba(156, 124, 56, 0.2); /* Caja de unión */
   border-bottom: none; /* Se abre para recibir a la imagen */
   background: rgba(255, 255, 255, 0.02);
@@ -76,6 +76,8 @@
     1px 1px 0px #fff, 
     3px 3px 0px var(--oro-medieval),
     5px 5px 15px rgba(0,0,0,0.1);
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .subtitle {
@@ -171,7 +173,7 @@
 }
 .back-link {
   font-weight: bold;
-  padding-right: 25px;
+  padding-right: 28px;
 }
 
 /* -----------------------------------------------------------
@@ -208,7 +210,7 @@
 
   .article-header {
     max-width: 100%;
-    padding: 15px;
+    padding: 20px;
   }
 
   .main-title {
