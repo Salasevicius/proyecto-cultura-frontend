@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import "./ArticleDetail.css";
-import { API_URL } from "../config"; // Asegúrate de que la ruta sea correcta
+import { API_URL } from "../config"; 
 
 const ArticleDetail = () => {
   const { id } = useParams();
@@ -30,19 +30,25 @@ const ArticleDetail = () => {
   if (!noticia) return <div className="error-screen">No se encontró el artículo.</div>;
 
   return (
-    <main className="reader-page-bg"> {/* Cambié div por main para mejor estructura */}
-      <article className="article-container">
-        <header className="article-header">
+    <main className="reader-page-bg">
+      {/* PORTADA FULL WIDTH ESTILO NEW YORKER */}
+      <section className="newyorker-hero-cover">
+        <header className="hero-text-side">
           <Link to="/" className="back-link">← Volver a Portada</Link>
-          <span className="category-tag">{noticia.category}</span>
-          <h1 className="main-title">{noticia.title}</h1>
-          <p className="subtitle">{noticia.description}</p>
+          <div className="title-group-split">
+            <span className="category-tag">{noticia.category}</span>
+            <h1 className="main-title-split">{noticia.title}</h1>
+            <p className="subtitle-split">{noticia.description}</p>
+          </div>
         </header>
 
-        <figure className="main-image">
+        <figure className="hero-image-side">
           <img src={noticia.imageUrl} alt={noticia.title} />
         </figure>
+      </section>
 
+      {/* EL FOLIO (ESTRUCTURA ORIGINAL RECUPERADA) */}
+      <article className="article-container">
         <section className="content-body">
           {noticia.content?.split('\n').map((para, i) => (
             para.trim() && <p key={i}>{para}</p>
@@ -51,7 +57,7 @@ const ArticleDetail = () => {
 
         <footer className="article-footer-detail">
           <p>© Proyecto Cultura Rosario - La memoria de la ciudad.</p>
-        </footer >
+        </footer>
       </article>
     </main>
   );
