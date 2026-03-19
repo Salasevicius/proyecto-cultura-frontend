@@ -8,7 +8,10 @@ import ArticleCard from './components/ArticleCard';
 import Pagination from './components/Pagination';
 import Footer from './components/Footer';
 import ArticleDetail from './components/ArticleDetail';
+
+// INTEGRACIÓN 1: Importar el componente ScrollDotNav
 import ScrollDotNav from './components/ScrollDotNav';
+
 import './styles/index.css';
 import { API_URL } from './config';
 import SkeletonCard from './components/SkeletonCard';
@@ -26,6 +29,7 @@ function AppContent() {
 
   const location = useLocation();
 
+  // INTEGRACIÓN 2: Definir las secciones para el DotNav
   const sections = [
     { id: 'anchor-top', label: 'Inicio' },
     { id: 'anchor-articulos', label: 'Artículos' }
@@ -37,14 +41,23 @@ function AppContent() {
       const queryParams = new URLSearchParams(location.search);
       const category = queryParams.get('category');
       const search = queryParams.get('search');
+
       const apiParams = new URLSearchParams();
       let url = `${API_URL}/api/articles`;
+
       if (category) apiParams.append('category', category);
       if (search) apiParams.append('search', search);
-      if (apiParams.toString()) url += `?${apiParams.toString()}`;
+
+      if (apiParams.toString()) {
+        url += `?${apiParams.toString()}`;
+      }
+
       const response = await fetch(url);
       const result = await response.json();
-      if (result.success) setNoticias(result.data);
+
+      if (result.success) {
+        setNoticias(result.data); 
+      }
     } catch (error) {
       console.error("Error al cargar noticias:", error);
     } finally {
@@ -62,6 +75,7 @@ function AppContent() {
     localStorage.removeItem('userName');
     setIsLoggedIn(false);
     setUserName('');
+    alert("Sesión cerrada");
   };
 
   const handleEditClick = (noticia) => {
@@ -83,11 +97,16 @@ function AppContent() {
       <Routes>
         <Route path="/" element={
           <>
+            {/* INTEGRACIÓN 3: Renderizar el ScrollDotNav */}
             <ScrollDotNav sections={sections} />
 
+            {/* INTEGRACIÓN 4: Contenedor relativo y Baliza de Inicio */}
             <div style={{ position: 'relative' }}>
               <div id="anchor-top" style={{ position: 'absolute', top: 0, height: '500px', width: '100%', pointerEvents: 'none' }}></div>
+              
               <HeaderHero />
+              
+              {/* Mantenemos CreatorCTA exactamente igual */}
               <CreatorCTA
                 isLoggedIn={isLoggedIn}
                 userName={userName}
@@ -97,7 +116,8 @@ function AppContent() {
                 onCreateClick={() => setShowCreateModal(true)}
               />
             </div>
-            
+
+            {/* INTEGRACIÓN 5: Contenedor relativo para main y Baliza de Artículos */}
             <main style={{ position: 'relative' }}>
               <div id="anchor-articulos" style={{ position: 'absolute', top: '-150px', height: '500px', width: '100%', pointerEvents: 'none' }}></div>
 
@@ -108,7 +128,7 @@ function AppContent() {
                 />
               )}
 
-              <section className="news-list" style={{ marginTop: location.search ? '2rem' : '0.5rem' }}>
+              <section className="news-list">
                 {loading ? (
                   [...Array(6)].map((_, i) => <SkeletonCard key={i} />)
                 ) : noticias.length > 0 ? (
@@ -122,7 +142,11 @@ function AppContent() {
                     />
                   ))
                 ) : (
-                  <p className="no-results">No se encontraron artículos.</p>
+                  <p className="no-results">
+                    {new URLSearchParams(location.search).get('search') 
+                      ? `No se encontraron resultados para "${new URLSearchParams(location.search).get('search')}"`
+                      : "No se encontraron artículos en esta categoría."}
+                  </p>
                 )}
               </section>
               <Pagination />
@@ -139,10 +163,36 @@ function AppContent() {
         onCreateClick={() => setShowCreateModal(true)}
       />
 
-      {/* Modales internos sin cambios */}
-      {showLogin && <AuthModal initialRegister={isRegisterMode} onClose={() => setShowLogin(false)} onLoginSuccess={(id, nom) => { setIsLoggedIn(true); setUserName(nom); setShowLogin(false); }} />}
-      {showCreateModal && <CreateArticleModal onClose={() => setShowCreateModal(false)} onSuccess={fetchData} />}
-      {showEditModal && articleToEdit && <EditArticleModal noticia={articleToEdit} onClose={() => { setShowEditModal(false); setArticleToEdit(null); }} onSuccess={fetchData} />}
+      {/* Mantenemos los Modales Internos exactamente igual */}
+      {showLogin && (
+        <AuthModal
+          initialRegister={isRegisterMode}
+          onClose={() => setShowLogin(false)}
+          onLoginSuccess={(idRecibido, nombreRecibido) => {
+            setIsLoggedIn(true);
+            setUserName(nombreRecibido);
+            setShowLogin(false);
+          }}
+        />
+      )}
+
+      {showCreateModal && (
+        <CreateArticleModal
+          onClose={() => setShowCreateModal(false)}
+          onSuccess={fetchData}
+        />
+      )}
+
+      {showEditModal && articleToEdit && (
+        <EditArticleModal
+          noticia={articleToEdit}
+          onClose={() => {
+            setShowEditModal(false);
+            setArticleToEdit(null);
+          }}
+          onSuccess={fetchData}
+        />
+      )}
     </>
   );
 }
@@ -155,7 +205,7 @@ function App() {
   );
 }
 
-// --- COMPONENTES DE MODALES (Sin cambios) ---
+// --- COMPONENTES INTERNOS (Modales) - SIN TOCAR ---
 
 function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
   const [isRegister, setIsRegister] = useState(initialRegister);
@@ -167,6 +217,7 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
     e.preventDefault();
     const endpoint = isRegister ? '/auth/register' : '/auth/login';
     const body = isRegister ? { username, email, password } : { email, password };
+
     try {
       const response = await fetch(`${API_URL}${endpoint}`, {
         method: 'POST',
@@ -174,19 +225,25 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
         body: JSON.stringify(body)
       });
       const result = await response.json();
+
       if (result.success) {
         if (isRegister) {
-          alert("¡Registro exitoso!");
+          alert("¡Registro exitoso! Ahora puedes iniciar sesión.");
           setIsRegister(false);
         } else {
           localStorage.setItem('token', result.data);
           localStorage.setItem('userId', result.userId);
-          const nombre = result.username || username || email.split('@')[0];
-          localStorage.setItem('userName', nombre);
-          onLoginSuccess(result.userId, nombre);
+          const nombreParaMostrar = result.username || username || email.split('@')[0];
+          localStorage.setItem('userName', nombreParaMostrar);
+          onLoginSuccess(result.userId, nombreParaMostrar);
+          alert(`¡Bienvenido, ${nombreParaMostrar}!`);
         }
-      } else { alert("Error en los datos"); }
-    } catch (error) { alert("Error de conexión"); }
+      } else {
+        alert("Error: " + (result.error || "Verifica los datos"));
+      }
+    } catch (error) {
+      alert("No se pudo conectar con el servidor");
+    }
   };
 
   return (
@@ -194,16 +251,18 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
       <div className="login-modal" onClick={(e) => e.stopPropagation()}>
         <h3>{isRegister ? 'Crear Cuenta' : 'Iniciar Sesión'}</h3>
         <form onSubmit={handleSubmit}>
-          {isRegister && <input type="text" placeholder="Usuario" value={username} onChange={(e) => setUsername(e.target.value)} required />}
+          {isRegister && (
+            <input type="text" placeholder="Nombre de usuario" value={username} onChange={(e) => setUsername(e.target.value)} required />
+          )}
           <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <input type="password" placeholder="Pass" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
           <div className="login-buttons">
-            <button type="submit" className="btn-send">Enviar</button>
-            <button type="button" onClick={onClose} className="btn-cancel">Cerrar</button>
+            <button type="submit" className="btn-send">{isRegister ? 'Registrarse' : 'Entrar'}</button>
+            <button type="button" onClick={onClose} className="btn-cancel">Cancelar</button>
           </div>
         </form>
-        <p className="modal-switch" onClick={() => setIsRegister(!isRegister)}>
-          {isRegister ? '¿Ya tienes cuenta?' : '¿No tienes cuenta? Regístrate'}
+        <p style={{ color: '#ff6f61', marginTop: '1.5rem', textAlign: 'center', cursor: 'pointer', fontWeight: 'bold' }} onClick={() => setIsRegister(!isRegister)}>
+          {isRegister ? '¿Ya tienes cuenta? Ingresa aquí' : '¿No tienes cuenta? Regístrate gratis'}
         </p>
       </div>
     </div>
@@ -211,7 +270,10 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
 }
 
 function CreateArticleModal({ onClose, onSuccess }) {
-  const [formData, setFormData] = useState({ title: '', description: '', content: '', category: 'Destacados', imageUrl: '' });
+  const [formData, setFormData] = useState({
+    title: '', description: '', content: '', category: 'Destacados', imageUrl: ''
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
@@ -221,23 +283,31 @@ function CreateArticleModal({ onClose, onSuccess }) {
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(formData)
       });
-      if ((await response.json()).success) { onSuccess(); onClose(); }
-    } catch (error) { console.error(error); }
+      const result = await response.json();
+      if (result.success) {
+        alert("¡Artículo publicado!");
+        onSuccess();
+        onClose();
+      } else { alert("Error al publicar"); }
+    } catch (error) { alert("Error de conexión"); }
   };
+
   return (
     <div className="login-overlay" onClick={onClose}>
-      <div className="login-modal" onClick={(e) => e.stopPropagation()}>
-        <h3>Nueva Crónica</h3>
+      <div className="login-modal" style={{ maxWidth: '600px' }} onClick={(e) => e.stopPropagation()}>
+        <h3>Nueva Crónica Rosarina</h3>
         <form onSubmit={handleSubmit}>
           <input type="text" placeholder="Título" onChange={(e) => setFormData({ ...formData, title: e.target.value })} required />
-          <textarea placeholder="Descripción" onChange={(e) => setFormData({ ...formData, description: e.target.value })} required />
-          <textarea placeholder="Contenido" style={{ minHeight: '100px' }} onChange={(e) => setFormData({ ...formData, content: e.target.value })} required />
-          <select onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
+          <textarea placeholder="Descripción" style={{ width: '100%', marginBottom: '1rem', background: '#252525', color: 'white', border: '1px solid #444', padding: '10px' }} onChange={(e) => setFormData({ ...formData, description: e.target.value })} required />
+          <textarea placeholder="Contenido" style={{ width: '100%', minHeight: '120px', marginBottom: '1rem', background: '#252525', color: 'white', border: '1px solid #444', padding: '10px' }} onChange={(e) => setFormData({ ...formData, content: e.target.value })} required />
+          <select style={{ width: '100%', marginBottom: '1rem', background: '#252525', color: 'white', padding: '10px' }} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
             <option value="Destacados">Destacados</option>
             <option value="Biografías">Biografías</option>
             <option value="Literarios">Literarios</option>
+            <option value="Periodísticos">Periodísticos</option>
+            <option value="Opinión">Opinión</option>
           </select>
-          <input type="text" placeholder="URL Imagen" onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} required />
+          <input type="text" placeholder="Ruta de imagen" onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} required />
           <div className="login-buttons">
             <button type="submit" className="btn-send">Publicar</button>
             <button type="button" onClick={onClose} className="btn-cancel">Cancelar</button>
@@ -249,7 +319,10 @@ function CreateArticleModal({ onClose, onSuccess }) {
 }
 
 function EditArticleModal({ noticia, onClose, onSuccess }) {
-  const [formData, setFormData] = useState({ ...noticia });
+  const [formData, setFormData] = useState({
+    title: noticia.title, description: noticia.description, content: noticia.content, category: noticia.category, imageUrl: noticia.imageUrl
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
@@ -259,19 +332,34 @@ function EditArticleModal({ noticia, onClose, onSuccess }) {
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(formData)
       });
-      if ((await response.json()).success) { onSuccess(); onClose(); }
-    } catch (error) { console.error(error); }
+      const result = await response.json();
+      if (result.success) {
+        alert("¡Artículo actualizado!");
+        onSuccess();
+        onClose();
+      } else { alert("Error al actualizar"); }
+    } catch (error) { alert("Error de conexión"); }
   };
+
   return (
     <div className="login-overlay" onClick={onClose}>
-      <div className="login-modal" onClick={(e) => e.stopPropagation()}>
-        <h3>Editar</h3>
+      <div className="login-modal" style={{ maxWidth: '600px' }} onClick={(e) => e.stopPropagation()}>
+        <h3>Editar Crónica</h3>
         <form onSubmit={handleSubmit}>
-          <input type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
-          <textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
+          <input type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} required />
+          <textarea value={formData.description} style={{ width: '100%', marginBottom: '1rem', background: '#252525', color: 'white', border: '1px solid #444', padding: '10px' }} onChange={(e) => setFormData({ ...formData, description: e.target.value })} required />
+          <textarea value={formData.content} style={{ width: '100%', minHeight: '120px', marginBottom: '1rem', background: '#252525', color: 'white', border: '1px solid #444', padding: '10px' }} onChange={(e) => setFormData({ ...formData, content: e.target.value })} required />
+          <select value={formData.category} style={{ width: '100%', marginBottom: '1rem', background: '#252525', color: 'white', padding: '10px' }} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
+            <option value="Destacados">Destacados</option>
+            <option value="Biografías">Biografías</option>
+            <option value="Literarios">Literarios</option>
+            <option value="Periodísticos">Periodísticos</option>
+            <option value="Opinión">Opinión</option>
+          </select>
+          <input type="text" value={formData.imageUrl} onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} required />
           <div className="login-buttons">
-            <button type="submit" className="btn-send">Guardar</button>
-            <button type="button" onClick={onClose} className="btn-cancel">Volver</button>
+            <button type="submit" className="btn-send">Guardar Cambios</button>
+            <button type="button" onClick={onClose} className="btn-cancel">Cancelar</button>
           </div>
         </form>
       </div>

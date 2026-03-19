@@ -1045,11 +1045,11 @@ a.button:hover {
   padding: 0;
   width: 0.1px;
   position: fixed !important;
-  right: 120px !important;
-  top: 18% !important;
+  right: 125px !important;
+  top: 17% !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 40px !important;
+  gap: 10px !important;
   z-index: 9999 !important;
   background: transparent !important;
   box-shadow: none !important;        /* Quita cualquier sombra del bloque */
@@ -1074,7 +1074,7 @@ a.button:hover {
 .dot-nav-circle {
   width: 8px !important;
   height: 8px !important;
-  background: rgba(255, 255, 255, 0.2) !important;
+  background: #ffffff !important;
   border-radius: 50% !important;
   transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1) !important;
 }
@@ -1095,7 +1095,7 @@ a.button:hover {
 .dot-nav-item.active::after {
   content: '' !important;
   position: absolute !important;
-  width: 11px !important;
+  width: 10px !important;
   height: 15px !important;
   border-radius: 50% !important;
   border: 1px solid #ff6600 !important;

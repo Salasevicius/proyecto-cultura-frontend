@@ -25,13 +25,13 @@ const CATEGORY_CONTENT = {
   },
   "Periodísticos": {
     title: "PERIODÍSTICOS",
-    description: "Encuentra artículos periodísticos con análisis claros y directos sobre las noticias y eventos que han atravesado la ciudad a lo largo de su historia.",
+    description: "Encuentra artículos periodísticos con análisis claros y directos sobre las noticias y eventos que han atravesado la ciudad a lo largo de su extensa historia.",
     imgLeft: "/mafia1930-rosario.webp",
     imgRight: "castagnino-museo-rosario.webp"
   },
   "Opinión": {
     title: "OPINIÓN",
-    description: "Reflexiones y perspectivas sobre el acontecer cultural y social de Rosario.",
+    description: "Reflexiones y perspectivas sobre el acontecer cultural y social de Rosario. Miradas diversas para una ciudad que cambia y crece de manera permanente.",
     imgLeft: "/cementerio-trenes-rosario.webp",
     imgRight: "inundaciones-rosario.webp"
   }
