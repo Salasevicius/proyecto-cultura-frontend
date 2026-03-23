@@ -20,6 +20,8 @@ const ArticleDetail = () => {
         const result = await response.json();
         if (result.success) {
           setNoticia(result.data);
+          // --- NUEVA LÍNEA PARA PRERENDER ---
+          window.prerenderReady = true;
         }
       } catch (error) {
         console.error("Error al cargar:", error);
