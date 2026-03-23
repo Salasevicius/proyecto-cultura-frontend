@@ -1392,6 +1392,8 @@ a.button:hover {
 
   .news-list p {
     font-size: 0.8rem;
+    font-weight: bolder;
+    color: #1a1714;
   }
 
   .pagination ul li a {

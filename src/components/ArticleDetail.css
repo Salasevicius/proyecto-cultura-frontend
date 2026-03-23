@@ -7,13 +7,16 @@
   --tinta-carbon: #1a1714;       
 }
 
+
 .reader-page-bg {
-  background-color: #fefcf9;
+  background-color: #fcf9f2;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 /* --- NUEVA PORTADA 50/50 (Independiente) --- */
@@ -33,44 +36,73 @@
   flex-direction: column;
   justify-content: center;
   position: relative;
-  background-color: var(--pergamino);
+  background-color: beige;
+  border-bottom: 1px solid #000;
+}
+.hero-image-side image {
+  border-bottom: 1px solid #000;
 }
 
 .back-link {
   position: absolute;
   top: 40px;
-  left: 80px;
+  left: 75px;
   font-weight: bold;
-  text-decoration: none;
+  text-decoration: underline;
   color: var(--tinta-carbon);
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .category-tag {
-  color: #ff6f61;
+  color: #ff6600;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 2px;
-  font-size: 0.85rem;
+  font-size: 1.2rem;
+  padding-left: 325px;
 }
 
 .main-title-split {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2.8rem, 6vw, 4.5rem);
   font-weight: 900;
-  line-height: 1;
+  line-height: 1.05;
   margin: 20px 0;
   color: #000;
-  letter-spacing: -2px;
+  letter-spacing: -1.5px;
+  text-align: center;
+  text-wrap: balance;
+  /* --- MAGIA DEL GRADIENTE --- */
+  /* Definimos el gradiente: Oro Medieval -> Negro Profundo */
+  background: linear-gradient(
+    135deg,
+    #1a1714 20%,   /* Tu Negro Profundo (empieza rápido) */
+    #000000 100%   /* Negro absoluto al final */
+  );
+
+  /* "Cortamos" el fondo para que solo se vea a través del texto */
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  /* Hacemos el color de texto transparente para revelar el fondo */
+  -webkit-text-fill-color: transparent;
+  color: transparent; /* Fallback */
+
+  /* Añadimos una sombra muy sutil para dar relieve */
+  filter: drop-shadow(0px 2px 0px rgba(0, 0, 0, 0.15));
 }
+
 
 .subtitle-split {
   font-family: 'Georgia', serif;
   font-size: 1.3rem;
-  color: #5a5248;
+  color: #24211e;
   font-style: italic;
   line-height: 1.4;
+  font-weight: bolder;
+  padding-top: 25px;
+  text-align: center;
 }
 
 .hero-image-side {
@@ -97,7 +129,7 @@
   position: relative;
   border: 4px double var(--oro-medieval);
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 }
 
 .article-container::before {
@@ -166,9 +198,9 @@
   font-family: 'Montserrat', sans-serif;
   letter-spacing: 6px;
   color: var(--oro-medieval);
-  font-size: 0.65rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
-  font-weight: 800;
+  font-weight: bold;
 }
 
 /* --- TUS MEDIA QUERIES ORIGINALES (RESPETADAS AL 100%) --- */
@@ -212,6 +244,13 @@
   .content-body {
     font-size: 1.1rem;
     line-height: 1.7;
+  }
+  .category-tag {
+    padding-left: 0;
+    font-size: 1.1rem;
+  }
+  .article-footer-detail p {
+    font-size: 0.75rem;
   }
 }
 
