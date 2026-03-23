@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async'; // Importación de la librería
+import { Helmet } from 'react-helmet-async';
 import "./ArticleDetail.css";
 import { API_URL } from "../config"; 
 
@@ -8,6 +8,9 @@ const ArticleDetail = () => {
   const { id } = useParams();
   const [noticia, setNoticia] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // URL Base para las imágenes y links (Render Frontend)
+  const FRONTEND_URL = "https://proyecto-cultura-frontend.onrender.com";
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -30,31 +33,34 @@ const ArticleDetail = () => {
   if (loading) return <div className="loading-screen">Cargando...</div>;
   if (!noticia) return <div className="error-screen">No se encontró el artículo.</div>;
 
+  // Lógica para asegurar URL absoluta en la imagen
+  const absoluteImageUrl = noticia.imageUrl?.startsWith('http') 
+    ? noticia.imageUrl 
+    : `${FRONTEND_URL}${noticia.imageUrl}`;
+
   return (
     <>
-      {/* INTEGRACIÓN DE SEO DINÁMICO */}
+      {/* INTEGRACIÓN DE SEO DINÁMICO BLINDADA */}
       <Helmet>
-        {/* Título dinámico para la pestaña del navegador */}
         <title>{`${noticia.title} | Proyecto Cultura Rosario`}</title>
         <meta name="description" content={noticia.description} />
 
-        {/* Open Graph / Facebook */}
+        {/* Open Graph / Facebook / WhatsApp */}
         <meta property="og:type" content="article" />
         <meta property="og:title" content={noticia.title} />
         <meta property="og:description" content={noticia.description} />
-        <meta property="og:image" content={noticia.imageUrl} />
-        <meta property="og:url" content={window.location.href} />
+        <meta property="og:image" content={absoluteImageUrl} />
+        <meta property="og:url" content={`${FRONTEND_URL}/articulo/${id}`} />
 
         {/* Twitter Cards */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={noticia.title} />
         <meta name="twitter:description" content={noticia.description} />
-        <meta name="twitter:image" content={noticia.imageUrl} />
+        <meta name="twitter:image" content={absoluteImageUrl} />
       </Helmet>
 
-      {/* TU ESTRUCTURA VISUAL ORIGINAL (SIN CAMBIOS) */}
+      {/* TU ESTRUCTURA VISUAL ORIGINAL INTEGRAL */}
       <main className="reader-page-bg">
-        {/* PORTADA FULL WIDTH ESTILO NEW YORKER */}
         <section className="newyorker-hero-cover">
           <header className="hero-text-side">
             <Link to="/" className="back-link">← Volver a Portada</Link>
@@ -66,11 +72,11 @@ const ArticleDetail = () => {
           </header>
 
           <figure className="hero-image-side">
+            {/* Aquí usamos la imagen tal cual viene para el renderizado local */}
             <img src={noticia.imageUrl} alt={noticia.title} />
           </figure>
         </section>
 
-        {/* EL FOLIO (ESTRUCTURA ORIGINAL RECUPERADA) */}
         <article className="article-container">
           <section className="content-body">
             {noticia.content?.split('\n').map((para, i) => (
