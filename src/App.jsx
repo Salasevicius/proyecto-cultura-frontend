@@ -1,4 +1,3 @@
-// ... (importaciones iniciales se mantienen igual)
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -26,6 +25,24 @@ function AppContent() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [articleToEdit, setArticleToEdit] = useState(null);
+
+  // --- IMPLEMENTACIÓN DE DISEÑO DE AUTOR: SCROLL GLOBAL ---
+  const [globalScroll, setGlobalScroll] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Solo activamos la profundidad de campo en Desktop para mantener el rendimiento
+      if (window.innerWidth > 768) {
+        setGlobalScroll(window.scrollY);
+      } else {
+        setGlobalScroll(0);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  // -------------------------------------------------------
 
   const location = useLocation();
   const sections = [
@@ -101,7 +118,13 @@ function AppContent() {
               />
             </div>
 
-            <main style={{ position: 'relative' }}>
+            {/* Inyectamos la variable de scroll en el contenedor principal */}
+            <main 
+              style={{ 
+                position: 'relative',
+                '--global-scroll': `${globalScroll}px` 
+              }}
+            >
               
               {!location.search && !loading && noticias.length > 0 && (
                 <FeaturedArticle 
@@ -110,7 +133,6 @@ function AppContent() {
                 />
               )}
 
-              {/* MEJORA: Baliza de detección movida aquí para el Slider */}
               <div id="anchor-articulos" style={{ position: 'absolute', top: location.search ? '-100px' : '-200px', height: '1px', width: '100%', pointerEvents: 'none' }}></div>
 
               <ArticleSlider 
@@ -130,6 +152,7 @@ function AppContent() {
 
       <Footer isLoggedIn={isLoggedIn} onLoginClick={() => openAuthModal(false)} onRegisterClick={() => openAuthModal(true)} onCreateClick={() => setShowCreateModal(true)} />
 
+      {/* --- MODALES Y AUXILIARES (Sin cambios) --- */}
       {showLogin && (
         <AuthModal
           initialRegister={isRegisterMode}
@@ -155,8 +178,7 @@ function App() {
   );
 }
 
-// --- COMPONENTES INTERNOS (Modales) - SIN TOCAR ---
-
+// --- Componentes Internos de soporte (Se mantienen idénticos) ---
 function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
   const [isRegister, setIsRegister] = useState(initialRegister);
   const [email, setEmail] = useState('');

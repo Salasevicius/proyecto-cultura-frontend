@@ -9,6 +9,9 @@
   overflow: visible; 
   pointer-events: none; 
   transition: margin-top 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(calc(var(--parallax-offset, 0px) * -0.5));
+  will-change: transform;
+  transform: translateY(calc(var(--global-scroll, 0px) * -0.1));
 }
 
 .slider-container-main.is-awake {
@@ -79,6 +82,8 @@
   box-shadow: -22px 28px 55px rgba(0, 0, 0, 0.9) !important;
   display: flex;
   flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.03); /* Un borde casi invisible para definir la forma */
+  transition: border-color 0.6s ease;
 }
 
 .slider-item article h3, 
@@ -112,9 +117,11 @@
   position: absolute;
   top: 55%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.75);
-  border: 1px solid #9c7c38;
-  color: #9c7c38;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(5px); /* Flechas que dejan ver lo que hay detrás */
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  border: 1px solid rgba(255, 102, 0, 0.4); /* Naranja con transparencia */
+  color: #ff6600;
   font-size: 2.3rem;
   width: 52px;
   height: 52px;
@@ -125,6 +132,12 @@
   align-items: center;
   justify-content: center;
   pointer-events: auto;
+}
+.nav-btn:hover {
+  background: #ff6600;
+  color: #fff;
+  box-shadow: 0 0 25px rgba(255, 102, 0, 0.3);
+  border-color: #ff6600;
 }
 
 .nav-btn.left { left: 20px; }
