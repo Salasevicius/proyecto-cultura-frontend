@@ -1,8 +1,9 @@
 import React from 'react';
 
-const CreatorCTA = ({ isLoggedIn, userName, onLoginClick, onRegisterClick, onLogout, onCreateClick }) => {
+const CreatorCTA = ({ isLoggedIn, userName, onLoginClick, onRegisterClick, onLogout, onCreateClick, isFiltered }) => {
   return (
-    <section className="creator-cta-section">
+    /* MEJORA: Clase condicional para expansión de fondo */
+    <section className={`creator-cta-section ${isFiltered ? 'is-filtered-cta' : ''}`}>
       <div className="creator-cta-container">
         <div className="creator-cta-text">
           <h3>
@@ -16,28 +17,28 @@ const CreatorCTA = ({ isLoggedIn, userName, onLoginClick, onRegisterClick, onLog
               : "Publicá tus propios artículos, crónicas o investigaciones sobre Rosario."}
           </p>
         </div>
-        <div className="creator-cta-action" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          {isLoggedIn ? (
-            <>
-              <button className="btn-create-news" onClick={onCreateClick}>
-                + Crear nuevo artículo
-              </button>
-              <button className="btn-creator-logout" onClick={onLogout}>
-                Cerrar Sesión
-              </button>
-            </>
-          ) : (
-            <>
-              <button className="btn-creator-login" onClick={onLoginClick}>
-                Ingresá como Creador
-              </button>
-
-              <button className="btn-creator-register" onClick={onRegisterClick}>
-                ¿No tienes cuenta? ¡Regístrate!
-              </button>
-            </>
-          )}
-        </div>
+        
+<div className="creator-cta-action" id="interactive-cta-layer">
+  {isLoggedIn ? (
+    <>
+      <button className="btn-create-news" onClick={onCreateClick}>
+        + Crear nuevo artículo
+      </button>
+      <button className="btn-creator-logout" onClick={onLogout}>
+        Cerrar Sesión
+      </button>
+    </>
+  ) : (
+    <>
+      <button className="btn-creator-login" onClick={onLoginClick}>
+        Ingresá como Creador
+      </button>
+      <button className="btn-creator-register" onClick={onRegisterClick}>
+        ¿No tienes cuenta? ¡Regístrate!
+      </button>
+    </>
+  )}
+</div>
       </div>
     </section>
   );

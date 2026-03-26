@@ -1,3 +1,4 @@
+// ... (importaciones iniciales se mantienen igual)
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -8,10 +9,9 @@ import ArticleCard from './components/ArticleCard';
 import Pagination from './components/Pagination';
 import Footer from './components/Footer';
 import ArticleDetail from './components/ArticleDetail';
-
-// INTEGRACIÓN 1: Importar el componente ScrollDotNav
+import ArticleSlider from './components/ArticleSlider';
+import './components/ArticleSlider.css';
 import ScrollDotNav from './components/ScrollDotNav';
-
 import './styles/index.css';
 import { API_URL } from './config';
 import SkeletonCard from './components/SkeletonCard';
@@ -28,8 +28,6 @@ function AppContent() {
   const [articleToEdit, setArticleToEdit] = useState(null);
 
   const location = useLocation();
-
-  // INTEGRACIÓN 2: Definir las secciones para el DotNav
   const sections = [
     { id: 'anchor-top', label: 'Inicio' },
     { id: 'anchor-articulos', label: 'Artículos' }
@@ -41,23 +39,14 @@ function AppContent() {
       const queryParams = new URLSearchParams(location.search);
       const category = queryParams.get('category');
       const search = queryParams.get('search');
-
       const apiParams = new URLSearchParams();
       let url = `${API_URL}/api/articles`;
-
       if (category) apiParams.append('category', category);
       if (search) apiParams.append('search', search);
-
-      if (apiParams.toString()) {
-        url += `?${apiParams.toString()}`;
-      }
-
+      if (apiParams.toString()) url += `?${apiParams.toString()}`;
       const response = await fetch(url);
       const result = await response.json();
-
-      if (result.success) {
-        setNoticias(result.data); 
-      }
+      if (result.success) setNoticias(result.data); 
     } catch (error) {
       console.error("Error al cargar noticias:", error);
     } finally {
@@ -93,20 +82,14 @@ function AppContent() {
       <header>
         <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       </header>
-
       <Routes>
         <Route path="/" element={
           <>
-            {/* INTEGRACIÓN 3: Renderizar el ScrollDotNav */}
             <ScrollDotNav sections={sections} />
-
-            {/* INTEGRACIÓN 4: Contenedor relativo y Baliza de Inicio */}
             <div style={{ position: 'relative' }}>
-              <div id="anchor-top" style={{ position: 'absolute', top: 0, height: '500px', width: '100%', pointerEvents: 'none' }}></div>
-              
+              <div id="anchor-top" style={{ position: 'absolute', top: 0, height: '1px', width: '100%', pointerEvents: 'none' }}></div>
               <HeaderHero />
               
-              {/* Mantenemos CreatorCTA exactamente igual */}
               <CreatorCTA
                 isLoggedIn={isLoggedIn}
                 userName={userName}
@@ -114,13 +97,12 @@ function AppContent() {
                 onRegisterClick={() => openAuthModal(true)}
                 onLogout={handleLogout}
                 onCreateClick={() => setShowCreateModal(true)}
+                isFiltered={location.search.length > 0} 
               />
             </div>
 
-            {/* INTEGRACIÓN 5: Contenedor relativo para main y Baliza de Artículos */}
             <main style={{ position: 'relative' }}>
-              <div id="anchor-articulos" style={{ position: 'absolute', top: '-150px', height: '500px', width: '100%', pointerEvents: 'none' }}></div>
-
+              
               {!location.search && !loading && noticias.length > 0 && (
                 <FeaturedArticle 
                   noticia={noticias[0]} 
@@ -128,27 +110,17 @@ function AppContent() {
                 />
               )}
 
-              <section className="news-list">
-                {loading ? (
-                  [...Array(6)].map((_, i) => <SkeletonCard key={i} />)
-                ) : noticias.length > 0 ? (
-                  (location.search ? noticias : noticias.slice(1)).map((n) => (
-                    <ArticleCard
-                      key={n._id}
-                      noticia={n}
-                      isLoggedIn={isLoggedIn}
-                      onActionSuccess={fetchData}
-                      onEditClick={handleEditClick}
-                    />
-                  ))
-                ) : (
-                  <p className="no-results">
-                    {new URLSearchParams(location.search).get('search') 
-                      ? `No se encontraron resultados para "${new URLSearchParams(location.search).get('search')}"`
-                      : "No se encontraron artículos en esta categoría."}
-                  </p>
-                )}
-              </section>
+              {/* MEJORA: Baliza de detección movida aquí para el Slider */}
+              <div id="anchor-articulos" style={{ position: 'absolute', top: location.search ? '-100px' : '-200px', height: '1px', width: '100%', pointerEvents: 'none' }}></div>
+
+              <ArticleSlider 
+                noticias={location.search ? noticias : noticias.slice(1)} 
+                loading={loading}
+                isLoggedIn={isLoggedIn}
+                fetchData={fetchData}
+                handleEditClick={handleEditClick}
+              />
+              
               <Pagination />
             </main>
           </>
@@ -156,14 +128,8 @@ function AppContent() {
         <Route path="/articulo/:id" element={<ArticleDetail />} />
       </Routes>
 
-      <Footer 
-        isLoggedIn={isLoggedIn}
-        onLoginClick={() => openAuthModal(false)}
-        onRegisterClick={() => openAuthModal(true)}
-        onCreateClick={() => setShowCreateModal(true)}
-      />
+      <Footer isLoggedIn={isLoggedIn} onLoginClick={() => openAuthModal(false)} onRegisterClick={() => openAuthModal(true)} onCreateClick={() => setShowCreateModal(true)} />
 
-      {/* Mantenemos los Modales Internos exactamente igual */}
       {showLogin && (
         <AuthModal
           initialRegister={isRegisterMode}
@@ -175,24 +141,8 @@ function AppContent() {
           }}
         />
       )}
-
-      {showCreateModal && (
-        <CreateArticleModal
-          onClose={() => setShowCreateModal(false)}
-          onSuccess={fetchData}
-        />
-      )}
-
-      {showEditModal && articleToEdit && (
-        <EditArticleModal
-          noticia={articleToEdit}
-          onClose={() => {
-            setShowEditModal(false);
-            setArticleToEdit(null);
-          }}
-          onSuccess={fetchData}
-        />
-      )}
+      {showCreateModal && <CreateArticleModal onClose={() => setShowCreateModal(false)} onSuccess={fetchData} />}
+      {showEditModal && articleToEdit && <EditArticleModal noticia={articleToEdit} onClose={() => { setShowEditModal(false); setArticleToEdit(null); }} onSuccess={fetchData} />}
     </>
   );
 }

@@ -417,12 +417,18 @@ nav .logo:hover::before {
 /* --- ESTILOS PARA LA SECCION DE CREADORES --- */
 .creator-cta-section {
   background-color: #1a1a2e;
-  padding: 12px 0; /* Tu padding original */
-  border-bottom: none; /* Quitamos la línea para que el aire sea infinito */
+  padding: 12px 0; 
+  border-bottom: none; 
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10; /* Menor que el Featured */
+  z-index: 10; 
+  transition: padding-bottom 0.6s ease; /* Transición para suavizar el cambio */
+}
+
+/* MEJORA: Expansión de fondo en categorías para permitir solapamiento */
+.creator-cta-section.is-filtered-cta {
+  padding-bottom: 150px; /* Expandimos el color hacia abajo */
 }
 
 .creator-cta-container {
@@ -432,7 +438,6 @@ nav .logo:hover::before {
   justify-content: space-evenly;
   align-items: center;
   flex-wrap: wrap;
-  /* Para que sea responsivo en celulares */
   gap: 50x;
 }
 
@@ -452,7 +457,7 @@ nav .logo:hover::before {
   text-align: center;
 }
 
-.btn-creator-login {
+.btn-creator-login, .btn-create-news, .btn-creator-logout, .btn-creator-register {
   background-color: #ff6600;
   color: #ffffff;
   border: none;
@@ -465,69 +470,16 @@ nav .logo:hover::before {
   font-size: 0.85rem;
 }
 
-.btn-creator-login:hover {
-  background-color: #b54900;
-  transform: scale(1.02);
-}
-.btn-create-news {
-  background-color: #ff6600;
-  color: white;
-  border: none;
-  padding: 10px 25px;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-}
-.btn-create-news:hover {
-  background-color: #b54900;
-  transform: scale(1.02);
-}
-.btn-creator-logout {
-  background-color: #ff6600;
-  color: white;
-  border: none;
-  padding: 10px 25px;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-
-}
-.btn-creator-logout:hover {
+.btn-creator-login:hover, .btn-create-news:hover, .btn-creator-logout:hover, .btn-creator-register:hover {
   background-color: #b54900;
   transform: scale(1.02);
 }
 
-
-/* Ajuste para móviles */
 @media (max-width: 768px) {
   .creator-cta-container {
     flex-direction: column;
     text-align: center;
   }
-}
-
-.btn-creator-register {
-  background-color: #ff6600;
-  color: white;
-  border: none;
-  padding: 10px 25px;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-}
-
-.btn-creator-register:hover {
-  background-color: #b54900;
-  transform: scale(1.02);
 }
 
 /*  LOGIN AND REGISTER MODAL*/
@@ -1492,4 +1444,20 @@ a.button:hover {
     padding: 3px 5px;
     font-size: 0.6rem;
   }
+}
+/* Esta capa obliga a los botones a estar por encima de CUALQUIER solapamiento */
+#interactive-cta-layer {
+  position: relative;
+  z-index: 9999 !important; /* Valor masivo para ser la capa superior del sitio */
+  pointer-events: auto !important; /* Asegura que responda al clic */
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* IMPORTANTE: Para que el z-index 9999 funcione, su padre no debe tener 'overflow: hidden' */
+.creator-cta-section {
+  position: relative;
+  z-index: 10;
+  overflow: visible !important; 
 }
