@@ -19,7 +19,7 @@ const ArticleSlider = ({ noticias, loading, isLoggedIn, fetchData, handleEditCli
   const location = useLocation();
   const isFiltered = location.search.length > 0;
 
-  // --- 1. TRIPLICACIÓN CON IDs ÚNICOS (Evita la confusión de clics) ---
+  // --- 1. TRIPLICACIÓN CON IDs ÚNICOS ---
   const noticiasInfinitas = noticias && noticias.length > 0 
     ? [
         ...noticias.map(n => ({ ...n, uniqueKey: `set1-${n._id}` })),
@@ -48,6 +48,7 @@ const ArticleSlider = ({ noticias, loading, isLoggedIn, fetchData, handleEditCli
       const distanceFromCenter = cardCenter - trackCenter;
       const absDistance = Math.abs(distanceFromCenter);
 
+      // Mantenemos tus valores de diseño de autor
       const scale = Math.max(0.80, 1.12 - (absDistance / 600));
       const translateZ = Math.max(-150, 100 - (absDistance / 3));
       const rotateY = (distanceFromCenter / 35) * -1;
@@ -72,7 +73,6 @@ const ArticleSlider = ({ noticias, loading, isLoggedIn, fetchData, handleEditCli
   };
 
   const handleCardClick = (e) => {
-    // Si la velocidad es alta, es un arrastre, no un clic
     if (Math.abs(dragData.current.velocity) > 3) return;
 
     const card = e.currentTarget;
@@ -131,13 +131,27 @@ const ArticleSlider = ({ noticias, loading, isLoggedIn, fetchData, handleEditCli
     const trigger = document.getElementById('anchor-articulos');
     if (trigger) observer.observe(trigger);
 
+    // MEJORA: Centralización de nacimiento
     if (noticias.length > 0) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         if (sliderRef.current) {
-          sliderRef.current.scrollLeft = sliderRef.current.scrollWidth / 3;
+          const track = sliderRef.current;
+          // Buscamos la primera tarjeta del set central (Set 2)
+          const cards = track.querySelectorAll('.slider-item');
+          const firstCardSet2 = cards[noticias.length]; 
+          
+          if (firstCardSet2) {
+            // Calculamos el punto exacto para que esta tarjeta nazca centrada
+            const centerPoint = (firstCardSet2.offsetLeft + firstCardSet2.offsetWidth / 2) - (track.offsetWidth / 2);
+            track.scrollLeft = centerPoint;
+          } else {
+            // Fallback por si la carga es asíncrona o lenta
+            track.scrollLeft = track.scrollWidth / 3;
+          }
           updateCardScales();
         }
-      }, 400);
+      }, 100); // Reducido el tiempo para que el efecto sea casi instantáneo
+      return () => clearTimeout(timer);
     }
     return () => observer.disconnect();
   }, [noticias, updateCardScales]);

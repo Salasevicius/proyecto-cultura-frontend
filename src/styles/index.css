@@ -998,7 +998,7 @@ a.button:hover {
   width: 0.1px;
   position: fixed !important;
   right: 125px !important;
-  top: 17% !important;
+  top: 20% !important;
   display: flex !important;
   flex-direction: column !important;
   gap: 10px !important;
@@ -1011,7 +1011,7 @@ a.button:hover {
   background: transparent !important;
   border: none !important;
   cursor: pointer !important;
-  padding: 12px !important;
+  padding: 18px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;

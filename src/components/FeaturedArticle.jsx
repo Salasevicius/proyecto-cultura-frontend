@@ -22,30 +22,26 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
     if (sectionRef.current) observer.observe(sectionRef.current);
 
     const handleScroll = () => {
-      // 1. FILTRO DE DISPOSITIVO: Solo calculamos si la pantalla es Desktop
       if (window.innerWidth > 768 && sectionRef.current) {
         const rect = sectionRef.current.getBoundingClientRect();
         const scrollPosition = window.innerHeight - rect.top;
         
         if (rect.top < window.innerHeight && rect.bottom > 0) {
           setOffset(scrollPosition * 0.25); 
-
           const opacityProgress = Math.min(Math.max(scrollPosition / 400, 0), 1);
           sectionRef.current.style.setProperty('--shadow-opacity', opacityProgress);
         }
       } else if (offset !== 0) {
-        // 2. RESET: Si la pantalla se achica, reseteamos el offset a 0
         setOffset(0);
       }
     };
 
     window.addEventListener('scroll', handleScroll);
-
     return () => {
       if (sectionRef.current) observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [offset]); // Añadimos offset a dependencias para asegurar el reset limpio
+  }, [offset]);
   
   if (!noticia) return null;
 
@@ -53,12 +49,12 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
     <section 
       className={`featured-wrapper ${isVisible ? 'is-visible' : ''}`} 
       ref={sectionRef}
-      /* El estilo inline ahora solo aplicará el valor real en Desktop */
       style={{ 
         '--parallax-offset': window.innerWidth > 768 ? `${offset}px` : '0px' 
       }}
     >
       <div className={`featured-main-card ${isOpen ? 'sidebar-open' : ''}`}>
+        {/* Lógica de navegación en el contenido principal */}
         <div className="featured-content" onClick={() => navigate(`/articulo/${noticia._id}`)}>
           <div className="featured-img-container">
             <img src={noticia.imageUrl} alt={noticia.title} />
@@ -72,24 +68,26 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
           </div>
         </div>
 
+        {/* El Cajón Lateral (Relacionadas) */}
         <aside className="featured-sidebar">
           <h3 className="sidebar-subtitle">RELACIONADAS</h3>
           <div className="sidebar-scroll-area">
             {noticiasSecundarias?.map((n) => (
               <div key={n._id} className="sidebar-row" onClick={() => navigate(`/articulo/${n._id}`)}>
-                <span>{n.category}</span>
-                <h4>{n.title}</h4>
+                <span className="sidebar-cat">{n.category}</span>
+                <h4 className="sidebar-item-title">{n.title}</h4>
               </div>
             ))}
           </div>
         </aside>
 
+        {/* Botón Toggle */}
         <button 
           className="sidebar-toggle" 
           onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}
         >
           <span className="toggle-icon">{isOpen ? '✕' : '→'}</span>
-          <span className="toggle-text">{isOpen ? 'CERRAR' : 'MÁS'}</span>
+          <span className="toggle-text">{isOpen ? 'CERRAR' : 'MÁS ARTÍCULOS DEL DÍA'}</span>
         </button>
       </div>
     </section>
