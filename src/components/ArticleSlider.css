@@ -1,5 +1,7 @@
 /* --- ARTICLE SLIDER: TARJETAS COMPACTAS Y HORIZONTALES --- */
-
+body, html {
+  background: #1a1a2e;
+}
 .slider-container-main {
   width: 100%;
   margin-top: -300px; /* Mantenemos el solapamiento de corpus en Desktop */
