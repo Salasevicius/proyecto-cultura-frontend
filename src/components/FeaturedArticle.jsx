@@ -50,7 +50,7 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
       className={`featured-wrapper ${isVisible ? 'is-visible' : ''}`} 
       ref={sectionRef}
       style={{ 
-        '--parallax-offset': window.innerWidth > 768 ? `${offset}px` : '0px' 
+        '--parallax-offset': (window.innerWidth > 768 && isVisible) ? `${offset}px` : '0px'
       }}
     >
       <div className={`featured-main-card ${isOpen ? 'sidebar-open' : ''}`}>
@@ -70,7 +70,7 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
 
         {/* El Cajón Lateral (Relacionadas) */}
         <aside className="featured-sidebar">
-          <h3 className="sidebar-subtitle">RELACIONADAS</h3>
+          <h3 className="sidebar-subtitle">ARTÍCULOS RELACIONADOS</h3>
           <div className="sidebar-scroll-area">
             {noticiasSecundarias?.map((n) => (
               <div key={n._id} className="sidebar-row" onClick={() => navigate(`/articulo/${n._id}`)}>

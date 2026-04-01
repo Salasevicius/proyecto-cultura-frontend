@@ -1,4 +1,4 @@
-/* --- FEATURED ARTICLE: CSS CONSOLIDADO Y CORREGIDO --- */
+/* --- FEATURED ARTICLE: CSS CONSOLIDADO Y COMPLETO --- */
 
 .featured-wrapper {
   width: 100%;
@@ -121,7 +121,7 @@
 .feat-link {
   margin-top: 6rem;
   margin-right: 15px; 
-  margin-left: auto; /* Empuja el botón hacia la derecha */
+  margin-left: auto; 
   background: transparent; 
   color: #e2b464; 
   border: none;
@@ -140,7 +140,6 @@
   z-index: 1;
 }
 
-/* El Haz de Luz (Destello que cruza) */
 .feat-link::before {
   content: '';
   position: absolute;
@@ -172,7 +171,6 @@
   box-shadow: 0 0 20px rgba(226, 180, 100, 0.2);
 }
 
-/* Disparo del haz de luz al hacer hover */
 .feat-link:hover::before {
   left: 150%;
   transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
@@ -230,10 +228,10 @@
 .toggle-icon { font-size: 1.2rem; margin-bottom: 10px; font-weight: bold; }
 .toggle-text { writing-mode: vertical-rl; font-size: 0.85rem; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
 
-/* --- MEDIA QUERIES: AJUSTE DE CENTRALIZACIÓN Y 50/50 --- */
+/* --- AJUSTE MÓVIL: DESPLIEGUE ULTRASUAVE (SLO-MO) --- */
 @media (max-width: 768px) {
   .featured-wrapper { 
-    padding: 60px 0 0 0x; 
+    padding: 60px 0 0 0; 
     margin-bottom: 0; 
     transform: none !important; 
     opacity: 1 !important; 
@@ -247,35 +245,35 @@
     overflow: visible; 
   }
 
-  .sidebar-open .featured-content { transform: none; }
+  .sidebar-open .featured-content { 
+    transform: none !important; 
+  }
 
-  /* MITAD 1: IMAGEN (50%) */
   .featured-img-container { 
     width: 100%; 
-    height: auto; /* Altura fija para impacto visual */
+    height: auto; 
     border-right: none; 
     border-bottom: 1px solid rgba(226, 180, 100, 0.2);
   }
 
-  /* MITAD 2: TEXTO (50%) - CENTRADO ERGONÓMICO */
   .featured-text { 
     width: 100%; 
-    padding: 35px 20px 85px 20px; /* Padding equilibrado */
+    padding: 35px 20px 85px 20px; 
     background: rgba(15, 23, 42, 0.85);
-    text-align: center; /* Centramos el contenido */
-    align-items: center; /* Centramos elementos flex */
+    text-align: center;
+    align-items: center;
   }
 
   .featured-tag { 
     left: 50%;
     top: 0; 
-    transform: translateX(-50%); /* Centrado absoluto */ 
+    transform: translateX(-50%); 
     font-size: 0.6rem; 
     padding: 4px 4px;
   }
 
   .feat-title { 
-    font-size: 1.65rem; /* Reducido para evitar cortes */
+    font-size: 1.65rem; 
     margin: 20px 0;
   }
 
@@ -286,43 +284,60 @@
   }
 
   .feat-link {
-    margin: 20px auto 0 auto; /* Centrado horizontal */
+    margin: 20px auto 0 auto;
     font-size: 1.1rem;
   }
 
-  /* SIDEBAR: Acordeón inferior */
   .featured-sidebar {
-    position: relative;
+    position: relative; 
     right: auto;
+    top: auto;
+    bottom: auto;
     width: 100%;
-    height: 0;
-    padding: 0 10px;
-    transform: none;
+    
+    /* CALIBRACIÓN DE VELOCIDAD */
+    max-height: 0; 
     opacity: 0;
+    padding: 0 20px;
+    
+    transform: translateY(-20px); /* Ligero desplazamiento inicial para efecto slide */
     overflow: hidden;
     background: rgba(10, 15, 28, 1);
     border-left: none;
-    transition: all 0.5s ease-in-out;
+    
+    /* Curva personalizada: Inicio lento, mitad suave, final frenado */
+    transition: max-height 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 1s ease-in-out, 
+                transform 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+                padding 1.2s ease;
   }
 
   .sidebar-open .featured-sidebar {
-    height: auto;
-    padding: 50px 20px;
+    max-height: 600px; /* Reducido para que la animación no se acelere */
+    padding: 50px 20px 100px 20px;
     opacity: 1;
+    transform: translateY(0);
     border-top: 1px solid rgba(226, 180, 100, 0.4);
   }
 
-  /* TOGGLE: Barra horizontal en la base */
   .sidebar-toggle {
     position: absolute;
     bottom: 0;
     top: auto;
     right: 0;
-    width: 100%;
+    left: 0;
+    width: 100% !important; 
     height: 55px;
     flex-direction: row;
     gap: 12px;
     border-radius: 0 0 12px 12px;
+    transition: none !important; 
+    z-index: 20;
+  }
+
+  .sidebar-toggle:hover {
+    width: 100% !important; 
+    background: #e2b464;
   }
 
   .toggle-text { 
@@ -333,7 +348,8 @@
   .toggle-icon { 
     margin-bottom: 0; 
     font-size: 1rem;
-    transition: transform 0.3s;
+    /* La flecha también se mueve con elegancia */
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .sidebar-open .toggle-icon { transform: rotate(180deg); }
