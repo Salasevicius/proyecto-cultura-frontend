@@ -9,6 +9,7 @@ import Pagination from './components/Pagination';
 import Footer from './components/Footer';
 import ArticleDetail from './components/ArticleDetail';
 import ArticleSlider from './components/ArticleSlider';
+import CulturaPreloader from './components/CulturaPreloader'; 
 import './components/ArticleSlider.css';
 import ScrollDotNav from './components/ScrollDotNav';
 import './styles/index.css';
@@ -18,6 +19,7 @@ import SkeletonCard from './components/SkeletonCard';
 function AppContent() {
   const [noticias, setNoticias] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [preloaderActive, setPreloaderActive] = useState(true); 
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
   const [userName, setUserName] = useState(localStorage.getItem('userName') || '');
   const [showLogin, setShowLogin] = useState(false);
@@ -26,23 +28,19 @@ function AppContent() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [articleToEdit, setArticleToEdit] = useState(null);
 
-  // --- IMPLEMENTACIÓN DE DISEÑO DE AUTOR: SCROLL GLOBAL ---
   const [globalScroll, setGlobalScroll] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Solo activamos la profundidad de campo en Desktop para mantener el rendimiento
       if (window.innerWidth > 768) {
         setGlobalScroll(window.scrollY);
       } else {
         setGlobalScroll(0);
       }
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  // -------------------------------------------------------
 
   const location = useLocation();
   const sections = [
@@ -51,7 +49,7 @@ function AppContent() {
   ];
 
   const fetchData = async () => {
-    setLoading(true);
+    setLoading(true); // Aseguramos que el estado de carga se active al filtrar o navegar
     try {
       const queryParams = new URLSearchParams(location.search);
       const category = queryParams.get('category');
@@ -75,6 +73,11 @@ function AppContent() {
     fetchData();
   }, [location.search]);
 
+  // Esta función es llamada por el Preloader al terminar su animación
+  const handlePreloaderComplete = () => {
+    setPreloaderActive(false);
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
@@ -96,63 +99,75 @@ function AppContent() {
 
   return (
     <>
-      <header>
-        <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-      </header>
-      <Routes>
-        <Route path="/" element={
-          <>
-            <ScrollDotNav sections={sections} />
-            <div style={{ position: 'relative' }}>
-              <div id="anchor-top" style={{ position: 'absolute', top: 0, height: '1px', width: '100%', pointerEvents: 'none' }}></div>
-              <HeaderHero />
-              
-              <CreatorCTA
-                isLoggedIn={isLoggedIn}
-                userName={userName}
-                onLoginClick={() => openAuthModal(false)}
-                onRegisterClick={() => openAuthModal(true)}
-                onLogout={handleLogout}
-                onCreateClick={() => setShowCreateModal(true)}
-                isFiltered={location.search.length > 0} 
-              />
-            </div>
+      {/* El preloader solo se renderiza si preloaderActive es true */}
+      {preloaderActive && <CulturaPreloader onComplete={handlePreloaderComplete} />}
 
-            {/* Inyectamos la variable de scroll en el contenedor principal */}
-            <main 
-              style={{ 
-                position: 'relative',
-                '--global-scroll': `${globalScroll}px` 
-              }}
-            >
-              
-              {!location.search && !loading && noticias.length > 0 && (
-                <FeaturedArticle 
-                  noticia={noticias[0]} 
-                  noticiasSecundarias={noticias.slice(1, 5)} 
-                />
-              )}
+      {/* Solo mostramos el contenido si el preloader terminó */}
+      {!preloaderActive && (
+        <div className="fade-in-site">
+          <header>
+            <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+          </header>
+          <Routes>
+            <Route path="/" element={
+              <>
+                <ScrollDotNav sections={sections} />
+                <div style={{ position: 'relative' }}>
+                  <div id="anchor-top" style={{ position: 'absolute', top: 0, height: '1px', width: '100%', pointerEvents: 'none' }}></div>
+                  <HeaderHero />
+                  
+                  <CreatorCTA
+                    isLoggedIn={isLoggedIn}
+                    userName={userName}
+                    onLoginClick={() => openAuthModal(false)}
+                    onRegisterClick={() => openAuthModal(true)}
+                    onLogout={handleLogout}
+                    onCreateClick={() => setShowCreateModal(true)}
+                    isFiltered={location.search.length > 0} 
+                  />
+                </div>
 
-              <div id="anchor-articulos" style={{ position: 'absolute', top: location.search ? '-100px' : '-200px', height: '1px', width: '100%', pointerEvents: 'none' }}></div>
+                <main 
+                  style={{ 
+                    position: 'relative',
+                    '--global-scroll': `${globalScroll}px` 
+                  }}
+                >
+                  {/* --- LÓGICA DE SKELETON PARA FEATURED --- */}
+                  {loading && !location.search && (
+                    <SkeletonCard type="featured" />
+                  )}
 
-              <ArticleSlider 
-                noticias={location.search ? noticias : noticias.slice(1)} 
-                loading={loading}
-                isLoggedIn={isLoggedIn}
-                fetchData={fetchData}
-                handleEditClick={handleEditClick}
-              />
-              
-              <Pagination />
-            </main>
-          </>
-        } />
-        <Route path="/articulo/:id" element={<ArticleDetail />} />
-      </Routes>
+                  {/* Articulo destacado real */}
+                  {!location.search && !loading && noticias.length > 0 && (
+                    <FeaturedArticle 
+                      noticia={noticias[0]} 
+                      noticiasSecundarias={noticias.slice(1, 5)} 
+                    />
+                  )}
 
-      <Footer isLoggedIn={isLoggedIn} onLoginClick={() => openAuthModal(false)} onRegisterClick={() => openAuthModal(true)} onCreateClick={() => setShowCreateModal(true)} />
+                  <div id="anchor-articulos" style={{ position: 'absolute', top: location.search ? '-100px' : '-200px', height: '1px', width: '100%', pointerEvents: 'none' }}></div>
 
-      {/* --- MODALES Y AUXILIARES (Sin cambios) --- */}
+                  {/* El ArticleSlider maneja sus propios Skeletons internamente usando la prop loading */}
+                  <ArticleSlider 
+                    noticias={location.search ? noticias : noticias.slice(1)} 
+                    loading={loading}
+                    isLoggedIn={isLoggedIn}
+                    fetchData={fetchData}
+                    handleEditClick={handleEditClick}
+                  />
+                  
+                  {!loading && <Pagination />}
+                </main>
+              </>
+            } />
+            <Route path="/articulo/:id" element={<ArticleDetail />} />
+          </Routes>
+
+          <Footer isLoggedIn={isLoggedIn} onLoginClick={() => openAuthModal(false)} onRegisterClick={() => openAuthModal(true)} onCreateClick={() => setShowCreateModal(true)} />
+        </div>
+      )}
+
       {showLogin && (
         <AuthModal
           initialRegister={isRegisterMode}
@@ -178,7 +193,7 @@ function App() {
   );
 }
 
-// --- Componentes Internos de soporte (Se mantienen idénticos) ---
+// --- Componentes Internos (Mantener tal cual estaban) ---
 function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
   const [isRegister, setIsRegister] = useState(initialRegister);
   const [email, setEmail] = useState('');

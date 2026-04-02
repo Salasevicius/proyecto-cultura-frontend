@@ -1,30 +1,37 @@
 import React from 'react';
 import './SkeletonCard.css';
 
-const SkeletonCard = () => {
-  return (
-    <article className="card skeleton-card">
-      {/* Imita a .card-image */}
-      <div className="skeleton-image shimmer"></div>
-      
-      <div className="skeleton-content">
-        {/* Imita a .category-tag */}
-        <div className="skeleton-tag shimmer"></div>
-        
-        {/* Imita al h3 */}
-        <div className="skeleton-title shimmer"></div>
-        <div className="skeleton-title short shimmer"></div>
-        
-        {/* Imita al p (descripción) */}
-        <div className="skeleton-text shimmer"></div>
-        <div className="skeleton-text shimmer"></div>
-        
-        {/* Imita al footer y al botón .btn-read */}
-        <div className="card-footer-actions">
-          <div className="skeleton-button shimmer"></div>
+const SkeletonCard = ({ type = "slider" }) => {
+  // Si el tipo es 'featured', renderizamos la estructura de la noticia principal
+  if (type === "featured") {
+    return (
+      <section className="featured-skeleton shimmer-bg">
+        <div className="featured-skeleton-content">
+          <div className="sk-tag shimmer"></div>
+          <div className="sk-title-large shimmer"></div>
+          <div className="sk-title-large short shimmer"></div>
+          <div className="sk-excerpt shimmer"></div>
+          <div className="sk-excerpt shimmer"></div>
+          <div className="sk-button-featured shimmer"></div>
         </div>
-      </div>
-    </article>
+        <div className="featured-skeleton-image shimmer"></div>
+      </section>
+    );
+  }
+
+  // Por defecto, renderiza el formato para el ArticleSlider
+  return (
+    <div className="slider-item">
+      <article className="skeleton-card">
+        <div className="skeleton-image shimmer"></div>
+        <div className="skeleton-content">
+          <div className="sk-title shimmer"></div>
+          <div className="sk-title short shimmer"></div>
+          <div className="sk-text shimmer"></div>
+          <div className="sk-text shimmer"></div>
+        </div>
+      </article>
+    </div>
   );
 };
 

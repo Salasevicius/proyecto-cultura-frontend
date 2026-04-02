@@ -1,0 +1,162 @@
+:root {
+  --ros-naranja: #ff6600;
+  --ros-azul-deep: #1a1a2e; /* NUEVO FONDO INICIAL */
+  --ros-dorado-tech: #e2b464; /* Dorado para el look blueprint inicial */
+  --ros-blanco: #ffffff;
+}
+
+.preloader-master {
+  position: fixed;
+  inset: 0;
+  background-color: var(--ros-azul-deep); /* INICIO EN AZUL PROFUNDO */
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  /* El cambio de background-color lo maneja GSAP lentamente */
+}
+
+/* Textura de grano sutil para un acabado artístico */
+.capa-textura {
+  position: absolute;
+  inset: 0;
+  background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+  opacity: 0.03; /* Muy sutil sobre el azul */
+  pointer-events: none;
+}
+
+.layout-art {
+  position: relative;
+  width: 85vw;
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 10;
+}
+
+/* PANEL INFORMATIVO */
+.panel-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dato-tec {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: var(--ros-dorado-tech); /* Comienza en Dorado Técnico */
+  opacity: 0.8;
+  transition: color 3s ease; /* Sincronizado con GSAP */
+}
+
+.linea-guia {
+  width: 60px;
+  height: 4px;
+  background: var(--ros-dorado-tech);
+  margin-top: 10px;
+  transition: background-color 3s ease;
+}
+
+/* CENTRO VISUAL */
+.centro-monumental {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.svg-monumento {
+  position: absolute;
+  width: 65vh; /* Monumental */
+}
+
+.path-monumento {
+  fill: none;
+  stroke: var(--ros-dorado-tech); /* Comienza en Dorado blueprint */
+  stroke-width: 1.2;
+  transition: stroke 3s ease;
+}
+
+.contenedor-marca {
+  text-align: center;
+  z-index: 20;
+}
+
+.titulo-gigante {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+  line-height: 0.75;
+}
+
+.linea-h {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.letra {
+  display: inline-block;
+  font-size: clamp(4rem, 18vw, 12rem); /* Escala Masiva */
+  font-weight: 900;
+  color: var(--ros-blanco); /* Comienza en Blanco puro */
+  letter-spacing: -8px;
+  transition: color 3s ease;
+}
+
+/* "CULTURA" comienza en Naranja para choque visual inicial */
+.letra.letra-naranja {
+  color: var(--ros-naranja);
+}
+
+/* FOOTER */
+.panel-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.frase-dinamica {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: var(--ros-blanco);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.barra-progreso {
+  width: 300px;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.progreso-fill {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--ros-naranja);
+  transform: translateX(-100%);
+  animation: cargaLenta 8s infinite ease-in-out; /* Más lenta */
+}
+
+@keyframes cargaLenta {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
+}
+
+@media (max-width: 768px) {
+  .letra { font-size: 4.5rem; letter-spacing: -3px; }
+  .svg-monumento { width: 45vh; }
+  .barra-progreso { width: 100%; }
+}
