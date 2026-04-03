@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { API_URL } from "../config";
+import LazyImage from './LazyImage'; // Ajusta la ruta según tu carpeta
 
 const ArticleCard = ({ noticia, isLoggedIn, onActionSuccess, onEditClick }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -53,7 +54,11 @@ const ArticleCard = ({ noticia, isLoggedIn, onActionSuccess, onEditClick }) => {
       ref={cardRef} 
       className={`card ${isVisible ? 'is-visible' : ''}`}
     >
-      <img src={noticia.imageUrl} alt={noticia.title} className="card-image" />
+      <LazyImage 
+  src={noticia.imageUrl} 
+  alt={noticia.title} 
+  className="card-image" 
+/>
       <div className="card-content">
         <span className="category-tag">{noticia.category}</span>
         <h3>{noticia.title}</h3>

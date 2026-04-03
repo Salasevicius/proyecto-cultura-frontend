@@ -4,7 +4,6 @@ import Navbar from './components/Navbar';
 import CreatorCTA from './components/CreatorCTA';
 import HeaderHero from './components/HeaderHero';
 import FeaturedArticle from './components/FeaturedArticle';
-import ArticleCard from './components/ArticleCard';
 import Pagination from './components/Pagination';
 import Footer from './components/Footer';
 import ArticleDetail from './components/ArticleDetail';
@@ -45,11 +44,11 @@ function AppContent() {
   const location = useLocation();
   const sections = [
     { id: 'anchor-top', label: 'Inicio' },
-    { id: 'anchor-articulos', label: 'Artículos' }
+    { id: 'anchor-articulos', label: 'Artículos' },
   ];
 
   const fetchData = async () => {
-    setLoading(true); // Aseguramos que el estado de carga se active al filtrar o navegar
+    setLoading(true); 
     try {
       const queryParams = new URLSearchParams(location.search);
       const category = queryParams.get('category');
@@ -73,7 +72,6 @@ function AppContent() {
     fetchData();
   }, [location.search]);
 
-  // Esta función es llamada por el Preloader al terminar su animación
   const handlePreloaderComplete = () => {
     setPreloaderActive(false);
   };
@@ -99,10 +97,8 @@ function AppContent() {
 
   return (
     <>
-      {/* El preloader solo se renderiza si preloaderActive es true */}
       {preloaderActive && <CulturaPreloader onComplete={handlePreloaderComplete} />}
 
-      {/* Solo mostramos el contenido si el preloader terminó */}
       {!preloaderActive && (
         <div className="fade-in-site">
           <header>
@@ -133,12 +129,12 @@ function AppContent() {
                     '--global-scroll': `${globalScroll}px` 
                   }}
                 >
-                  {/* --- LÓGICA DE SKELETON PARA FEATURED --- */}
+                  {/* SKELETON PARA FEATURED */}
                   {loading && !location.search && (
                     <SkeletonCard type="featured" />
                   )}
 
-                  {/* Articulo destacado real */}
+                  {/* ARTICULO DESTACADO REAL */}
                   {!location.search && !loading && noticias.length > 0 && (
                     <FeaturedArticle 
                       noticia={noticias[0]} 
@@ -148,14 +144,14 @@ function AppContent() {
 
                   <div id="anchor-articulos" style={{ position: 'absolute', top: location.search ? '-100px' : '-200px', height: '1px', width: '100%', pointerEvents: 'none' }}></div>
 
-                  {/* El ArticleSlider maneja sus propios Skeletons internamente usando la prop loading */}
+                  {/* SLIDER DE ARTÍCULOS */}
                   <ArticleSlider 
                     noticias={location.search ? noticias : noticias.slice(1)} 
                     loading={loading}
                     isLoggedIn={isLoggedIn}
                     fetchData={fetchData}
                     handleEditClick={handleEditClick}
-                  />
+                  />                  
                   
                   {!loading && <Pagination />}
                 </main>
@@ -193,7 +189,8 @@ function App() {
   );
 }
 
-// --- Componentes Internos (Mantener tal cual estaban) ---
+// --- Componentes Internos de Soporte (Mantenidos) ---
+
 function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
   const [isRegister, setIsRegister] = useState(initialRegister);
   const [email, setEmail] = useState('');

@@ -2,7 +2,7 @@
   --ros-naranja: #ff6600;
   --ros-azul-deep: #1a1a2e; /* NUEVO FONDO INICIAL */
   --ros-dorado-tech: #e2b464; /* Dorado para el look blueprint inicial */
-  --ros-blanco: #ffffff;
+  --ros-blanco: #000;
 }
 
 .preloader-master {
@@ -126,7 +126,7 @@
   font-size: 0.7rem;
   font-weight: 900;
   letter-spacing: 4px;
-  color: var(--ros-blanco);
+  color: #ffffffff;
   margin-bottom: 20px;
   text-transform: uppercase;
   opacity: 0.8;

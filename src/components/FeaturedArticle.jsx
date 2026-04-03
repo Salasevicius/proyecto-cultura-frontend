@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './FeaturedArticle.css';
+import LazyImage from './LazyImage'; // Ajusta la ruta según tu carpeta
 
 const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,9 +57,14 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
       <div className={`featured-main-card ${isOpen ? 'sidebar-open' : ''}`}>
         {/* Lógica de navegación en el contenido principal */}
         <div className="featured-content" onClick={() => navigate(`/articulo/${noticia._id}`)}>
-          <div className="featured-img-container">
-            <img src={noticia.imageUrl} alt={noticia.title} />
-          </div>
+          
+<div className="featured-img-container">
+  <LazyImage 
+    src={noticia.imageUrl} 
+    alt={noticia.title} 
+    className="featured-main-img" // Puedes mantener o cambiar el nombre de la clase
+  />
+</div>
           <div className="featured-text">
             <div className="featured-tag">ARTÍCULO DEL DÍA</div>
             <span className="feat-cat">{noticia.category}</span>
