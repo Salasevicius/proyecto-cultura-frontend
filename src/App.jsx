@@ -18,7 +18,7 @@ import SkeletonCard from './components/SkeletonCard';
 function AppContent() {
   const [noticias, setNoticias] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [preloaderActive, setPreloaderActive] = useState(true); 
+  const [preloaderActive, setPreloaderActive] = useState(false); 
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
   const [userName, setUserName] = useState(localStorage.getItem('userName') || '');
   const [showLogin, setShowLogin] = useState(false);
