@@ -256,202 +256,233 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
   );
 }
 
+/* ==========================================================================
+   COMPONENTES DE EDICIÓN Y CREACIÓN (CORREGIDOS)
+   ========================================================================== */
+
+/* ==========================================================================
+   COMPONENTES DE EDICIÓN Y CREACIÓN (VERSION FINAL CORREGIDA)
+   ========================================================================== */
+
 function CreateArticleModal({ onClose, onSuccess }) {
   const [formData, setFormData] = useState({
-    title: '', description: '', content: '', category: 'Destacados', imageUrl: ''
+    title: '', 
+    description: '', 
+    content: '', 
+    category: 'Destacados', 
+    imageUrl: ''
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
+    
     try {
       const response = await fetch(`${API_URL}/api/articles`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify(formData)
+        headers: { 
+          'Content-Type': 'application/json', 
+          'Authorization': `Bearer ${token}` 
+        },
+        // Enviamos formData. El Backend extraerá el userId del token automáticamente.
+        body: JSON.stringify(formData) 
       });
       const result = await response.json();
       if (result.success) {
         alert("¡Artículo publicado!");
         onSuccess();
         onClose();
-      } else { alert("Error al publicar"); }
-    } catch (error) { alert("Error de conexión"); }
+      } else { 
+        // Mostramos el error específico del servidor si existe
+        alert("Error al publicar: " + (result.error?.message || "Verifica los datos")); 
+      }
+    } catch (error) { 
+      alert("Error de conexión con el servidor"); 
+    }
   };
 
   return (
-  <div className="login-overlay" onClick={onClose}>
-    <div className="login-modal article-editor-v2" onClick={(e) => e.stopPropagation()}>
-      <div className="editor-header">
-        <h3>{formData.title ? 'Editando Crónica' : 'Nueva Crónica Rosarina'}</h3>
-        <button className="close-x" onClick={onClose}>×</button>
-      </div>
-      
-      <form onSubmit={handleSubmit} className="modern-editor-form">
-        {/* Título Principal */}
-        <input 
-          type="text" 
-          className="main-title-input"
-          placeholder="Título de la crónica..." 
-          value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })} 
-          required 
-        />
+    <div className="login-overlay" onClick={onClose}>
+      <div className="login-modal article-editor-v2" onClick={(e) => e.stopPropagation()}>
+        <div className="editor-header">
+          <h3>Nueva Crónica Rosarina</h3>
+          <button className="close-x" onClick={onClose}>×</button>
+        </div>
+        
+        <form onSubmit={handleSubmit} className="modern-editor-form">
+          <input 
+            type="text" 
+            className="main-title-input"
+            placeholder="Título de la crónica..." 
+            value={formData.title}
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })} 
+            required 
+          />
 
-        <div className="editor-grid">
-          {/* Columna Izquierda: Escritura */}
-          <div className="writing-zone">
-            <textarea 
-              className="desc-area-v2" 
-              placeholder="Copete o introducción breve..." 
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })} 
-              required 
-            />
-            <textarea 
-              className="content-area-v2" 
-              placeholder="Escribe aquí el cuerpo de la historia..." 
-              value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })} 
-              required 
-            />
-          </div>
-
-          {/* Columna Derecha: Metadatos (Se apila en móvil) */}
-          <div className="meta-zone">
-            <div className="input-group">
-              <label>Categoría</label>
-              <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
-                <option value="Destacados">Destacados</option>
-                <option value="Biografías">Biografías</option>
-                <option value="Literarios">Literarios</option>
-                <option value="Periodísticos">Periodísticos</option>
-                <option value="Opinión">Opinión</option>
-              </select>
-            </div>
-            
-            <div className="input-group">
-              <label>Ruta de Imagen</label>
-              <input 
-                type="text" 
-                placeholder="/ejemplo.webp" 
-                value={formData.imageUrl}
-                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} 
+          <div className="editor-grid">
+            <div className="writing-zone">
+              <textarea 
+                className="desc-area-v2" 
+                placeholder="Copete o introducción breve..." 
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })} 
+                required 
+              />
+              <textarea 
+                className="content-area-v2" 
+                placeholder="Escribe aquí el cuerpo de la historia..." 
+                value={formData.content}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })} 
                 required 
               />
             </div>
 
-            <div className="editor-footer-actions">
-              <button type="submit" className="btn-publish">
-                {formData._id ? 'Guardar Cambios' : 'Publicar Ahora'}
-              </button>
-              <button type="button" onClick={onClose} className="btn-discard">Cancelar</button>
+            <div className="meta-zone">
+              <div className="input-group">
+                <label>Categoría</label>
+                <select 
+                  value={formData.category} 
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                >
+                  <option value="Destacados">Destacados</option>
+                  {/* Sincronizado con Mongoose y Zod */}
+                  <option value="Microbiografías">Microbiografías</option>
+                  <option value="Literarios">Literarios</option>
+                  <option value="Periodísticos">Periodísticos</option>
+                  <option value="Opinión">Opinión</option>
+                </select>
+              </div>
+              
+              <div className="input-group">
+                <label>Ruta de Imagen</label>
+                <input 
+                  type="text" 
+                  placeholder="/ejemplo.webp" 
+                  value={formData.imageUrl}
+                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} 
+                  required 
+                />
+              </div>
+
+              <div className="editor-footer-actions">
+                <button type="submit" className="btn-publish">Publicar Ahora</button>
+                <button type="button" onClick={onClose} className="btn-discard">Cancelar</button>
+              </div>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
-  </div>
-);
+  );
 }
 
 function EditArticleModal({ noticia, onClose, onSuccess }) {
   const [formData, setFormData] = useState({
-    title: noticia.title, description: noticia.description, content: noticia.content, category: noticia.category, imageUrl: noticia.imageUrl
+    title: noticia.title, 
+    description: noticia.description, 
+    content: noticia.content, 
+    category: noticia.category, 
+    imageUrl: noticia.imageUrl
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
+
     try {
       const response = await fetch(`${API_URL}/api/articles/${noticia._id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify(formData)
+        headers: { 
+          'Content-Type': 'application/json', 
+          'Authorization': `Bearer ${token}` 
+        },
+        body: JSON.stringify(formData) 
       });
       const result = await response.json();
       if (result.success) {
         alert("¡Artículo actualizado!");
         onSuccess();
         onClose();
-      } else { alert("Error al actualizar"); }
-    } catch (error) { alert("Error de conexión"); }
+      } else { 
+        alert("Error al actualizar: " + (result.error || "Intenta nuevamente")); 
+      }
+    } catch (error) { 
+      alert("Error de conexión"); 
+    }
   };
 
   return (
-  <div className="login-overlay" onClick={onClose}>
-    <div className="login-modal article-editor-v2" onClick={(e) => e.stopPropagation()}>
-      <div className="editor-header">
-        <h3>{formData.title ? 'Editando Crónica' : 'Nueva Crónica Rosarina'}</h3>
-        <button className="close-x" onClick={onClose}>×</button>
-      </div>
-      
-      <form onSubmit={handleSubmit} className="modern-editor-form">
-        {/* Título Principal */}
-        <input 
-          type="text" 
-          className="main-title-input"
-          placeholder="Título de la crónica..." 
-          value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })} 
-          required 
-        />
+    <div className="login-overlay" onClick={onClose}>
+      <div className="login-modal article-editor-v2" onClick={(e) => e.stopPropagation()}>
+        <div className="editor-header">
+          <h3>Editando Crónica</h3>
+          <button className="close-x" onClick={onClose}>×</button>
+        </div>
+        
+        <form onSubmit={handleSubmit} className="modern-editor-form">
+          <input 
+            type="text" 
+            className="main-title-input"
+            placeholder="Título de la crónica..." 
+            value={formData.title}
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })} 
+            required 
+          />
 
-        <div className="editor-grid">
-          {/* Columna Izquierda: Escritura */}
-          <div className="writing-zone">
-            <textarea 
-              className="desc-area-v2" 
-              placeholder="Copete o introducción breve..." 
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })} 
-              required 
-            />
-            <textarea 
-              className="content-area-v2" 
-              placeholder="Escribe aquí el cuerpo de la historia..." 
-              value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })} 
-              required 
-            />
-          </div>
-
-          {/* Columna Derecha: Metadatos (Se apila en móvil) */}
-          <div className="meta-zone">
-            <div className="input-group">
-              <label>Categoría</label>
-              <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
-                <option value="Destacados">Destacados</option>
-                <option value="Biografías">Biografías</option>
-                <option value="Literarios">Literarios</option>
-                <option value="Periodísticos">Periodísticos</option>
-                <option value="Opinión">Opinión</option>
-              </select>
-            </div>
-            
-            <div className="input-group">
-              <label>Ruta de Imagen</label>
-              <input 
-                type="text" 
-                placeholder="/ejemplo.webp" 
-                value={formData.imageUrl}
-                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} 
+          <div className="editor-grid">
+            <div className="writing-zone">
+              <textarea 
+                className="desc-area-v2" 
+                placeholder="Copete o introducción breve..." 
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })} 
+                required 
+              />
+              <textarea 
+                className="content-area-v2" 
+                placeholder="Escribe aquí el cuerpo de la historia..." 
+                value={formData.content}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })} 
                 required 
               />
             </div>
 
-            <div className="editor-footer-actions">
-              <button type="submit" className="btn-publish">
-                {formData._id ? 'Guardar Cambios' : 'Publicar Ahora'}
-              </button>
-              <button type="button" onClick={onClose} className="btn-discard">Cancelar</button>
+            <div className="meta-zone">
+              <div className="input-group">
+                <label>Categoría</label>
+                <select 
+                  value={formData.category} 
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                >
+                  <option value="Destacados">Destacados</option>
+                  <option value="Microbiografías">Microbiografías</option>
+                  <option value="Literarios">Literarios</option>
+                  <option value="Periodísticos">Periodísticos</option>
+                  <option value="Opinión">Opinión</option>
+                </select>
+              </div>
+              
+              <div className="input-group">
+                <label>Ruta de Imagen</label>
+                <input 
+                  type="text" 
+                  placeholder="/ejemplo.webp" 
+                  value={formData.imageUrl}
+                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} 
+                  required 
+                />
+              </div>
+
+              <div className="editor-footer-actions">
+                <button type="submit" className="btn-publish">Guardar Cambios</button>
+                <button type="button" onClick={onClose} className="btn-discard">Cancelar</button>
+              </div>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
-  </div>
-);
+  );
 }
 
 export default App;
