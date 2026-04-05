@@ -18,7 +18,7 @@ import SkeletonCard from './components/SkeletonCard';
 function AppContent() {
   const [noticias, setNoticias] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [preloaderActive, setPreloaderActive] = useState(false); 
+  const [preloaderActive, setPreloaderActive] = useState(true); 
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
   const [userName, setUserName] = useState(localStorage.getItem('userName') || '');
   const [showLogin, setShowLogin] = useState(false);
@@ -151,7 +151,10 @@ function AppContent() {
                     isLoggedIn={isLoggedIn}
                     fetchData={fetchData}
                     handleEditClick={handleEditClick}
-                  />                  
+                  />
+
+                  {/* --- NUEVA UBICACIÓN: LA CHICAGO ARGENTINA (POST-SLIDER) --- */}
+                  
                   
                   {!loading && <Pagination />}
                 </main>
@@ -277,29 +280,79 @@ function CreateArticleModal({ onClose, onSuccess }) {
   };
 
   return (
-    <div className="login-overlay" onClick={onClose}>
-      <div className="login-modal" style={{ maxWidth: '600px' }} onClick={(e) => e.stopPropagation()}>
-        <h3>Nueva Crónica Rosarina</h3>
-        <form onSubmit={handleSubmit}>
-          <input type="text" placeholder="Título" onChange={(e) => setFormData({ ...formData, title: e.target.value })} required />
-          <textarea placeholder="Descripción" style={{ width: '100%', marginBottom: '1rem', background: '#252525', color: 'white', border: '1px solid #444', padding: '10px' }} onChange={(e) => setFormData({ ...formData, description: e.target.value })} required />
-          <textarea placeholder="Contenido" style={{ width: '100%', minHeight: '120px', marginBottom: '1rem', background: '#252525', color: 'white', border: '1px solid #444', padding: '10px' }} onChange={(e) => setFormData({ ...formData, content: e.target.value })} required />
-          <select style={{ width: '100%', marginBottom: '1rem', background: '#252525', color: 'white', padding: '10px' }} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
-            <option value="Destacados">Destacados</option>
-            <option value="Biografías">Biografías</option>
-            <option value="Literarios">Literarios</option>
-            <option value="Periodísticos">Periodísticos</option>
-            <option value="Opinión">Opinión</option>
-          </select>
-          <input type="text" placeholder="Ruta de imagen" onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} required />
-          <div className="login-buttons">
-            <button type="submit" className="btn-send">Publicar</button>
-            <button type="button" onClick={onClose} className="btn-cancel">Cancelar</button>
-          </div>
-        </form>
+  <div className="login-overlay" onClick={onClose}>
+    <div className="login-modal article-editor-v2" onClick={(e) => e.stopPropagation()}>
+      <div className="editor-header">
+        <h3>{formData.title ? 'Editando Crónica' : 'Nueva Crónica Rosarina'}</h3>
+        <button className="close-x" onClick={onClose}>×</button>
       </div>
+      
+      <form onSubmit={handleSubmit} className="modern-editor-form">
+        {/* Título Principal */}
+        <input 
+          type="text" 
+          className="main-title-input"
+          placeholder="Título de la crónica..." 
+          value={formData.title}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })} 
+          required 
+        />
+
+        <div className="editor-grid">
+          {/* Columna Izquierda: Escritura */}
+          <div className="writing-zone">
+            <textarea 
+              className="desc-area-v2" 
+              placeholder="Copete o introducción breve..." 
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })} 
+              required 
+            />
+            <textarea 
+              className="content-area-v2" 
+              placeholder="Escribe aquí el cuerpo de la historia..." 
+              value={formData.content}
+              onChange={(e) => setFormData({ ...formData, content: e.target.value })} 
+              required 
+            />
+          </div>
+
+          {/* Columna Derecha: Metadatos (Se apila en móvil) */}
+          <div className="meta-zone">
+            <div className="input-group">
+              <label>Categoría</label>
+              <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
+                <option value="Destacados">Destacados</option>
+                <option value="Biografías">Biografías</option>
+                <option value="Literarios">Literarios</option>
+                <option value="Periodísticos">Periodísticos</option>
+                <option value="Opinión">Opinión</option>
+              </select>
+            </div>
+            
+            <div className="input-group">
+              <label>Ruta de Imagen</label>
+              <input 
+                type="text" 
+                placeholder="/ejemplo.webp" 
+                value={formData.imageUrl}
+                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} 
+                required 
+              />
+            </div>
+
+            <div className="editor-footer-actions">
+              <button type="submit" className="btn-publish">
+                {formData._id ? 'Guardar Cambios' : 'Publicar Ahora'}
+              </button>
+              <button type="button" onClick={onClose} className="btn-discard">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
-  );
+  </div>
+);
 }
 
 function EditArticleModal({ noticia, onClose, onSuccess }) {
@@ -326,29 +379,79 @@ function EditArticleModal({ noticia, onClose, onSuccess }) {
   };
 
   return (
-    <div className="login-overlay" onClick={onClose}>
-      <div className="login-modal" style={{ maxWidth: '600px' }} onClick={(e) => e.stopPropagation()}>
-        <h3>Editar Crónica</h3>
-        <form onSubmit={handleSubmit}>
-          <input type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} required />
-          <textarea value={formData.description} style={{ width: '100%', marginBottom: '1rem', background: '#252525', color: 'white', border: '1px solid #444', padding: '10px' }} onChange={(e) => setFormData({ ...formData, description: e.target.value })} required />
-          <textarea value={formData.content} style={{ width: '100%', minHeight: '120px', marginBottom: '1rem', background: '#252525', color: 'white', border: '1px solid #444', padding: '10px' }} onChange={(e) => setFormData({ ...formData, content: e.target.value })} required />
-          <select value={formData.category} style={{ width: '100%', marginBottom: '1rem', background: '#252525', color: 'white', padding: '10px' }} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
-            <option value="Destacados">Destacados</option>
-            <option value="Biografías">Biografías</option>
-            <option value="Literarios">Literarios</option>
-            <option value="Periodísticos">Periodísticos</option>
-            <option value="Opinión">Opinión</option>
-          </select>
-          <input type="text" value={formData.imageUrl} onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} required />
-          <div className="login-buttons">
-            <button type="submit" className="btn-send">Guardar Cambios</button>
-            <button type="button" onClick={onClose} className="btn-cancel">Cancelar</button>
-          </div>
-        </form>
+  <div className="login-overlay" onClick={onClose}>
+    <div className="login-modal article-editor-v2" onClick={(e) => e.stopPropagation()}>
+      <div className="editor-header">
+        <h3>{formData.title ? 'Editando Crónica' : 'Nueva Crónica Rosarina'}</h3>
+        <button className="close-x" onClick={onClose}>×</button>
       </div>
+      
+      <form onSubmit={handleSubmit} className="modern-editor-form">
+        {/* Título Principal */}
+        <input 
+          type="text" 
+          className="main-title-input"
+          placeholder="Título de la crónica..." 
+          value={formData.title}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })} 
+          required 
+        />
+
+        <div className="editor-grid">
+          {/* Columna Izquierda: Escritura */}
+          <div className="writing-zone">
+            <textarea 
+              className="desc-area-v2" 
+              placeholder="Copete o introducción breve..." 
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })} 
+              required 
+            />
+            <textarea 
+              className="content-area-v2" 
+              placeholder="Escribe aquí el cuerpo de la historia..." 
+              value={formData.content}
+              onChange={(e) => setFormData({ ...formData, content: e.target.value })} 
+              required 
+            />
+          </div>
+
+          {/* Columna Derecha: Metadatos (Se apila en móvil) */}
+          <div className="meta-zone">
+            <div className="input-group">
+              <label>Categoría</label>
+              <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
+                <option value="Destacados">Destacados</option>
+                <option value="Biografías">Biografías</option>
+                <option value="Literarios">Literarios</option>
+                <option value="Periodísticos">Periodísticos</option>
+                <option value="Opinión">Opinión</option>
+              </select>
+            </div>
+            
+            <div className="input-group">
+              <label>Ruta de Imagen</label>
+              <input 
+                type="text" 
+                placeholder="/ejemplo.webp" 
+                value={formData.imageUrl}
+                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} 
+                required 
+              />
+            </div>
+
+            <div className="editor-footer-actions">
+              <button type="submit" className="btn-publish">
+                {formData._id ? 'Guardar Cambios' : 'Publicar Ahora'}
+              </button>
+              <button type="button" onClick={onClose} className="btn-discard">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
-  );
+  </div>
+);
 }
 
 export default App;
