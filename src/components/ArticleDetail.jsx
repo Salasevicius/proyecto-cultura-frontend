@@ -70,11 +70,12 @@ const ArticleDetail = () => {
               <span className="category-tag">{noticia.category}</span>
               <h1 className="main-title-split">{noticia.title}</h1>
               <p className="subtitle-split">{noticia.description}</p>
+              {/* NUEVO: Autor debajo de la descripción */}
+              {noticia.author && <p className="author-split">Por {noticia.author}</p>}
             </div>
           </header>
 
           <figure className="hero-image-side">
-            {/* Aquí usamos la imagen tal cual viene para el renderizado local */}
             <img src={noticia.imageUrl} alt={noticia.title} />
           </figure>
         </section>

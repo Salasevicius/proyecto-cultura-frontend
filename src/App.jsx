@@ -129,12 +129,10 @@ function AppContent() {
                     '--global-scroll': `${globalScroll}px` 
                   }}
                 >
-                  {/* SKELETON PARA FEATURED */}
                   {loading && !location.search && (
                     <SkeletonCard type="featured" />
                   )}
 
-                  {/* ARTICULO DESTACADO REAL */}
                   {!location.search && !loading && noticias.length > 0 && (
                     <FeaturedArticle 
                       noticia={noticias[0]} 
@@ -144,7 +142,6 @@ function AppContent() {
 
                   <div id="anchor-articulos" style={{ position: 'absolute', top: location.search ? '-100px' : '-200px', height: '1px', width: '100%', pointerEvents: 'none' }}></div>
 
-                  {/* SLIDER DE ARTÍCULOS */}
                   <ArticleSlider 
                     noticias={location.search ? noticias : noticias.slice(1)} 
                     loading={loading}
@@ -152,9 +149,6 @@ function AppContent() {
                     fetchData={fetchData}
                     handleEditClick={handleEditClick}
                   />
-
-                  {/* --- NUEVA UBICACIÓN: LA CHICAGO ARGENTINA (POST-SLIDER) --- */}
-                  
                   
                   {!loading && <Pagination />}
                 </main>
@@ -192,7 +186,9 @@ function App() {
   );
 }
 
-// --- Componentes Internos de Soporte (Mantenidos) ---
+/* ==========================================================================
+   COMPONENTES INTERNOS DE SOPORTE (ACTUALIZADOS)
+   ========================================================================== */
 
 function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
   const [isRegister, setIsRegister] = useState(initialRegister);
@@ -256,17 +252,10 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
   );
 }
 
-/* ==========================================================================
-   COMPONENTES DE EDICIÓN Y CREACIÓN (CORREGIDOS)
-   ========================================================================== */
-
-/* ==========================================================================
-   COMPONENTES DE EDICIÓN Y CREACIÓN (VERSION FINAL CORREGIDA)
-   ========================================================================== */
-
 function CreateArticleModal({ onClose, onSuccess }) {
   const [formData, setFormData] = useState({
     title: '', 
+    author: '', // NUEVO CAMPO AGREGADO
     description: '', 
     content: '', 
     category: 'Destacados', 
@@ -284,7 +273,6 @@ function CreateArticleModal({ onClose, onSuccess }) {
           'Content-Type': 'application/json', 
           'Authorization': `Bearer ${token}` 
         },
-        // Enviamos formData. El Backend extraerá el userId del token automáticamente.
         body: JSON.stringify(formData) 
       });
       const result = await response.json();
@@ -293,7 +281,6 @@ function CreateArticleModal({ onClose, onSuccess }) {
         onSuccess();
         onClose();
       } else { 
-        // Mostramos el error específico del servidor si existe
         alert("Error al publicar: " + (result.error?.message || "Verifica los datos")); 
       }
     } catch (error) { 
@@ -316,6 +303,17 @@ function CreateArticleModal({ onClose, onSuccess }) {
             placeholder="Título de la crónica..." 
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })} 
+            required 
+          />
+
+          {/* NUEVO INPUT PARA EL AUTOR */}
+          <input 
+            type="text" 
+            className="author-input-v2"
+            style={{ width: '100%', marginBottom: '15px', padding: '10px', background: '#1a1a2e', border: '1px solid #e2b464', color: 'white', borderRadius: '4px' }}
+            placeholder="Nombre del autor..." 
+            value={formData.author}
+            onChange={(e) => setFormData({ ...formData, author: e.target.value })} 
             required 
           />
 
@@ -345,7 +343,6 @@ function CreateArticleModal({ onClose, onSuccess }) {
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 >
                   <option value="Destacados">Destacados</option>
-                  {/* Sincronizado con Mongoose y Zod */}
                   <option value="Microbiografías">Microbiografías</option>
                   <option value="Literarios">Literarios</option>
                   <option value="Periodísticos">Periodísticos</option>
@@ -379,6 +376,7 @@ function CreateArticleModal({ onClose, onSuccess }) {
 function EditArticleModal({ noticia, onClose, onSuccess }) {
   const [formData, setFormData] = useState({
     title: noticia.title, 
+    author: noticia.author || '', // CAMPO AUTOR INTEGRADO EN EDICIÓN
     description: noticia.description, 
     content: noticia.content, 
     category: noticia.category, 
@@ -426,6 +424,16 @@ function EditArticleModal({ noticia, onClose, onSuccess }) {
             placeholder="Título de la crónica..." 
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })} 
+            required 
+          />
+
+          {/* INPUT PARA EL AUTOR EN EDICIÓN */}
+          <input 
+            type="text" 
+            className="author-input-v2" // <--- Esta clase vincula el CSS
+            placeholder="Nombre del autor..." 
+            value={formData.author}
+            onChange={(e) => setFormData({ ...formData, author: e.target.value })} 
             required 
           />
 

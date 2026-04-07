@@ -55,14 +55,22 @@ const ArticleCard = ({ noticia, isLoggedIn, onActionSuccess, onEditClick }) => {
       className={`card ${isVisible ? 'is-visible' : ''}`}
     >
       <LazyImage 
-  src={noticia.imageUrl} 
-  alt={noticia.title} 
-  className="card-image" 
-/>
+        src={noticia.imageUrl} 
+        alt={noticia.title} 
+        className="card-image" 
+      />
       <div className="card-content">
-        <span className="category-tag">{noticia.category}</span>
+        <div className="card-header-meta">
+          <span className="category-tag">{noticia.category}</span>
+        </div>
+
         <h3>{noticia.title}</h3>
         <p>{noticia.description}</p>
+
+        {/* UBICACIÓN ACTUALIZADA: Justo debajo de la descripción */}
+        {noticia.author && (
+          <span className="author-name-card">Por {noticia.author}</span>
+        )}
 
         <div className="card-footer-actions">
           <Link to={`/articulo/${noticia._id}`} className="btn-read">

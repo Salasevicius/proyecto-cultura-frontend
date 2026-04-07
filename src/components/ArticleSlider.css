@@ -96,6 +96,36 @@ body, html {
   overflow: visible !important;
 }
 
+.author-name-card {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  color: #e2b464; /* El dorado de tu marca */
+  font-style: italic;
+  margin-top: 8px; /* Espacio respecto a la descripción */
+  margin-bottom: 12px; /* Espacio respecto a los botones */
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+/* --- ESTILOS COMPARTIDOS: AUTOR Y META --- */
+.card-header-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.author-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  color: rgba(226, 180, 100, 0.75);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
 .nav-btn {
   position: absolute;
   top: 50%;
@@ -128,7 +158,6 @@ body, html {
   }
 
   .slider-track {
-    /* Padding lateral para que la tarjeta actual se vea centrada y las vecinas asomen */
     padding: 30px 10% 40px 10% !important; 
     gap: 15px !important;
     perspective: none !important;
@@ -137,15 +166,13 @@ body, html {
   }
 
   .slider-item { 
-    /* 68vw es el ancho ideal para que la siguiente asome un 22% aprox */
     flex: 0 0 68vw !important; 
     min-width: 68vw !important; 
     margin: 0;
     scroll-snap-align: center;
-    opacity: 1 !important; /* Forzamos visibilidad total */
+    opacity: 1 !important;
   }
 
-  /* Rediseño de la tarjeta compacta */
   .slider-item article { 
     min-height: 240px !important; 
     padding: 12px !important; 
@@ -156,8 +183,17 @@ body, html {
     border: 1px solid rgba(226, 180, 100, 0.1);
   }
 
+  /* Ajuste de Autor en Móvil */
+  .card-header-meta {
+    margin-bottom: 6px;
+  }
+
+  .author-name {
+    font-size: 0.65rem; /* Reducción proporcional para móvil */
+  }
+
   .slider-item img {
-    height: 95px !important; /* Imagen mucho más pequeña */
+    height: 95px !important; 
     margin-bottom: 8px;
     border-radius: 6px;
     filter: brightness(0.95);
@@ -175,22 +211,25 @@ body, html {
     font-size: 0.78rem !important; 
     line-height: 1.3 !important;
     color: rgba(248, 250, 252, 0.5) !important;
-    /* Limitamos a 2 líneas para mantener compacto */
     display: -webkit-box !important;
     -webkit-box-orient: vertical;
     overflow: hidden !important;
   }
 
-  /* Botón de lectura ajustado */
   .slider-item article .btn-read {
     font-size: 0.75rem !important;
     padding: 6px 10px !important;
-    margin-top: auto; /* Empuja el botón al final */
+    margin-top: auto;
+  }
+ 
+  .author-name-card {
+    font-size: 0.65rem;
+    margin-top: 5px;
+    margin-bottom: 8px;
   }
 
   .nav-btn { display: none !important; }
 
-  /* DOT NAV MÓVIL */
   .dots-container-mobile {
     display: flex;
     justify-content: center;

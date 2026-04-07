@@ -72,23 +72,15 @@
   letter-spacing: -1.5px;
   text-align: center;
   text-wrap: balance;
-  /* --- MAGIA DEL GRADIENTE --- */
-  /* Definimos el gradiente: Oro Medieval -> Negro Profundo */
   background: linear-gradient(
     135deg,
-    #1a1714 20%,   /* Tu Negro Profundo (empieza rápido) */
-    #000000 100%   /* Negro absoluto al final */
+    #1a1714 20%,   
+    #000000 100%   
   );
-
-  /* "Cortamos" el fondo para que solo se vea a través del texto */
   -webkit-background-clip: text;
   background-clip: text;
-
-  /* Hacemos el color de texto transparente para revelar el fondo */
   -webkit-text-fill-color: transparent;
-  color: transparent; /* Fallback */
-
-  /* Añadimos una sombra muy sutil para dar relieve */
+  color: transparent; 
   filter: drop-shadow(0px 2px 0px rgba(0, 0, 0, 0.15));
 }
 
@@ -101,6 +93,18 @@
   line-height: 1.4;
   font-weight: bolder;
   padding-top: 25px;
+  text-align: center;
+}
+
+/* --- ESTILO DEL AUTOR (OBLIGATORIO DEBAJO DE DESCRIPCIÓN) --- */
+.author-split {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  color: var(--oro-medieval);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 700;
+  margin-top: 20px;
   text-align: center;
 }
 
@@ -250,6 +254,11 @@
   }
   .article-footer-detail p {
     font-size: 0.75rem;
+  }
+  /* Ajuste de autor para móvil */
+  .author-split {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
   }
 }
 

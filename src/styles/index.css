@@ -1538,13 +1538,38 @@ a.button:hover {
   border: none !important;
   border-left: 2px solid #ff6f61 !important;
   padding: 5px 25px !important;
-  margin-bottom: 35px !important;
+  margin-bottom: 15px !important;
   color: #2c2925 !important; /* Texto oscuro para fondo claro */
   font-weight: 700;
   outline: none !important;
   width: 100%;
 }
 .main-title-input::placeholder { color: #ccc5b5; }
+
+/* NUEVO: ESTILO PARA EL INPUT DE AUTOR (Incorporar aquí) */
+.author-input-v2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem !important;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: transparent !important;
+  border: none !important;
+  border-left: 2px solid #ccc5b5 !important; /* Borde más tenue que el del título */
+  padding: 2px 25px !important;
+  margin-bottom: 35px !important;
+  color: #8b867a !important; /* Color grisáceo elegante */
+  font-weight: 600;
+  outline: none !important;
+  width: 100%;
+  transition: border-color 0.3s ease;
+}
+
+.author-input-v2:focus {
+  border-left: 2px solid #ff6f61 !important; /* Se ilumina al escribir */
+  color: #2c2925 !important;
+}
+
+.author-input-v2::placeholder { color: #ccc5b5; opacity: 0.7; }
 
 /* 4. Grid de Trabajo - Tu estructura intacta */
 .editor-grid {
@@ -1943,6 +1968,12 @@ a.button:hover {
   
   .main-title-input {
     font-size: 1.5rem !important;
+    padding-left: 12px !important;
+    margin-bottom: 20px !important;
+    border-left-width: 3px !important;
+  }
+  .author-input-v2 {
+    font-size: 0.85rem !important;
     padding-left: 12px !important;
     margin-bottom: 20px !important;
     border-left-width: 3px !important;
