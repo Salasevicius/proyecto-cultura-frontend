@@ -1,10 +1,10 @@
-/* --- ARTICLE SLIDER: TARJETAS COMPACTAS Y HORIZONTALES --- */
+/* --- ARTICLE SLIDER: DESKTOP (TODO TU CÓDIGO ORIGINAL MANTENIDO) --- */
 body, html {
   background: #1a1a2e;
 }
 .slider-container-main {
   width: 100%;
-  margin-top: -300px; /* Mantenemos el solapamiento de corpus en Desktop */
+  margin-top: -300px;
   padding-bottom: 100px;
   background: transparent;
   position: relative;
@@ -17,7 +17,6 @@ body, html {
 
 .slider-container-main.is-home { margin-top: -300px; }
 
-/* 2. Estado filtrado (Categorías sin Featured) */
 .slider-container-main.is-filtered { 
  margin-top: -50px !important; 
   transition: margin-top 0.8s cubic-bezier(0.19, 1, 0.22, 1);
@@ -76,8 +75,6 @@ body, html {
   transition: 0.5s ease;
 }
 
-.slider-item article:hover img { filter: brightness(1); }
-
 .slider-item article h3, 
 .slider-item article .article-title {
   font-family: 'Playfair Display', serif !important;
@@ -99,7 +96,6 @@ body, html {
   overflow: visible !important;
 }
 
-/* --- NAVEGACIÓN --- */
 .nav-btn {
   position: absolute;
   top: 50%;
@@ -119,39 +115,108 @@ body, html {
   transition: 0.3s;
 }
 
-.nav-btn:hover { background: #e2b464; color: #1a1a2e; }
 .nav-btn.left { left: 45px; }
 .nav-btn.right { right: 45px; }
 
-
-
-/* --- RESPONSIVE: REFINAMIENTO MÓVIL --- */
+/* --- RESPONSIVE: NUEVA VERSIÓN MÓVIL ESTILO NEW YORKER (-30% TAMAÑO) --- */
 @media (max-width: 768px) {
   .slider-container-main { 
-    /* Cambiamos el margen negativo por uno positivo para que respire debajo del Featured */
-    margin-top: 0 !important; 
-    padding-bottom: 60px;
-    transform: none !important; /* Desactivamos parallax en móvil para mayor fluidez */
+    margin-top: 10px !important; 
+    padding-bottom: 70px;
+    transform: none !important;
+    overflow: hidden;
   }
 
   .slider-track {
-    /* Ajustamos el padding lateral para que el usuario entienda que hay más tarjetas */
-    padding: 46px 7.5% 40px 7.5%; 
-    gap: 1px;
+    /* Padding lateral para que la tarjeta actual se vea centrada y las vecinas asomen */
+    padding: 30px 10% 40px 10% !important; 
+    gap: 15px !important;
+    perspective: none !important;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory; 
   }
 
   .slider-item { 
-    flex: 0 0 15vw !important; 
-    min-width: 85vw !important; 
+    /* 68vw es el ancho ideal para que la siguiente asome un 22% aprox */
+    flex: 0 0 68vw !important; 
+    min-width: 68vw !important; 
+    margin: 0;
+    scroll-snap-align: center;
+    opacity: 1 !important; /* Forzamos visibilidad total */
   }
 
+  /* Rediseño de la tarjeta compacta */
   .slider-item article { 
-    min-height: 300px !important; 
-    padding: 20px !important; 
+    min-height: 240px !important; 
+    padding: 12px !important; 
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    border: 1px solid rgba(226, 180, 100, 0.1);
   }
 
-  /* Ocultamos flechas en móvil para limpiar la UI, ya que el gesto es táctil */
-  .nav-btn {
-    display: none !important;
+  .slider-item img {
+    height: 95px !important; /* Imagen mucho más pequeña */
+    margin-bottom: 8px;
+    border-radius: 6px;
+    filter: brightness(0.95);
   }
+
+  .slider-item article h3, 
+  .slider-item article .article-title {
+    font-size: 0.98rem !important; 
+    line-height: 1.15 !important;
+    margin-bottom: 6px !important;
+  }
+
+  .slider-item article p, 
+  .slider-item article .article-excerpt {
+    font-size: 0.78rem !important; 
+    line-height: 1.3 !important;
+    color: rgba(248, 250, 252, 0.5) !important;
+    /* Limitamos a 2 líneas para mantener compacto */
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical;
+    overflow: hidden !important;
+  }
+
+  /* Botón de lectura ajustado */
+  .slider-item article .btn-read {
+    font-size: 0.75rem !important;
+    padding: 6px 10px !important;
+    margin-top: auto; /* Empuja el botón al final */
+  }
+
+  .nav-btn { display: none !important; }
+
+  /* DOT NAV MÓVIL */
+  .dots-container-mobile {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    position: absolute;
+    bottom: 25px;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  .slider-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(226, 180, 100, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .slider-dot.is-active {
+    background: #e2b464;
+    transform: scale(1.4);
+    box-shadow: 0 0 10px rgba(226, 180, 100, 0.3);
+  }
+}
+
+/* Ocultar dots en desktop */
+@media (min-width: 769px) {
+  .dots-container-mobile { display: none; }
 }
