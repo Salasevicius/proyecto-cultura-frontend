@@ -234,6 +234,7 @@
 }
 
 @media (max-width: 768px) {
+
   .reader-page-bg {
     padding: 20px 10px;
   }
@@ -250,7 +251,7 @@
   }
   .category-tag {
     padding-left: 0;
-    font-size: 1.1rem;
+    font-size: 0.75rem;
   }
   .article-footer-detail p {
     font-size: 0.75rem;

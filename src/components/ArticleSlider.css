@@ -193,9 +193,9 @@ body, html {
   }
 
   .slider-item img {
-    height: 95px !important; 
+    height: 150px !important; 
     margin-bottom: 8px;
-    border-radius: 6px;
+    border-radius: 1px;
     filter: brightness(0.95);
   }
 
@@ -221,12 +221,7 @@ body, html {
     padding: 6px 10px !important;
     margin-top: auto;
   }
- 
-  .author-name-card {
-    font-size: 0.65rem;
-    margin-top: 5px;
-    margin-bottom: 8px;
-  }
+  
 
   .nav-btn { display: none !important; }
 
