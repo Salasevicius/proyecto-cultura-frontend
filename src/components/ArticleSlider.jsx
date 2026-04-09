@@ -22,7 +22,7 @@ const ArticleSlider = ({ noticias, loading, isLoggedIn, fetchData, handleEditCli
   const location = useLocation();
   const isFiltered = location.search.length > 0;
 
-  // --- 1. TRIPLICACIÓN CON IDs ÚNICOS (Mantenida) ---
+  // --- 1. TRIPLICACIÓN CON IDs ÚNICOS ---
   const noticiasInfinitas = noticias && noticias.length > 0 
     ? [
         ...noticias.map(n => ({ ...n, uniqueKey: `set1-${n._id}` })),
@@ -38,7 +38,6 @@ const ArticleSlider = ({ noticias, loading, isLoggedIn, fetchData, handleEditCli
     const trackCenter = track.offsetWidth / 2;
     const currentScroll = track.scrollLeft;
 
-    // --- LÓGICA DE DOT NAV (Sincronizada con el set central) ---
     const singleSetWidth = track.scrollWidth / 3;
     const cardWidth = cards[0]?.offsetWidth || 340;
     const relativeScroll = (currentScroll - singleSetWidth + (cardWidth / 2));
@@ -48,25 +47,21 @@ const ArticleSlider = ({ noticias, loading, isLoggedIn, fetchData, handleEditCli
       setActiveIndex(newIndex);
     }
 
-    // Loop Infinito Original (Mantenido)
     if (currentScroll <= 10) {
       track.scrollLeft = singleSetWidth;
     } else if (currentScroll >= (singleSetWidth * 2) - 10) {
       track.scrollLeft = singleSetWidth;
     }
 
-    // --- DETECCIÓN DE MÓVIL PARA BYPASS DE EFECTO 3D ---
     const isMobile = window.innerWidth <= 768;
 
     cards.forEach((card) => {
       if (isMobile) {
-        // En móvil: Limpiamos transformaciones para que sea plano y legible (The New Yorker Style)
         card.style.transform = `scale(1) translateZ(0) rotateY(0)`;
         card.style.opacity = '1';
         card.style.zIndex = '1';
         card.style.transition = 'none'; 
       } else {
-        // En Desktop: Tu efecto 3D original de autor (Mantenido)
         const cardCenter = card.offsetLeft + card.offsetWidth / 2 - currentScroll;
         const distanceFromCenter = cardCenter - trackCenter;
         const absDistance = Math.abs(distanceFromCenter);
@@ -83,23 +78,40 @@ const ArticleSlider = ({ noticias, loading, isLoggedIn, fetchData, handleEditCli
     });
   }, [noticias.length]);
 
+  // --- EL AJUSTE CLAVE ESTÁ AQUÍ ---
   const smoothScrollTo = (target) => {
     if (!sliderRef.current) return;
-    gsap.killTweensOf(sliderRef.current);
-    gsap.to(sliderRef.current, {
+    const track = sliderRef.current;
+
+    gsap.killTweensOf(track);
+
+    // En móviles, el "scroll-behavior: smooth" del CSS o el snapping pueden romper GSAP.
+    // Forzamos el modo manual durante la animación.
+    const originalStyle = track.style.scrollSnapType;
+    track.style.scrollSnapType = 'none'; 
+    track.style.scrollBehavior = 'auto'; 
+
+    gsap.to(track, {
       scrollLeft: target,
-      duration: 1.4,
+      duration: 1.2, // Un poquito más rápido para que se sienta reactivo en móvil
       ease: "power2.inOut",
       overwrite: true,
-      onUpdate: updateCardScales
+      onUpdate: updateCardScales,
+      onComplete: () => {
+        // Restauramos el comportamiento original al terminar para no romper el arrastre manual
+        track.style.scrollSnapType = originalStyle;
+      }
     });
   };
 
   const handleCardClick = (e) => {
-    if (Math.abs(dragData.current.velocity) > 3) return;
+    // Evitamos disparar si el usuario está terminando un arrastre (swipe)
+    if (Math.abs(dragData.current.velocity) > 2) return;
+    
     const card = e.currentTarget;
     const track = sliderRef.current;
     const targetScroll = (card.offsetLeft + card.offsetWidth / 2) - (track.offsetWidth / 2);
+    
     smoothScrollTo(targetScroll);
   };
 
@@ -192,7 +204,6 @@ const ArticleSlider = ({ noticias, loading, isLoggedIn, fetchData, handleEditCli
         </div>
         <button className="nav-btn right" onClick={() => smoothScrollTo(sliderRef.current.scrollLeft + 270)}>›</button>
 
-        {/* DOT NAV MÓVIL */}
         <div className="dots-container-mobile">
           {noticias.map((_, idx) => (
             <div 

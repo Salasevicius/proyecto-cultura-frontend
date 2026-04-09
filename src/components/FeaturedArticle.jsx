@@ -1,16 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './FeaturedArticle.css';
-import LazyImage from './LazyImage'; // Ajusta la ruta según tu carpeta
+import LazyImage from './LazyImage'; 
+import FeaturedArticleMobile from './FeaturedArticleMobile'; // Importamos el nuevo componente
 
 const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [offset, setOffset] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Estado para el switch
   const sectionRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Manejador para detectar cambios de tamaño de pantalla
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -23,6 +30,7 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
     if (sectionRef.current) observer.observe(sectionRef.current);
 
     const handleScroll = () => {
+      // Aplicamos lógica de scroll solo si no es móvil y existe la referencia
       if (window.innerWidth > 768 && sectionRef.current) {
         const rect = sectionRef.current.getBoundingClientRect();
         const scrollPosition = window.innerHeight - rect.top;
@@ -38,14 +46,29 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
     };
 
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize); // Escuchar redimensionamiento
+
     return () => {
       if (sectionRef.current) observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
     };
   }, [offset]);
   
   if (!noticia) return null;
 
+  // --- SWITCH DE RENDERIZADO ---
+  // Si es móvil, devolvemos el nuevo componente y cortamos la ejecución aquí.
+  if (isMobile) {
+    return (
+      <FeaturedArticleMobile 
+        noticia={noticia} 
+        noticiasSecundarias={noticiasSecundarias} 
+      />
+    );
+  }
+
+  // --- RENDER DESKTOP (Sin cambios, tal como estaba) ---
   return (
     <section 
       className={`featured-wrapper ${isVisible ? 'is-visible' : ''}`} 
@@ -55,16 +78,14 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
       }}
     >
       <div className={`featured-main-card ${isOpen ? 'sidebar-open' : ''}`}>
-        {/* Lógica de navegación en el contenido principal */}
         <div className="featured-content" onClick={() => navigate(`/articulo/${noticia._id}`)}>
-          
-<div className="featured-img-container">
-  <LazyImage 
-    src={noticia.imageUrl} 
-    alt={noticia.title} 
-    className="featured-main-img" // Puedes mantener o cambiar el nombre de la clase
-  />
-</div>
+          <div className="featured-img-container">
+            <LazyImage 
+              src={noticia.imageUrl} 
+              alt={noticia.title} 
+              className="featured-main-img" 
+            />
+          </div>
           <div className="featured-text">
             <div className="featured-tag">ARTÍCULO DEL DÍA</div>
             <span className="feat-cat">{noticia.category}</span>
@@ -74,7 +95,6 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
           </div>
         </div>
 
-        {/* El Cajón Lateral (Relacionadas) */}
         <aside className="featured-sidebar">
           <h3 className="sidebar-subtitle">ARTÍCULOS RELACIONADOS</h3>
           <div className="sidebar-scroll-area">
@@ -87,7 +107,6 @@ const FeaturedArticle = ({ noticia, noticiasSecundarias }) => {
           </div>
         </aside>
 
-        {/* Botón Toggle */}
         <button 
           className="sidebar-toggle" 
           onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}

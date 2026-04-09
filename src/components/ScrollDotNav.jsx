@@ -36,9 +36,10 @@ const ScrollDotNav = ({ sections }) => {
     const targetY = id === 'anchor-top' ? 0 : `#${id}`;
     
     gsap.to(window, {
-      duration: 2.5, // Tiempo extendido para efecto etéreo
+      duration: 2.3, // Tiempo extendido para efecto etéreo
       scrollTo: { 
-        y: targetY, 
+        y: targetY,
+        offsetY: -24, 
         autoKill: true 
       },
       ease: "power4.inOut", // Curva cinemática aceleración/desaceleración lenta
