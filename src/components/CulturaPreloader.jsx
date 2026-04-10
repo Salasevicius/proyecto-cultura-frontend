@@ -93,8 +93,8 @@ const CulturaPreloader = ({ onComplete }) => {
       <div className="layout-art">
         {/* Datos Técnicos */}
         <div className="panel-info">
-          <span className="dato-tec">COORDENADAS: 32.94° S / 60.64° W</span>
-          <span className="dato-tec">ORIGEN: ROSARIO, SANTA FE</span>
+          <span className="dato-tec">COORDENADAS: 32° 56′ S, 60° 38′ O</span>
+          <span className="dato-tec">ORIGEN: ROSARIO, SANTA FE, ARGENTINA</span>
           <div className="linea-guia"></div>
         </div>
 
