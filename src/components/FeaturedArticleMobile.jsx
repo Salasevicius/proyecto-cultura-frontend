@@ -15,7 +15,7 @@ const FeaturedArticleMobile = ({ noticia, noticiasSecundarias }) => {
         {/* Capa 1: Imagen */}
         <div className="fam-image-container">
           <LazyImage 
-            src={noticia.imageUrl} 
+            src={noticia.imageMobileUrl || noticia.imageUrl}
             alt={noticia.title} 
             className="fam-img" 
           />
