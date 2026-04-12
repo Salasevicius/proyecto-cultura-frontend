@@ -444,9 +444,10 @@ nav .logo:hover::before {
 .creator-cta-text h3 {
   color: #ff6600;
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   text-transform: uppercase;
   font-weight: bold;
+  margin-bottom: 2px ;
 }
 
 .creator-cta-text p {
@@ -458,21 +459,29 @@ nav .logo:hover::before {
 }
 
 .btn-creator-login, .btn-create-news, .btn-creator-logout, .btn-creator-register {
-  background-color: #ff6600;
-  color: #ffffff;
-  border: none;
-  padding: 10px 25px;
+  flex: 1;
+  color: #e2b464;
+  border: 1px solid rgba(226, 180, 100, 0.4);
+  background: transparent;
+  padding: 12px 12px; /* Padding vertical consistente */
+  border-radius: 25px; /* Un poco más redondeados para suavizar el set */
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  text-transform: uppercase;
-  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  text-align: center; /* Centrado perfecto del texto */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
 }
 
 .btn-creator-login:hover, .btn-create-news:hover, .btn-creator-logout:hover, .btn-creator-register:hover {
-  background-color: #b54900;
-  transform: scale(1.02);
+  background: rgba(226, 180, 100, 0.1);
+  transform: scale(1.05);;
 }
 
 @media (max-width: 768px) {
@@ -1926,6 +1935,17 @@ a.button:hover {
   .modern-editor-form { padding: 30px !important; }
   .editor-grid { gap: 25px; grid-template-columns: 1fr 250px; }
   .main-title-input { font-size: 2rem !important; }
+  .btn-creator-login {
+    margin-right: 73px;
+    margin-bottom: 6px;
+  }
+  .btn-creator-register {
+    margin-right: 42px;
+    margin-bottom: 10px;
+  }
+  .creator-cta-text h3 {
+    font-size: 1.25rem;
+  }
 }
 
 /* 3. Smartphones Grandes y Phablets (480px - 850px) */
