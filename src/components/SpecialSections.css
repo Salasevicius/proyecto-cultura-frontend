@@ -1,0 +1,320 @@
+/* SpecialSections.css - Zenith & Ultra-Performance Edition */
+
+:root {
+  --gold-primary: #e2b464;
+  --gold-dark: #b8860b;
+  --gold-soft: rgba(226, 180, 100, 0.12);
+  --gold-glow: rgba(226, 180, 100, 0.35);
+  --bg-dark: #0a0a0a;
+  --bg-card: #111111;
+  --text-main: #ffffff;
+  --text-muted: #b0b0b0;
+  --font-serif: 'Playfair Display', serif;
+  /* Curva de Bézier personalizada para una sensación de peso real */
+  --transition-cinematic: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-fast: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base Optimization para Lighthouse & Performance */
+.special-hub {
+  padding: clamp(100px, 15vh, 200px) 8%;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  overflow: hidden;
+  position: relative;
+  contain: layout;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Spotlight dinámico optimizado con hardware acceleration */
+.special-hub::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(
+    800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+    rgba(226, 180, 100, 0.06), 
+    transparent 50%
+  );
+  pointer-events: none;
+  z-index: 1;
+  will-change: background;
+  transform: translateZ(0); /* Force GPU acceleration */
+}
+
+/* --- HEADER --- */
+.hub-header {
+  text-align: center;
+  margin-bottom: clamp(80px, 12vh, 160px);
+  position: relative;
+  z-index: 5;
+}
+
+.hub-subtitle {
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.6em;
+  display: block;
+  margin-bottom: 25px;
+  opacity: 0.8;
+  transform: translateY(0);
+  transition: var(--transition-cinematic);
+}
+
+.hub-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  perspective: 1000px;
+}
+
+/* --- GRID & CARDS --- */
+.hub-grid {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(100px, 10vh, 150px);
+  max-width: 1500px;
+  margin: 0 auto;
+  counter-reset: card-index;
+}
+
+.special-card {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(40px, 8vw, 150px);
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  will-change: transform;
+}
+
+.special-card:nth-child(even) { direction: rtl; }
+.special-card:nth-child(even) .card-info { direction: ltr; text-align: left; }
+
+/* --- IMÁGENES ZENITH --- */
+.card-image-wrapper {
+  height: clamp(350px, 55vh, 700px);
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(226, 180, 100, 0.08);
+  background: #000;
+  box-shadow: 0 40px 100px -30px rgba(0, 0, 0, 1);
+  transition: var(--transition-cinematic);
+  clip-path: inset(0 0 0 0); /* Contiene el desbordamiento visual */
+}
+
+/* Efecto de barrido de luz mejorado (Reflejo de Cristal) */
+.card-image-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -150%; width: 100%; height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.05) 40%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.05) 60%,
+    transparent
+  );
+  transition: 1s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: 3;
+}
+
+.special-card:hover .card-image-wrapper::after {
+  left: 150%;
+}
+
+.card-parallax-bg {
+  width: 100%;
+  height: 130%;
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  top: -15%;
+  filter: grayscale(100%) brightness(0.5) contrast(1.2);
+  transition: transform 2s cubic-bezier(0.1, 1, 0.2, 1), filter 1.2s ease;
+}
+
+.special-card:hover .card-parallax-bg {
+  filter: grayscale(0%) brightness(0.8) contrast(1.1);
+  transform: scale(1.1);
+}
+
+.bg-1 { background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200'); }
+.bg-2 { background-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1200'); }
+.bg-3 { background-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1200'); }
+
+/* --- TEXTO CON PROFUNDIDAD LAYERED --- */
+.card-info { 
+  position: relative;
+  z-index: 10;
+}
+
+.card-info::before {
+  content: "0" counter(card-index);
+  counter-increment: card-index;
+  position: absolute;
+  top: -80px; left: -40px;
+  font-family: var(--font-serif);
+  font-size: clamp(8rem, 12vw, 14rem);
+  font-weight: 900;
+  /* Efecto de texto hueco con gradiente */
+  background: linear-gradient(180deg, rgba(226, 180, 100, 0.1), transparent);
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  z-index: -1;
+  transition: var(--transition-cinematic);
+  opacity: 0.5;
+}
+
+.special-card:hover .card-info::before {
+  transform: translateY(-20px) scale(1.05);
+  opacity: 1;
+  -webkit-text-fill-color: rgba(226, 180, 100, 0.05);
+}
+
+.card-tag {
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5em;
+  margin-bottom: 35px;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.card-tag::before {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--gold-primary);
+  transform-origin: left;
+  transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.special-card:hover .card-tag::before {
+  transform: scaleX(2);
+  background: #fff;
+}
+
+.card-info h3 {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 5vw, 4.2rem);
+  margin: 15px 0 35px;
+  line-height: 1.05;
+  color: #fff;
+  transition: var(--transition-cinematic);
+}
+
+.special-card:hover h3 {
+  color: var(--gold-primary);
+  transform: translateX(15px);
+  text-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.card-info p {
+  color: var(--text-muted);
+  font-size: clamp(1.1rem, 1.3vw, 1.4rem);
+  line-height: 1.9;
+  max-width: 520px;
+  font-weight: 300;
+  transition: var(--transition-cinematic);
+}
+
+.special-card:hover p {
+  color: #fff;
+}
+
+/* --- BOTÓN ZENITH (INTERACCIÓN TÁCTIL) --- */
+.hub-btn {
+  margin-top: 55px;
+  background: transparent;
+  border: 1px solid var(--gold-primary);
+  color: var(--gold-primary);
+  padding: 20px 50px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-cinematic);
+  isolation: isolate;
+}
+
+.hub-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gold-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: -1;
+}
+
+.hub-btn:hover {
+  color: #000;
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 20px var(--gold-soft);
+  border-color: transparent;
+}
+
+.hub-btn:hover::before {
+  transform: scaleX(1);
+}
+
+/* --- RESPONSIVE DE PRECISIÓN --- */
+
+@media (max-width: 1200px) {
+  .special-card { gap: 60px; }
+  .card-image-wrapper { height: 500px; }
+}
+
+@media (max-width: 992px) {
+  .special-hub { padding: 100px 6%; }
+  .hub-header { margin-bottom: 80px; }
+  .special-card { 
+    grid-template-columns: 1fr; 
+    gap: 50px; 
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .special-card:nth-child(even) { direction: ltr; }
+  .card-image-wrapper { height: 450px; }
+  .card-info { text-align: center; padding: 0; }
+  .card-tag { justify-content: center; }
+  .card-info p { margin: 0 auto; }
+  .card-info::before { 
+    left: 50%; 
+    transform: translateX(-50%); 
+    top: -50px; 
+    font-size: 10rem;
+  }
+  .special-card:hover h3 { transform: translateY(-10px); }
+}
+
+@media (max-width: 650px) {
+  .hub-title { font-size: 3.2rem; }
+  .card-image-wrapper { height: 350px; }
+  .card-info h3 { font-size: 2.2rem; }
+  .hub-btn { width: 100%; padding: 22px; }
+}
+
+/* Soporte para High-Contrast o Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

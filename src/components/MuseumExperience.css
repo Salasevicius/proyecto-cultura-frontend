@@ -1,0 +1,121 @@
+/* MuseumExperience.css - Versión Sublime Editorial */
+:root {
+  --accent-gold: #d2b48c;
+  --text-muted: #888;
+}
+
+.museum-container {
+  width: 100vw;
+  color: #fff;
+  background: transparent;
+}
+
+.museum-section {
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  /* En desktop usamos 12 columnas para control total */
+  grid-template-columns: repeat(12, 1fr);
+  align-items: center;
+  padding: 0 8%;
+  box-sizing: border-box;
+}
+
+.section-content {
+  grid-column: span 6; /* Ocupa media pantalla */
+  z-index: 10;
+}
+
+/* Alineaciones dinámicas para que no sea monótono */
+.section-right { grid-column: 7 / span 6; text-align: right; }
+.section-center { grid-column: 4 / span 6; text-align: center; }
+
+.museum-subtitle {
+  font-family: 'Inter', sans-serif;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.8rem;
+  font-size: clamp(0.7rem, 1vw, 0.9rem);
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.museum-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(4rem, 12vw, 6rem);
+  line-height: 0.95;
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 900;
+  /* Efecto de texto con borde para llenar el espacio sin saturar */
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+}
+
+.museum-title .solid {
+  color: white;
+  -webkit-text-stroke: 0;
+  display: block;
+}
+
+.museum-text-block {
+  max-width: 500px;
+  margin-top: 3rem;
+  padding-left: 2rem;
+  border-left: 1px solid var(--accent-gold);
+}
+
+.section-right .museum-text-block {
+  margin-left: auto;
+  padding-left: 0;
+  padding-right: 2rem;
+  border-left: 0;
+  border-right: 1px solid var(--accent-gold);
+}
+
+.museum-paragraph {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1rem, 1.2vw, 1.3rem);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.museum-btn {
+  margin-top: 4rem;
+  padding: 1.5rem 4rem;
+  background: transparent;
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.3rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: all;
+}
+
+.museum-btn:hover {
+  background: var(--accent-gold);
+  color: #000;
+  letter-spacing: 0.5rem;
+}
+
+/* RESPONSIVE MÓVIL (Mantiene la legibilidad que ya te gustó) */
+@media (max-width: 1024px) {
+  .museum-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center !important;
+    padding: 0 5%;
+  }
+  .section-content { grid-column: span 12; width: 100%; }
+  .museum-text-block { 
+    margin: 2rem auto 0; 
+    border: none; 
+    padding: 1.5rem;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+  }
+  .museum-title { font-size: 3rem; }
+}

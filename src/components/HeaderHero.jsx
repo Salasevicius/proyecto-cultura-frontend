@@ -76,7 +76,7 @@ const HeaderHero = () => {
       <section className="highlighted-news">
         <article>
           <h1 className="h1-seo-main">
-            BIENVENIDOS A LOS ARTÍCULOS DE 
+            BIENVENIDOS A 
             <span className="h2negronaranjanegro"> PROYECTO </span>
             <span className="h2negronaranja">CULTURA </span>
             <span className="sr-only"> EN ROSARIO</span>

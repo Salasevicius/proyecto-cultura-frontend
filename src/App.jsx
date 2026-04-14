@@ -8,6 +8,7 @@ import Pagination from './components/Pagination';
 import Footer from './components/Footer';
 import ArticleDetail from './components/ArticleDetail';
 import ArticleSlider from './components/ArticleSlider';
+import SpecialSections from './components/SpecialSections'; // INTEGRACIÓN SECCIÓN ESPECIAL
 import CulturaPreloader from './components/CulturaPreloader'; 
 import './components/ArticleSlider.css';
 import ScrollDotNav from './components/ScrollDotNav';
@@ -42,9 +43,12 @@ function AppContent() {
   }, []);
 
   const location = useLocation();
+  
+  // SECCIONES ACTUALIZADAS PARA EL NAVEGADOR DE PUNTOS
   const sections = [
     { id: 'anchor-top', label: 'Inicio' },
     { id: 'anchor-articulos', label: 'Artículos' },
+    { id: 'anchor-especiales', label: 'Especiales' },
   ];
 
   const fetchData = async () => {
@@ -149,6 +153,13 @@ function AppContent() {
                     fetchData={fetchData}
                     handleEditClick={handleEditClick}
                   />
+
+                  {/* NUEVA SECCIÓN DE PRESENTACIÓN DE ESPECIALES */}
+                  {!location.search && (
+                    <div id="anchor-especiales" style={{ position: 'relative' }}>
+                      <SpecialSections />
+                    </div>
+                  )}
                   
                   {!loading && <Pagination />}
                 </main>
@@ -255,7 +266,7 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
 function CreateArticleModal({ onClose, onSuccess }) {
   const [formData, setFormData] = useState({
     title: '', 
-    author: '', // NUEVO CAMPO AGREGADO
+    author: '', 
     description: '', 
     content: '', 
     category: 'Destacados', 
@@ -306,7 +317,6 @@ function CreateArticleModal({ onClose, onSuccess }) {
             required 
           />
 
-          {/* NUEVO INPUT PARA EL AUTOR */}
           <input 
             type="text" 
             className="author-input-v2"
@@ -376,7 +386,7 @@ function CreateArticleModal({ onClose, onSuccess }) {
 function EditArticleModal({ noticia, onClose, onSuccess }) {
   const [formData, setFormData] = useState({
     title: noticia.title, 
-    author: noticia.author || '', // CAMPO AUTOR INTEGRADO EN EDICIÓN
+    author: noticia.author || '', 
     description: noticia.description, 
     content: noticia.content, 
     category: noticia.category, 
@@ -427,10 +437,9 @@ function EditArticleModal({ noticia, onClose, onSuccess }) {
             required 
           />
 
-          {/* INPUT PARA EL AUTOR EN EDICIÓN */}
           <input 
             type="text" 
-            className="author-input-v2" // <--- Esta clase vincula el CSS
+            className="author-input-v2" 
             placeholder="Nombre del autor..." 
             value={formData.author}
             onChange={(e) => setFormData({ ...formData, author: e.target.value })} 
