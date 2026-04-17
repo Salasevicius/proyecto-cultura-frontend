@@ -1,42 +1,82 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import LazyImage from './LazyImage'; 
 import './SpecialSections.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function SpecialSections() {
   const containerRef = useRef();
+  const titleRef = useRef(); // Ref específica para el título
 
-  // --- Lógica de Micro-interacción: Spotlight ---
   const handleMouseMove = (e) => {
     if (!containerRef.current) return;
-    
-    // Calculamos la posición del mouse relativa al contenedor
     const { clientX, clientY } = e;
     const rect = containerRef.current.getBoundingClientRect();
     const x = clientX - rect.left;
     const y = clientY - rect.top;
 
-    // Seteamos las variables CSS en el elemento padre
     containerRef.current.style.setProperty("--mouse-x", `${x}px`);
     containerRef.current.style.setProperty("--mouse-y", `${y}px`);
   };
 
   useLayoutEffect(() => {
     let ctx = gsap.context(() => {
-      // Animación para que las secciones aparezcan con elegancia al hacer scroll
-      gsap.utils.toArray('.special-card').forEach((card) => {
+      
+      // 1. FADE-IN ELEGANTE PARA EL TÍTULO (H1)
+      gsap.from(titleRef.current, {
+        scrollTrigger: {
+          trigger: titleRef.current,
+          start: "top 85%", // Comienza la animación un poco antes de que sea totalmente visible
+          toggleActions: "play none none reverse",
+        },
+        opacity: 0,
+        y: 40,
+        duration: 1.5,
+        ease: "power3.out",
+      });
+
+      const cards = gsap.utils.toArray('.special-card');
+
+      cards.forEach((card) => {
+        // 2. Efecto de aparición para las tarjetas
         gsap.from(card, {
           scrollTrigger: {
             trigger: card,
-            start: "top 85%",
-            toggleActions: "play none none reverse"
+            start: "top 90%",
+            toggleActions: "play none none reverse",
           },
           opacity: 0,
-          y: 50,
-          duration: 1,
-          ease: "power3.out"
+          y: 80,
+          duration: 1.6,
+          ease: "power4.out",
+        });
+
+        // 3. ACTIVACIÓN AUTOMÁTICA Y MOVIMIENTO DE SPOTLIGHT
+        ScrollTrigger.create({
+          trigger: card,
+          start: "top 60%", 
+          end: "bottom 20%",
+          onToggle: (self) => {
+            if (self.isActive) {
+              card.classList.add('is-active');
+              
+              const rect = card.getBoundingClientRect();
+              const containerRect = containerRef.current.getBoundingClientRect();
+              const centerX = (rect.left + rect.width / 2) - containerRect.left;
+              const centerY = (rect.top + rect.height / 2) - containerRect.top;
+
+              gsap.to(containerRef.current, {
+                "--mouse-x": `${centerX}px`,
+                "--mouse-y": `${centerY}px`,
+                duration: 1.5,
+                ease: "power2.out"
+              });
+            } else {
+              card.classList.remove('is-active');
+            }
+          }
         });
       });
     }, containerRef);
@@ -48,18 +88,24 @@ export default function SpecialSections() {
     <section 
       className="special-hub" 
       ref={containerRef} 
-      onMouseMove={handleMouseMove} // Vinculación del evento
+      onMouseMove={handleMouseMove}
     >
+      <div className="special-hub-divider"></div>
+
       <div className="hub-header">
         <h2 className="hub-subtitle">Exploración Profunda</h2>
-        <h1 className="hub-title">SECCIONES ESPECIALES</h1>
+        <h1 className="hub-title" ref={titleRef}>SECCIONES ESPECIALES</h1>
       </div>
 
       <div className="hub-grid">
-        {/* 1. CRONOLOGÍA */}
-        <div className="special-card cronologia">
+        {/* Card 1 */}
+        <div className="special-card">
           <div className="card-image-wrapper">
-             <div className="card-parallax-bg bg-1"></div>
+             <LazyImage 
+                src="/monumento-construccion.webp" 
+                alt="Cronología"
+                className="card-parallax-bg"
+             />
           </div>
           <div className="card-info">
             <span className="card-tag">Interactivo</span>
@@ -69,10 +115,14 @@ export default function SpecialSections() {
           </div>
         </div>
 
-        {/* 2. ARCHIVO */}
-        <div className="special-card archivo">
+        {/* Card 2 */}
+        <div className="special-card">
           <div className="card-image-wrapper">
-             <div className="card-parallax-bg bg-2"></div>
+             <LazyImage 
+                src="/plano-rosario.webp" 
+                alt="Archivo"
+                className="card-parallax-bg"
+             />
           </div>
           <div className="card-info">
             <span className="card-tag">Digitalización</span>
@@ -82,10 +132,14 @@ export default function SpecialSections() {
           </div>
         </div>
 
-        {/* 3. ENCICLOPEDIA */}
-        <div className="special-card enciclopedia">
+        {/* Card 3 */}
+        <div className="special-card">
           <div className="card-image-wrapper">
-             <div className="card-parallax-bg bg-3"></div>
+             <LazyImage 
+                src="/biblioteca-argentina.webp" 
+                alt="Enciclopedia"
+                className="card-parallax-bg"
+             />
           </div>
           <div className="card-info">
             <span className="card-tag">Investigación</span>
@@ -95,6 +149,8 @@ export default function SpecialSections() {
           </div>
         </div>
       </div>
+
+      <div className="background-watermark">HISTORIA</div>
     </section>
   );
 }
