@@ -1,14 +1,27 @@
 import React, { useLayoutEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importamos el hook de navegación
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin'; 
 import LazyImage from './LazyImage'; 
 import './SpecialSections.css';
 
-gsap.registerPlugin(ScrollTrigger);
+// Registro de plugins
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 export default function SpecialSections() {
   const containerRef = useRef();
-  const titleRef = useRef(); // Ref específica para el título
+  const titleRef = useRef();
+  const navigate = useNavigate(); // Instanciamos la navegación
+
+  // FUNCIÓN DE NAVEGACIÓN ACTUALIZADA PARA RUTA INDEPENDIENTE
+  const navegarALineaDeTiempo = (e) => {
+    if (e) e.preventDefault();
+    
+    // En lugar de hacer scroll, navegamos a la ruta definida en App.jsx
+    // Esto renderizará el componente TimelineExperience en solitario
+    navigate('/cronologia');
+  };
 
   const handleMouseMove = (e) => {
     if (!containerRef.current) return;
@@ -24,11 +37,11 @@ export default function SpecialSections() {
   useLayoutEffect(() => {
     let ctx = gsap.context(() => {
       
-      // 1. FADE-IN ELEGANTE PARA EL TÍTULO (H1)
+      // 1. FADE-IN DEL TÍTULO
       gsap.from(titleRef.current, {
         scrollTrigger: {
           trigger: titleRef.current,
-          start: "top 85%", // Comienza la animación un poco antes de que sea totalmente visible
+          start: "top 85%",
           toggleActions: "play none none reverse",
         },
         opacity: 0,
@@ -53,7 +66,7 @@ export default function SpecialSections() {
           ease: "power4.out",
         });
 
-        // 3. ACTIVACIÓN AUTOMÁTICA Y MOVIMIENTO DE SPOTLIGHT
+        // 3. LÓGICA DE SPOTLIGHT (Se mantiene para la interactividad visual)
         ScrollTrigger.create({
           trigger: card,
           start: "top 60%", 
@@ -61,7 +74,6 @@ export default function SpecialSections() {
           onToggle: (self) => {
             if (self.isActive) {
               card.classList.add('is-active');
-              
               const rect = card.getBoundingClientRect();
               const containerRect = containerRef.current.getBoundingClientRect();
               const centerX = (rect.left + rect.width / 2) - containerRect.left;
@@ -98,7 +110,7 @@ export default function SpecialSections() {
       </div>
 
       <div className="hub-grid">
-        {/* Card 1 */}
+        {/* Card 1: Línea de Tiempo */}
         <div className="special-card">
           <div className="card-image-wrapper">
              <LazyImage 
@@ -111,7 +123,13 @@ export default function SpecialSections() {
             <span className="card-tag">Interactivo</span>
             <h3>Línea de Tiempo</h3>
             <p>Un recorrido cronológico horizontal por los hitos que forjaron la identidad de Rosario.</p>
-            <button className="hub-btn">Iniciar Recorrido</button>
+            <button 
+              type="button" 
+              className="hub-btn" 
+              onClick={(e) => navegarALineaDeTiempo(e)}
+            >
+              Iniciar Recorrido
+            </button>
           </div>
         </div>
 

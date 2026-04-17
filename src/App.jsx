@@ -8,7 +8,8 @@ import Pagination from './components/Pagination';
 import Footer from './components/Footer';
 import ArticleDetail from './components/ArticleDetail';
 import ArticleSlider from './components/ArticleSlider';
-import SpecialSections from './components/SpecialSections'; // INTEGRACIÓN SECCIÓN ESPECIAL
+import SpecialSections from './components/SpecialSections'; 
+import TimelineExperience from './components/TimelineExperience'; // COMPONENTE INDEPENDIENTE
 import CulturaPreloader from './components/CulturaPreloader'; 
 import './components/ArticleSlider.css';
 import ScrollDotNav from './components/ScrollDotNav';
@@ -44,7 +45,7 @@ function AppContent() {
 
   const location = useLocation();
   
-  // SECCIONES ACTUALIZADAS PARA EL NAVEGADOR DE PUNTOS
+  // SECCIONES PARA EL NAVEGADOR DE PUNTOS (Solo en Home)
   const sections = [
     { id: 'anchor-top', label: 'Inicio' },
     { id: 'anchor-articulos', label: 'Artículos' },
@@ -108,7 +109,9 @@ function AppContent() {
           <header>
             <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
           </header>
+          
           <Routes>
+            {/* RUTA PRINCIPAL (HOME) */}
             <Route path="/" element={
               <>
                 <ScrollDotNav sections={sections} />
@@ -154,7 +157,6 @@ function AppContent() {
                     handleEditClick={handleEditClick}
                   />
 
-                  {/* NUEVA SECCIÓN DE PRESENTACIÓN DE ESPECIALES */}
                   {!location.search && (
                     <div id="anchor-especiales" style={{ position: 'relative' }}>
                       <SpecialSections />
@@ -165,6 +167,11 @@ function AppContent() {
                 </main>
               </>
             } />
+
+            {/* NUEVA RUTA: LÍNEA DE TIEMPO INDEPENDIENTE */}
+            <Route path="/cronologia" element={<TimelineExperience />} />
+
+            {/* RUTA DETALLE DE ARTÍCULO */}
             <Route path="/articulo/:id" element={<ArticleDetail />} />
           </Routes>
 
@@ -197,9 +204,7 @@ function App() {
   );
 }
 
-/* ==========================================================================
-   COMPONENTES INTERNOS DE SOPORTE (ACTUALIZADOS)
-   ========================================================================== */
+/* --- Los componentes internos de soporte (AuthModal, CreateArticleModal, EditArticleModal) se mantienen idénticos abajo --- */
 
 function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
   const [isRegister, setIsRegister] = useState(initialRegister);
