@@ -48,16 +48,18 @@ header {
 
 .btn-read {
   text-decoration: none;
-  color: #ff6f61;
+  font-family: 'Bebas Neue', cursive;
+  color: #e2b464;
   font-weight: bold;
-  border: 1px solid #ff6f61;
+  border: 1px solid #e2b464;
   padding: 6px 18px;
   border-radius: 4px;
   transition: all 0.3s ease;
+  letter-spacing: 0.1rem;
 }
 
 .btn-read:hover {
-  background: #ff6f61;
+  background: #e2b46469;
   color: white;
 }
 
@@ -302,7 +304,7 @@ nav .logo:hover::before {
 .presentation-section {
   background: linear-gradient(135deg, #1a1a2e, #16213e);
   color: white;
-  padding: 80px 20px;
+  padding: 60px 20px;
   position: relative;
   overflow: hidden;
 }
@@ -329,7 +331,7 @@ nav .logo:hover::before {
   font-weight: 700;
   margin-bottom: 15px;
   padding-top: 3rem;
-  color: #ff6f61;
+  color: #ff6600;
   z-index: 10; /* Aseguramos que esté arriba */
   
   /* EL TRUCO DE LA BÓVEDA SIMPLE */
@@ -417,7 +419,8 @@ nav .logo:hover::before {
 /* --- ESTILOS PARA LA SECCION DE CREADORES --- */
 .creator-cta-section {
   background-color: #1a1a2e;
-  padding: 12px 0; 
+  padding: 1px 0; 
+  padding-bottom: 50px;
   border-bottom: none; 
   display: flex;
   justify-content: center;
@@ -442,18 +445,17 @@ nav .logo:hover::before {
 }
 
 .creator-cta-text h3 {
-  color: #ff6600;
+  color: #ffffff;
   margin: 0;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   text-transform: uppercase;
   font-weight: bold;
-  margin-bottom: 2px ;
 }
 
 .creator-cta-text p {
-  color: #ffffff;
+  color: #c8c8c8;
   margin-top: 2px;
-  font-size: 0.9rem;
+  font-size: 1.15rem;
   font-weight: bold;
   text-align: center;
 }
@@ -461,9 +463,9 @@ nav .logo:hover::before {
 .btn-creator-login, .btn-create-news, .btn-creator-logout, .btn-creator-register {
   flex: 1;
   color: #e2b464;
-  border: 1px solid rgba(226, 180, 100, 0.4);
+  border: 3px solid rgb(226, 180, 100);
   background: transparent;
-  padding: 12px 12px; /* Padding vertical consistente */
+  padding: 8px 12px; /* Padding vertical consistente */
   border-radius: 25px; /* Un poco más redondeados para suavizar el set */
   font-family: 'Playfair Display', serif;
   font-style: italic;
@@ -566,13 +568,13 @@ nav .logo:hover::before {
 .h2negronaranjanegro {
   color: #000;
   font-weight: bold;
-  font-size: 2.8rem;
+  font-size: 4rem;
 }
 
 .h2negronaranja {
-  color: #ff6f61;
+  color: #ff6600;
   font-weight: bold;
-  font-size: 2.8rem;
+  font-size: 4rem;
 }
 
 /* --- GRILLA DE ARTÍCULOS CON APARICIÓN CINEMATOGRÁFICA --- */
@@ -794,6 +796,7 @@ a.button:hover {
 }
 .category-tag {
   font-weight: bold;
+  font-family: 'Cinzel', serif;
 }
 
 /* PAGINACIÓN DE ARTÍCULOS */
@@ -1123,7 +1126,7 @@ a.button:hover {
   font-weight: 700;
   margin-bottom: 15px;
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
-  background: linear-gradient(135deg, #ff6161, #ff6161);
+  background: linear-gradient(135deg, #ff6600, #ff6600);
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -1310,7 +1313,15 @@ a.button:hover {
   .btn-creator-register {
     margin-left: 44px;
   }
-
+  .h2negronaranjanegro {
+    font-size: 3.2rem;
+  }
+  .h2negronaranja {
+    font-size: 3.2rem;
+  }
+  .presentation-title {
+    font-size: 2.5rem;
+  }
 
 
 }
@@ -1944,7 +1955,7 @@ a.button:hover {
     margin-bottom: 10px;
   }
   .creator-cta-text h3 {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
   }
 }
 

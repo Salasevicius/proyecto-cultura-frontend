@@ -119,6 +119,7 @@
   font-family: var(--font-serif);
   font-size: 15vw;
   font-weight: 900;
+  font-style: italic;
   color: rgba(255, 255, 255, 0.015);
   white-space: nowrap;
   pointer-events: none;
@@ -208,7 +209,7 @@
 
 /* --- IMÁGENES ZENITH --- */
 .card-image-wrapper {
-  height: clamp(350px, 55vh, 700px);
+  height: clamp(350px, 55vh, 300px);
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -222,7 +223,7 @@
 .card-image-wrapper::before {
   content: '';
   position: absolute;
-  top: 20px; right: 20px; bottom: 20px; left: 20px;
+  top: 2px; right: 20px; bottom: 20px; left: 20px;
   border: 1px solid transparent;
   z-index: 4;
   pointer-events: none;
@@ -428,7 +429,8 @@
   .special-card.is-active h3 { transform: translateY(-10px); }
   .background-watermark {
     bottom: 0;
-  right: 10vw;
+  right: 12vw;
+
 }
 }
 

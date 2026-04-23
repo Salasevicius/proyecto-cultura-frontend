@@ -97,20 +97,26 @@
   background: transparent;
 }
 
-.feat-cat { color: #e2b464; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 6px; margin-top: 0; text-align: center;}
+.feat-cat { color: #e2b464; font-weight: 700; font-size: 0.9rem;
+   text-transform: uppercase;
+    letter-spacing: 3px; margin-bottom: 6px; margin-top: 0;
+     text-align: center;
+    }
 
 .feat-title { 
-  font-family: 'Playfair Display', serif; 
+  font-family: 'Cormorant Garamond', serif;
   font-size: 2.3rem; 
   margin: 0.1rem 0; 
   margin-top: 20px;
   color: #f8fafc; 
-  line-height: 1.1;text-align: center;
+  line-height: 1.1;
+  text-align: center;
 }
 
 .feat-desc { 
   color: rgba(248, 250, 252, 0.65); 
   font-size: 1.05rem; 
+  font-family: 'Inter', sans-serif;
   line-height: 1.5; 
   margin-top: 10px;
   display: -webkit-box;
@@ -126,7 +132,7 @@
   background: transparent; 
   color: #e2b464; 
   border: none;
-  font-family: 'Playfair Display', serif; 
+  font-family: 'Bebas Neue', cursive;
   font-size: 1.2rem; 
   font-style: italic; 
   cursor: pointer;
@@ -218,7 +224,7 @@
 .sidebar-row:hover { transform: translateX(8px); }
 
 .sidebar-cat { color: rgba(226, 180, 100, 0.6); font-size: 0.7rem; text-transform: uppercase; }
-.sidebar-item-title { color: #f8fafc; font-size: 0.95rem; margin-top: 5px; font-weight: 500; }
+.sidebar-item-title { color: #f8fafc; font-size: 0.95rem; margin-top: 5px; font-weight: 500; font-family: 'Tenor Sans', sans-serif; }
 
 .sidebar-toggle {
   position: absolute; right: 0; top: 0; bottom: 0; width: 70px; 
