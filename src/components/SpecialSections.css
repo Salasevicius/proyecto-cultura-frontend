@@ -9,7 +9,6 @@
   --bg-card: #111111;
   --text-main: #ffffff;
   --text-muted: #b0b0b0;
-  --font-serif: 'Playfair Display', serif;
   --transition-cinematic: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
   --transition-fast: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --mouse-x: 50%;
@@ -38,7 +37,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 2px;
+  height: 20px;
   background: linear-gradient(90deg, 
     transparent, 
     var(--gold-primary), 
@@ -83,7 +82,7 @@
   content: '';
   position: absolute;
   left: 4%;
-  top: 0;
+  top: 2%;
   width: 2px;
   height: 100%;
   background: linear-gradient(to bottom, 
@@ -114,11 +113,12 @@
 /* MARCA DE AGUA TIPOGRÁFICA */
 .background-watermark {
   position: absolute;
-  bottom: -5vh;
-  right: 5vw;
+  bottom: -18vh;
+  right: -2vw;
   font-family: var(--font-serif);
-  font-size: 15vw;
+  font-size: 24vw;
   font-weight: 900;
+  font-family: 'Cormorant Garamond', serif;
   font-style: italic;
   color: rgba(255, 255, 255, 0.015);
   white-space: nowrap;
@@ -147,6 +147,7 @@
 
 .hub-subtitle {
   color: var(--gold-primary);
+  font-family: 'Big Shoulders Display', sans-serif;
   text-transform: uppercase;
   font-size: 0.85rem;
   font-weight: 700;
@@ -159,11 +160,10 @@
 }
 
 .hub-title {
-  font-family: var(--font-serif);
+  font-family: "Cormorant Garamond", serif;
   font-size: clamp(2.5rem, 8vw, 6rem);
-  font-weight: 900;
+  font-weight: bold;
   letter-spacing: -0.03em;
-  line-height: 0.9;
   perspective: 1000px;
 }
 
@@ -173,7 +173,7 @@
   flex-direction: column;
   gap: clamp(100px, 10vh, 150px);
   max-width: 1500px;
-  margin: 0 auto;
+  margin: 100px auto;
   counter-reset: card-index;
 }
 
@@ -282,7 +282,7 @@
   content: "0" counter(card-index);
   counter-increment: card-index;
   position: absolute;
-  top: -80px; left: 6px;
+  bottom: 80px; left: 360px;
   font-family: var(--font-serif);
   font-size: clamp(8rem, 12vw, 14rem);
   font-weight: 900;
@@ -303,6 +303,7 @@
 
 .card-tag {
   color: var(--gold-primary);
+  font-family: 'Big Shoulders Display', sans-serif;
   text-transform: uppercase;
   font-size: 0.8rem;
   font-weight: 700;
@@ -329,9 +330,9 @@
 }
 
 .card-info h3 {
-  font-family: var(--font-serif);
+  font-family: 'Tenor Sans', sans-serif;
   font-size: clamp(2.5rem, 5vw, 4.2rem);
-  margin: 15px 0 35px;
+  margin: 5px 0 0;
   line-height: 1.05;
   color: #fff;
   transition: var(--transition-cinematic);
@@ -346,6 +347,7 @@
 
 .card-info p {
   color: var(--text-muted);
+  font-family: 'Inter', sans-serif;
   font-size: clamp(1.1rem, 1.3vw, 1.4rem);
   line-height: 1.9;
   max-width: 520px;
@@ -360,11 +362,12 @@
 
 /* --- BOTÓN ZENITH --- */
 .hub-btn {
-  margin-top: 55px;
+  margin-top: 15px;
   background: transparent;
   border: 1px solid var(--gold-primary);
   color: var(--gold-primary);
   padding: 20px 50px;
+  font-family: 'Bebas Neue', cursive;
   font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.4em;
@@ -414,6 +417,9 @@
     max-width: 700px;
     margin: 0 auto;
   }
+  .hub-title{
+    line-height: 0.9;
+  }
   .special-card:nth-child(even) { direction: ltr; }
   .card-image-wrapper { height: 450px; }
   .card-info { text-align: center; padding: 0; }
@@ -429,7 +435,7 @@
   .special-card.is-active h3 { transform: translateY(-10px); }
   .background-watermark {
     bottom: 0;
-  right: 12vw;
+  right: -1vw;
 
 }
 }

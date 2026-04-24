@@ -191,13 +191,13 @@
 
 .featured-sidebar {
   position: absolute;
-  right: 70px;
+  right: 75px;
   top: 0;
   bottom: 0;
   width: 350px;
   background: rgba(15, 23, 42, 0.95);
   border-left: 1px solid rgba(226, 180, 100, 0.2);
-  padding: 40px;
+  padding: 20px;
   transform: translateX(100%);
   transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
   display: flex;

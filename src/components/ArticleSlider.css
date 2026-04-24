@@ -44,7 +44,7 @@ body::before {
   display: flex;
   gap: 4px; 
   overflow-x: auto;
-  padding: 60px 45% 80px 45%; 
+  padding: 60px 45% 190px 45%; 
   perspective: 1800px;
   align-items: stretch; 
   cursor: grab;
@@ -121,7 +121,7 @@ body::before {
 .author-name-card {
   display: block;
   font-family: 'Cinzel', serif;
-  font-size: 0.80rem;
+  font-size: 0.85rem;
   /* Dorado mate (pálido) para un look más editorial */
   color: #d4a355; 
   margin-top: 8px;
@@ -140,10 +140,10 @@ body::before {
   width: 100%;
 }
 
-.author-name {
-  font-size: 0.65rem;
+.author-name-card {
+  font-size: 0.78rem;
   color: rgba(212, 163, 85, 0.8);
-  font-family: 'Pinyon Script', cursive;
+  font-family: 'Cinzel', serif;
   font-weight: bold;
   letter-spacing: 0.01em;
 }
@@ -174,13 +174,13 @@ body::before {
 @media (max-width: 768px) {
   .slider-container-main { 
     margin-top: 10px !important; 
-    padding-bottom: 70px;
+    padding-bottom: 8px;
     transform: none !important;
     overflow: hidden;
   }
 
   .slider-track {
-    padding: 30px 10% 40px 10% !important; 
+    padding: 20px 10% 40px 10% !important; 
     gap: 15px !important;
     perspective: none !important;
     -webkit-overflow-scrolling: touch;
@@ -210,9 +210,9 @@ body::before {
     margin-bottom: 6px;
   }
 
-  .author-name {
-    font-size: 0.85rem; /* Reducción proporcional para móvil */
-    font-family: 'Pinyon Script', cursive;
+  .author-name-card {
+    font-size: 0.75rem; /* Reducción proporcional para móvil */
+    font-family: 'Cinzel', serif;
     font-weight: bold;
   }
 
