@@ -331,7 +331,7 @@ nav .logo:hover::before {
   font-weight: 700;
   margin-bottom: 15px;
   padding-top: 3rem;
-  color: #ff6600;
+  color: #e2b464;
   z-index: 10; /* Aseguramos que esté arriba */
   
   /* EL TRUCO DE LA BÓVEDA SIMPLE */
@@ -1126,7 +1126,7 @@ a.button:hover {
   font-weight: 700;
   margin-bottom: 15px;
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
-  background: linear-gradient(135deg, #ff6600, #ff6600);
+  background: linear-gradient(135deg, #e2b464,#e2b464);
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -1321,6 +1321,7 @@ a.button:hover {
   }
   .presentation-title {
     font-size: 2.5rem;
+    color: #e2b464;
   }
 
 

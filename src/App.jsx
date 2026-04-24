@@ -16,6 +16,7 @@ import ScrollDotNav from './components/ScrollDotNav';
 import './styles/index.css';
 import { API_URL } from './config';
 import SkeletonCard from './components/SkeletonCard';
+import { Eye, EyeOff } from 'lucide-react'; // Importación de iconos de Lucide
 
 function AppContent() {
   const [noticias, setNoticias] = useState([]);
@@ -211,6 +212,9 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  
+  // Nuevo estado para la visibilidad de la contraseña
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -251,10 +255,53 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
         <h3>{isRegister ? 'Crear Cuenta' : 'Iniciar Sesión'}</h3>
         <form onSubmit={handleSubmit}>
           {isRegister && (
-            <input type="text" placeholder="Nombre de usuario" value={username} onChange={(e) => setUsername(e.target.value)} required />
+            <input 
+              type="text" 
+              placeholder="Nombre de usuario" 
+              value={username} 
+              onChange={(e) => setUsername(e.target.value)} 
+              required 
+            />
           )}
-          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <input 
+            type="email" 
+            placeholder="Email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            required 
+          />
+          
+          {/* Contenedor relativo para el input y el icono del ojo */}
+          <div style={{ position: 'relative', width: '100%' }}>
+            <input 
+              type={showPassword ? "text" : "password"} 
+              placeholder="Contraseña" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: 'absolute',
+                right: '-10px',
+                top: '40%',
+                transform: 'translateY(-50%)',
+                background: 'none',
+                border: 'none',
+                color: '#e2b464', // Tu dorado principal
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '0',
+                opacity: 0.8
+              }}
+            >
+              {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+            </button>
+          </div>
+
           <div className="login-buttons">
             <button type="submit" className="btn-send">{isRegister ? 'Registrarse' : 'Entrar'}</button>
             <button type="button" onClick={onClose} className="btn-cancel">Cancelar</button>

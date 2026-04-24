@@ -3,23 +3,16 @@ export const timelineData = [
     year: "1725", 
     title: "Pago de los Arroyos", 
     desc: "Primeros asentamientos coloniales en la zona. Francisco de Godoy llega con la imagen de la Virgen del Rosario.", 
-    img: "/plano-rosario.webp", 
+    img: "/pago-de-los-arroyos.webp", 
     tag: "Origen",
     color: "#1a1a1d" // Negro Carbón: Neutralidad absoluta, el vacío antes de la historia.
   },
-  { 
-    year: "1793", 
-    title: "Parroquia Nuestra Señora del Rosario", 
-    desc: "Se eleva a Curato la humilde capilla del Pago, dando nombre definitivo al asentamiento que crecía en las barrancas.", 
-    img: "/plano-rosario.webp", 
-    tag: "Historia",
-    color: "#3d3d35" // Oliva Ceniza: Evoca materiales coloniales, adobe y piedra vieja.
-  },
+ 
   { 
     year: "1812", 
     title: "Batería Libertad", 
     desc: "A orillas del Paraná, Manuel Belgrano iza por primera vez la bandera nacional, cambiando la historia del país.", 
-    img: "/images/1812-bandera.webp", 
+    img: "/vitral-rosario.webp", 
     tag: "Patria",
     color: "#004080" // Azul Prusia: Confianza, deber y el origen de la identidad nacional.
   },
@@ -27,7 +20,7 @@ export const timelineData = [
     year: "1852", 
     title: "Declaración de Ciudad", 
     desc: "Rosario es declarada ciudad por Justo José de Urquiza, iniciando su autonomía y despegue institucional.", 
-    img: "/images/1852-ciudad.webp", 
+    img: "/declaracion-ciudad-rosario.webp", 
     tag: "Política",
     color: "#5e2121" // Sangre de Toro: Un salto hacia la fuerza política y la institucionalidad.
   },
@@ -35,7 +28,7 @@ export const timelineData = [
     year: "1854", 
     title: "Aduana de Rosario", 
     desc: "Se establece la Confederación Argentina y el puerto de Rosario se convierte en la puerta de entrada al país.", 
-    img: "/images/1854-aduana.webp", 
+    img: "/aduana-rosario.webp", 
     tag: "Economía",
     color: "#0b3d33" // Verde Ciprés: Estabilidad económica y el color de las aguas del puerto antiguo.
   },
@@ -43,7 +36,7 @@ export const timelineData = [
     year: "1867", 
     title: "Diario La Capital", 
     desc: "Ovidio Lagos funda el 'Decano de la Prensa Argentina', voz fundamental del interior del país.", 
-    img: "/images/1867-capital.webp", 
+    img: "/diario-la-capital.webp", 
     tag: "Prensa",
     color: "#343434" // Gris Plomo: La tinta, el linotipo y la seriedad de la información.
   },
@@ -51,7 +44,7 @@ export const timelineData = [
     year: "1870", 
     title: "El Ferrocarril Central", 
     desc: "La conexión Rosario-Córdoba queda inaugurada, consolidando el modelo agroexportador y la unión nacional.", 
-    img: "/images/1870-tren.webp", 
+    img: "/ferrocarril.webp", 
     tag: "Progreso",
     color: "#8c4423" // Óxido de Hierro: El metal de las vías y el vapor de la industria.
   },
@@ -59,7 +52,7 @@ export const timelineData = [
     year: "1884", 
     title: "La Gran Inmigración", 
     desc: "Llegan los primeros grandes contingentes de italianos y españoles, transformando el tejido social y cultural.", 
-    img: "/images/1884-inmigrantes.webp", 
+    img: "/gran-inmigracion.webp", 
     tag: "Social",
     color: "#5a3e7a" // Amatista Oscuro: El choque cultural, la nostalgia de Europa y la nueva vida.
   },
@@ -67,7 +60,7 @@ export const timelineData = [
     year: "1889", 
     title: "Rosario Central", 
     desc: "Se funda el Central Argentine Railway Athletic Club, el origen del club canalla vinculado a los talleres ferroviarios.", 
-    img: "/images/1889-central.webp", 
+    img: "/equipo-central-rosario.webp", 
     tag: "Deporte",
     color: "#002d5a" // Azul Ferroviario: Pertenencia y la lealtad de la clase trabajadora.
   },
@@ -75,7 +68,7 @@ export const timelineData = [
     year: "1891", 
     title: "Teatro El Círculo", 
     desc: "Se inaugura bajo el nombre de Teatro La Ópera, trayendo a artistas como Enrico Caruso a la ciudad.", 
-    img: "/images/1891-teatro.webp", 
+    img: "/el-circulo-rosario.webp", 
     tag: "Cultura",
     color: "#7a0019" // Rojo Teatro: Lujo, arte dramático y pasión escénica.
   },
@@ -83,7 +76,7 @@ export const timelineData = [
     year: "1903", 
     title: "Newell's Old Boys", 
     desc: "Isaac Newell funda el club lepra, introduciendo el fútbol como lenguaje identitario bajo los colores rojo y negro.", 
-    img: "/images/1903-newells.webp", 
+    img: "/equipo-ñuls.webp", 
     tag: "Deporte",
     color: "#4d0000" // Granate Profundo: Identidad inquebrantable y elegancia deportiva.
   },
@@ -91,7 +84,7 @@ export const timelineData = [
     year: "1905", 
     title: "Grito de Rebeldía", 
     desc: "Grandes huelgas de estibadores y trabajadores ferroviarios marcan el inicio del movimiento obrero organizado.", 
-    img: "/images/1905-huelga.webp", 
+    img: "/huelga-obrera.webp", 
     tag: "Lucha",
     color: "#2b2b2b" // Negro Hollín: La lucha obrera y el humo de las fábricas.
   },
