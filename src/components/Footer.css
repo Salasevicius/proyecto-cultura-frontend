@@ -161,32 +161,50 @@
   .footer-matrix { grid-template-columns: 1fr 1fr; gap: 20px; }
   .brand-header { flex-direction: column; gap: 10px; }
 }
+
+/* Estilos duplicados de tu código original para asegurar consistencia */
 .footer-matrix {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   margin-bottom: 80px;
-  
 }
+
 .matrix-links {
   gap: 15px;
 }
+
 .matrix-label {
   font-size: 0.85rem;
   color: #ff6161;
 }
 
 @media (max-width: 600px) {
-  .footer-matrix { grid-template-columns: 2fr; }
+  /* INYECCIÓN DE IMAGEN SOLO EN MÓVILES */
+  .footer-final-matrix {
+    background-image: 
+      linear-gradient(to bottom, var(--bg) 0%, rgba(3, 3, 5, 0) 50%, rgba(3, 3, 5, 0.2) 100%),
+      url('/skyline-rosario.webp');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: top center;
+  }
+
+  /* Mejora de legibilidad solo para móvil */
+  .brand-logo, .brand-description, .matrix-label, .matrix-links a {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+  }
+
+  /* Estructura original de links en móvil que pasaste */
+  .footer-matrix { 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 25px;
+    margin-bottom: 10px;
+  }
+
   .footer-metadata { 
     flex-direction: column; 
     gap: 20px; 
     text-align: center; 
   }
-  .footer-matrix {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
-  margin-bottom: 10px;
-}
 }

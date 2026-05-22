@@ -1,0 +1,8 @@
+.reveal-wrapper { height: 80vh; background: #0f172a; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.mask-container { overflow: hidden; height: 12vw; }
+.reveal-line { 
+    font-family: 'Cormorant Garamond', serif; font-size: 10vw; font-weight: 900; 
+    line-height: 1; margin: 0; transform: translateY(100%); color: #fff;
+}
+.reveal-line.highlight { color: #e2b464; font-style: italic; }
+.reveal-sub { font-family: 'Inter', sans-serif; color: rgba(255,255,255,0.4); letter-spacing: 4px; margin-top: 30px; text-transform: uppercase; }

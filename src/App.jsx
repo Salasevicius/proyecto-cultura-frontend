@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navbar from './components/Navbar';
 import CreatorCTA from './components/CreatorCTA';
 import HeaderHero from './components/HeaderHero';
@@ -9,14 +11,20 @@ import Footer from './components/Footer';
 import ArticleDetail from './components/ArticleDetail';
 import ArticleSlider from './components/ArticleSlider';
 import SpecialSections from './components/SpecialSections'; 
-import TimelineExperience from './components/TimelineExperience'; // COMPONENTE INDEPENDIENTE
+import TimelineExperience from './components/TimelineExperience'; 
 import CulturaPreloader from './components/CulturaPreloader'; 
 import './components/ArticleSlider.css';
 import ScrollDotNav from './components/ScrollDotNav';
+import ChroniclesHub from './components/ChroniclesHub'; // Importa el nuevo componente
 import './styles/index.css';
 import { API_URL } from './config';
 import SkeletonCard from './components/SkeletonCard';
-import { Eye, EyeOff } from 'lucide-react'; // Importación de iconos de Lucide
+import { Eye, EyeOff } from 'lucide-react';
+
+// IMPORTACIÓN DE LA CRÓNICA
+import EnzoBordabehereArticle from './components/EnzoBordabehereArticle';
+
+gsap.registerPlugin(ScrollTrigger);
 
 function AppContent() {
   const [noticias, setNoticias] = useState([]);
@@ -29,8 +37,13 @@ function AppContent() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [articleToEdit, setArticleToEdit] = useState(null);
-
   const [globalScroll, setGlobalScroll] = useState(0);
+
+  const location = useLocation();
+  
+  // Detectar si estamos en una crónica para ocultar UI global
+  const isInmersiveRoute = location.pathname.startsWith('/cronica/');
+  location.pathname === '/cronicas-hub';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,9 +57,6 @@ function AppContent() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const location = useLocation();
-  
-  // SECCIONES PARA EL NAVEGADOR DE PUNTOS (Solo en Home)
   const sections = [
     { id: 'anchor-top', label: 'Inicio' },
     { id: 'anchor-articulos', label: 'Artículos' },
@@ -80,6 +90,7 @@ function AppContent() {
 
   const handlePreloaderComplete = () => {
     setPreloaderActive(false);
+    setTimeout(() => { ScrollTrigger.refresh(); }, 200);
   };
 
   const handleLogout = () => {
@@ -88,7 +99,6 @@ function AppContent() {
     localStorage.removeItem('userName');
     setIsLoggedIn(false);
     setUserName('');
-    alert("Sesión cerrada");
   };
 
   const handleEditClick = (noticia) => {
@@ -107,19 +117,20 @@ function AppContent() {
 
       {!preloaderActive && (
         <div className="fade-in-site">
-          <header>
-            <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-          </header>
+          {/* HEADER CONDICIONAL */}
+          {!isInmersiveRoute && (
+            <header>
+              <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+            </header>
+          )}
           
           <Routes>
-            {/* RUTA PRINCIPAL (HOME) */}
             <Route path="/" element={
               <>
                 <ScrollDotNav sections={sections} />
                 <div style={{ position: 'relative' }}>
                   <div id="anchor-top" style={{ position: 'absolute', top: 0, height: '1px', width: '100%', pointerEvents: 'none' }}></div>
                   <HeaderHero />
-                  
                   <CreatorCTA
                     isLoggedIn={isLoggedIn}
                     userName={userName}
@@ -131,21 +142,10 @@ function AppContent() {
                   />
                 </div>
 
-                <main 
-                  style={{ 
-                    position: 'relative',
-                    '--global-scroll': `${globalScroll}px` 
-                  }}
-                >
-                  {loading && !location.search && (
-                    <SkeletonCard type="featured" />
-                  )}
-
+                <main style={{ position: 'relative', overflow: 'visible', '--global-scroll': `${globalScroll}px` }}>
+                  {loading && !location.search && <SkeletonCard type="featured" />}
                   {!location.search && !loading && noticias.length > 0 && (
-                    <FeaturedArticle 
-                      noticia={noticias[0]} 
-                      noticiasSecundarias={noticias.slice(1, 5)} 
-                    />
+                    <FeaturedArticle noticia={noticias[0]} noticiasSecundarias={noticias.slice(1, 5)} />
                   )}
 
                   <div id="anchor-articulos" style={{ position: 'absolute', top: location.search ? '-100px' : '-200px', height: '1px', width: '100%', pointerEvents: 'none' }}></div>
@@ -163,30 +163,39 @@ function AppContent() {
                       <SpecialSections />
                     </div>
                   )}
-                  
                   {!loading && <Pagination />}
                 </main>
               </>
             } />
 
-            {/* NUEVA RUTA: LÍNEA DE TIEMPO INDEPENDIENTE */}
+            {/* RUTAS INDEPENDIENTES */}
             <Route path="/cronologia" element={<TimelineExperience />} />
-
-            {/* RUTA DETALLE DE ARTÍCULO */}
+            {/* RUTA DEL HUB DE CRÓNICAS */}
+            <Route path="/cronicas-hub" element={<ChroniclesHub />} />
+            <Route path="/cronica/enzo-bordabehere" element={<EnzoBordabehereArticle />} />
             <Route path="/articulo/:id" element={<ArticleDetail />} />
           </Routes>
 
-          <Footer isLoggedIn={isLoggedIn} onLoginClick={() => openAuthModal(false)} onRegisterClick={() => openAuthModal(true)} onCreateClick={() => setShowCreateModal(true)} />
+          {/* FOOTER CONDICIONAL */}
+          {!isInmersiveRoute && (
+            <Footer 
+              isLoggedIn={isLoggedIn} 
+              onLoginClick={() => openAuthModal(false)} 
+              onRegisterClick={() => openAuthModal(true)} 
+              onCreateClick={() => setShowCreateModal(true)} 
+            />
+          )}
         </div>
       )}
 
+      {/* MODALES (Permanecen igual) */}
       {showLogin && (
         <AuthModal
           initialRegister={isRegisterMode}
           onClose={() => setShowLogin(false)}
-          onLoginSuccess={(idRecibido, nombreRecibido) => {
+          onLoginSuccess={(id, nombre) => {
             setIsLoggedIn(true);
-            setUserName(nombreRecibido);
+            setUserName(nombre);
             setShowLogin(false);
           }}
         />
@@ -271,7 +280,6 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
             required 
           />
           
-          {/* Contenedor relativo para el input y el icono del ojo */}
           <div style={{ position: 'relative', width: '100%' }}>
             <input 
               type={showPassword ? "text" : "password"} 

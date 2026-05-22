@@ -1,27 +1,17 @@
 import React, { useLayoutEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importamos el hook de navegación
+import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'; 
 import LazyImage from './LazyImage'; 
 import './SpecialSections.css';
 
-// Registro de plugins
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 export default function SpecialSections() {
   const containerRef = useRef();
   const titleRef = useRef();
-  const navigate = useNavigate(); // Instanciamos la navegación
-
-  // FUNCIÓN DE NAVEGACIÓN ACTUALIZADA PARA RUTA INDEPENDIENTE
-  const navegarALineaDeTiempo = (e) => {
-    if (e) e.preventDefault();
-    
-    // En lugar de hacer scroll, navegamos a la ruta definida en App.jsx
-    // Esto renderizará el componente TimelineExperience en solitario
-    navigate('/cronologia');
-  };
+  const navigate = useNavigate();
 
   const handleMouseMove = (e) => {
     if (!containerRef.current) return;
@@ -29,15 +19,12 @@ export default function SpecialSections() {
     const rect = containerRef.current.getBoundingClientRect();
     const x = clientX - rect.left;
     const y = clientY - rect.top;
-
     containerRef.current.style.setProperty("--mouse-x", `${x}px`);
     containerRef.current.style.setProperty("--mouse-y", `${y}px`);
   };
 
   useLayoutEffect(() => {
     let ctx = gsap.context(() => {
-      
-      // 1. FADE-IN DEL TÍTULO
       gsap.from(titleRef.current, {
         scrollTrigger: {
           trigger: titleRef.current,
@@ -51,9 +38,7 @@ export default function SpecialSections() {
       });
 
       const cards = gsap.utils.toArray('.special-card');
-
       cards.forEach((card) => {
-        // 2. Efecto de aparición para las tarjetas
         gsap.from(card, {
           scrollTrigger: {
             trigger: card,
@@ -66,7 +51,6 @@ export default function SpecialSections() {
           ease: "power4.out",
         });
 
-        // 3. LÓGICA DE SPOTLIGHT (Se mantiene para la interactividad visual)
         ScrollTrigger.create({
           trigger: card,
           start: "top 60%", 
@@ -74,17 +58,6 @@ export default function SpecialSections() {
           onToggle: (self) => {
             if (self.isActive) {
               card.classList.add('is-active');
-              const rect = card.getBoundingClientRect();
-              const containerRect = containerRef.current.getBoundingClientRect();
-              const centerX = (rect.left + rect.width / 2) - containerRect.left;
-              const centerY = (rect.top + rect.height / 2) - containerRect.top;
-
-              gsap.to(containerRef.current, {
-                "--mouse-x": `${centerX}px`,
-                "--mouse-y": `${centerY}px`,
-                duration: 1.5,
-                ease: "power2.out"
-              });
             } else {
               card.classList.remove('is-active');
             }
@@ -92,16 +65,11 @@ export default function SpecialSections() {
         });
       });
     }, containerRef);
-
     return () => ctx.revert();
   }, []);
 
   return (
-    <section 
-      className="special-hub" 
-      ref={containerRef} 
-      onMouseMove={handleMouseMove}
-    >
+    <section className="special-hub" ref={containerRef} onMouseMove={handleMouseMove}>
       <div className="special-hub-divider"></div>
 
       <div className="hub-header">
@@ -113,34 +81,20 @@ export default function SpecialSections() {
         {/* Card 1: Línea de Tiempo */}
         <div className="special-card">
           <div className="card-image-wrapper">
-             <LazyImage 
-                src="/monumento-construccion.webp" 
-                alt="Cronología"
-                className="card-parallax-bg"
-             />
+             <LazyImage src="/monumento-construccion.webp" alt="Cronología" className="card-parallax-bg" />
           </div>
           <div className="card-info">
             <span className="card-tag">Interactivo</span>
             <h3>Línea de Tiempo</h3>
             <p>Un recorrido cronológico horizontal por los hitos que forjaron la identidad de Rosario.</p>
-            <button 
-              type="button" 
-              className="hub-btn" 
-              onClick={(e) => navegarALineaDeTiempo(e)}
-            >
-              Iniciar Recorrido
-            </button>
+            <button className="hub-btn" onClick={() => navigate('/cronologia')}>Iniciar Recorrido</button>
           </div>
         </div>
 
-        {/* Card 2 */}
+        {/* Card 2: Archivo Histórico */}
         <div className="special-card">
           <div className="card-image-wrapper">
-             <LazyImage 
-                src="/plano-rosario.webp" 
-                alt="Archivo"
-                className="card-parallax-bg"
-             />
+             <LazyImage src="/plano-rosario.webp" alt="Archivo" className="card-parallax-bg" />
           </div>
           <div className="card-info">
             <span className="card-tag">Digitalización</span>
@@ -150,14 +104,28 @@ export default function SpecialSections() {
           </div>
         </div>
 
-        {/* Card 3 */}
+        {/* Card 3: Crónica Inmersiva (Bordabehere) */}
+        <div className="special-card inmersive-chronicle-card">
+          <div className="card-image-wrapper">
+             <LazyImage src="/biblioteca-argentina.webp" alt="Bordabehere" className="card-parallax-bg" />
+          </div>
+          <div className="card-info">
+            <span className="card-tag">Narrativa Cinematográfica</span>
+            <h3>Crónicas Inmersivas</h3>
+            <p>Una experiencia inmersiva sobre el magnicidio que marcó la historia política local.</p>
+             <button 
+  className="hub-btn" 
+  onClick={() => navigate('/cronicas-hub')} // CAMBIO AQUÍ
+>
+  Explorar Archivo
+</button>
+          </div>
+        </div>
+
+        {/* Card 4: Enciclopedia */}
         <div className="special-card">
           <div className="card-image-wrapper">
-             <LazyImage 
-                src="/biblioteca-argentina.webp" 
-                alt="Enciclopedia"
-                className="card-parallax-bg"
-             />
+             <LazyImage src="/biblioteca-argentina.webp" alt="Enciclopedia" className="card-parallax-bg" />
           </div>
           <div className="card-info">
             <span className="card-tag">Investigación</span>

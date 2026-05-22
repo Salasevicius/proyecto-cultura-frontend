@@ -1930,6 +1930,32 @@ a.button:hover {
   border-radius: 6px !important;
   cursor: pointer;
 }
+.exit-inmersive-btn {
+  position: fixed;
+  top: 30px;
+  left: 30px;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-family: 'Big Shoulders Display', sans-serif;
+  letter-spacing: 0.2em;
+  font-size: 0.7rem;
+  transition: all 0.4s ease;
+  border-radius: 2px;
+}
+
+.exit-inmersive-btn:hover {
+  background: var(--accent-inmersive);
+  border-color: var(--accent-inmersive);
+  transform: translateX(5px);
+}
 
 /* ==========================================================================
    SOPHISTICATED MEDIA QUERIES - OPTIMIZACIÓN MULTIDISPOSITIVO

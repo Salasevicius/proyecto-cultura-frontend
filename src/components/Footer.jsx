@@ -54,7 +54,6 @@ const Footer = ({ isLoggedIn, onLoginClick, onRegisterClick, onCreateClick }) =>
           <div className="matrix-item">
             <span className="matrix-label">ROSARIOPEDIA</span>
             <div className="matrix-links">
-              {/* Ajustado para usar el filtrado por categorías que ya tienes en App.jsx */}
               <Link to="/?category=Periodísticos">Explorar Artículos</Link>
               <Link to="/?category=Biografías">Historias de Barrio</Link>
               <Link to="/?category=Opinión">Patrimonio Histórico</Link>

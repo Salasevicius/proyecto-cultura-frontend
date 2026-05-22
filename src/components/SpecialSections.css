@@ -13,6 +13,9 @@
   --transition-fast: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --mouse-x: 50%;
   --mouse-y: 50%;
+  
+  /* Acento para Crónicas Inmersivas */
+  --accent-inmersive: #ff6f61; 
 }
 
 /* Base Optimization para Lighthouse & Performance */
@@ -115,10 +118,9 @@
   position: absolute;
   bottom: -18vh;
   right: -2vw;
-  font-family: var(--font-serif);
+  font-family: 'Cormorant Garamond', serif;
   font-size: 24vw;
   font-weight: 900;
-  font-family: 'Cormorant Garamond', serif;
   font-style: italic;
   color: rgba(255, 255, 255, 0.015);
   white-space: nowrap;
@@ -209,7 +211,7 @@
 
 /* --- IMÁGENES ZENITH --- */
 .card-image-wrapper {
-  height: clamp(350px, 55vh, 300px);
+  height: clamp(350px, 55vh, 500px);
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -283,7 +285,7 @@
   counter-increment: card-index;
   position: absolute;
   bottom: 80px; left: 360px;
-  font-family: var(--font-serif);
+  font-family: 'Cormorant Garamond', serif;
   font-size: clamp(8rem, 12vw, 14rem);
   font-weight: 900;
   background: linear-gradient(180deg, rgba(226, 180, 100, 0.1), transparent);
@@ -401,6 +403,35 @@
   transform: scaleX(1);
 }
 
+/* --- MODIFICACIÓN: CRÓNICA INMERSIVA (ESTILO DIFERENCIADO) --- */
+
+.inmersive-chronicle-card .card-tag {
+  color: var(--accent-inmersive);
+}
+
+.inmersive-chronicle-card .card-tag::before {
+  background: var(--accent-inmersive);
+}
+
+.inmersive-chronicle-card .hub-btn {
+  border-color: var(--accent-inmersive);
+  color: var(--accent-inmersive);
+}
+
+.inmersive-chronicle-card .hub-btn::before {
+  background: var(--accent-inmersive);
+}
+
+.inmersive-chronicle-card .hub-btn:hover {
+  color: #fff;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 20px rgba(255, 111, 97, 0.2);
+}
+
+.inmersive-chronicle-card:hover h3,
+.inmersive-chronicle-card.is-active h3 {
+  color: var(--accent-inmersive);
+}
+
 /* --- RESPONSIVE DE PRECISIÓN --- */
 
 @media (max-width: 1200px) {
@@ -435,9 +466,8 @@
   .special-card.is-active h3 { transform: translateY(-10px); }
   .background-watermark {
     bottom: 0;
-  right: -1vw;
-
-}
+    right: -1vw;
+  }
 }
 
 @media (max-width: 650px) {
