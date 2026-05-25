@@ -1186,258 +1186,624 @@ html.lenis { height: auto; }
   .enzo-step h1 { font-size: 3rem; }
 }
 
-/* ==========================================================================
-   SECCIÓN FINAL DE MEDIA QUERIES (OPTIMIZACIONES MOBILE ≤ 768px)
-   ========================================================================== */
-
 @media (max-width: 768px) {
+  /*  ACTO 1 */
+  .hero-subtitle {
+    padding: 40px;
+    text-align: center;
+  }
+  .enzo-scroll-indicator {
+    text-align: center;
+  }
   
-  /* 1. Liberación absoluta del scroll nativo del dispositivo */
-  .enzo-article-wrapper {
-    height: auto !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    position: relative;
-    -webkit-overflow-scrolling: touch; /* Suavizado inercial en iOS */
+  .enzo-step { 
+   padding: 0;
+   margin: 0;
   }
+  .enzo-accent-title {
+    padding-left: 400px;
+    text-align: center;
+  }
+  .enzo-step h1 {
+    font-size: 2.8rem;
+    padding-left: 220px;
+    text-align: center;
+  }
+  .img-frame { width: 200px; height: 250px; }
+  .lead-text { font-size: 1.5rem !important;
+  text-align: center;
+  padding-left: 220px;
+  }
+  .enzo-step p { 
+  font-size: 1.2rem;
+  padding-left: 220px;
+  text-align: justify;
+  line-height: 1.4rem;
+  }
+  .img-frame-1 {
+    bottom: 125px;
+    margin: 50px;
+    width: 100%;
+    max-height: 240px;
+  }
+  .curtain-title {
+    font-size: 2rem; 
+    padding-left: 280px;
+    margin: 0;
+  }
+  .curtain-body {
+    text-align: justify;
+    padding-left: 190px;
+  }
+  .curtain-body p {
+    font-size: 1.35rem;
+  text-align: justify;
+  padding-left: 100px;
+  line-height: 1.45rem;
+  }
+  .curtain-meta {
+    padding-left: 300px;
+  }
+.main-hero-video {
+  width: 80%;
+  padding-left: 240px;
+  height: auto;
+  aspect-ratio: 16 / 9; /* Formato panorámico cinematográfico */
+}
+  .secondary-videos-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 63%;
+  padding-left: 274px;
+  gap: 2px;
+  height: auto;
+}
+/* ==========================================================================
+   ADAPTACIÓN QUIRÚRGICA: PASO DE 2 COLUMNAS (DESKTOP) A 1 COLUMNA (MOBILE)
+   ========================================================================== */
+@media (max-width: 768px) {
 
-  /* 2. Retornamos los Actos al flujo vertical normal de una página web */
-  .step-1, .step-2, .step-3, .step-3-factive, 
-  .step-4, .step-5, .step-6, .step-7, .step-8,
-  .enzo-act-announcer, .document-overlay-layer {
-    position: relative !important; /* Salen del modo absoluto/fijo de pantalla completa */
+  /* 1. Ajustamos el contenedor para móviles: pasa de Grid a bloque fluido vertical */
+  .enzo-step.step-2 .information-slide .two-columns-text {
+    display: block !important;
     width: 100% !important;
-    height: auto !important; /* Su altura se adapta al contenido interno */
-    min-height: auto !important;
-    top: auto !important;
-    left: auto !important;
-    transform: none !important; /* Desactivamos desplazamientos forzados en el eje X/Y */
+    padding: 0 5vw !important;
   }
 
-  /* 3. Desactivación de filtros avanzados pesados para aliviar la GPU móvil */
-  .enzo-act-announcer, .enzo-hero-intro, .document-overlay-layer, .step-3-factive, .step-5 {
-    filter: none !important; 
-  }
-
-  /* 4. Anulación de recálculos de Clip-Path vectoriales */
-  .img-frame, .img-frame-1, .img-frame-2, .img-frame-4, .img-frame-5, .img-frame-6, .img-frame-7, .img-frame-8 {
-    clip-path: none !important;
-    transition: none !important;
-  }
-
-  /* Ocultamos el cursor personalizado de desktop que interfiere con los eventos táctiles */
-  .custom-cursor {
+  /* 2. ANULACIÓN DE LA SEGUNDA COLUMNA: "El costo social" desaparece en celulares */
+  .enzo-step.step-2 .information-slide .two-columns-text .column:nth-child(2) {
     display: none !important;
   }
 
-  /* ==========================================================================
-     ADAPTACIÓN EDITORIAL DE CONTENIDOS (CONFIGURACIÓN BASE DE ACTOS)
-     ========================================================================== */
-  .enzo-step { 
-    padding: 40px 20px !important;
+  /* 3. BLINDAJE ESTÉTICO DE LA PRIMERA COLUMNA: "Análisis de poder" ocupa el total */
+  .enzo-step.step-2 .information-slide .two-columns-text .column:first-child {
+    width: 100% !important;
+    border-right: none !important; /* Eliminamos el fileteado divisorio en móviles */
+    padding-right: 0 !important;
+    margin-bottom: 2rem !important;
+  }
+}
+
+/*  ACTO 2 */
+/* =======================================================================
+   📱 ENCAPSULAMIENTO EXCLUSIVO PARA ACTO 2 (MAX-WIDTH / MAX-HEIGHT: 768px)
+   -----------------------------------------------------------------------
+   ⚠️ ADVERTENCIA: Este bloque está aislado y no interfiere con el Acto 1.
+   ======================================================================= */
+
+@media (max-width: 768px), (max-height: 768px) {
+
+  /* --- CONTENEDOR MAESTRO DEL ACTO 2 --- */
+  .enzo-scroll-indicator {
+    bottom: 5px !important;
+    font-size: 0.6rem !important;
+  }
+  .mouse-icon {
+    width: 25px !important;
+    height: 25px !important;
+  }
+  .enzo-step.step-2 {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    padding: 0 !important;
     margin: 0 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    box-sizing: border-box;
+  }
+
+  /* El riel maestro ahora se estira a 300vw porque contiene 3 pantallas físicas en el HTML */
+  .enzo-step.step-2 .horizontal-track {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    width: 300vw !important; 
+    height: 100vh !important;
+    will-change: transform, filter, opacity;
+  }
+
+  /* Forzamos a que tanto la Slide A, la B y la C midan exactamente el 100% del dispositivo */
+  .enzo-step.step-2 .slide {
+    width: 100vw !important;
+    height: 100vh !important;
+    flex-shrink: 0 !important;
+    position: relative !important;
+    overflow: hidden !important;
     box-sizing: border-box;
     display: flex !important;
-    flex-direction: column !important; /* Todo el contenido multimedia y texto se apila verticalmente */
-    height: auto !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
-  
-  .enzo-accent-title, .enzo-step h1, .lead-text {
-    padding-left: 0 !important; /* Eliminamos márgenes asimétricos de escritorio */
-    text-align: center !important;
+
+  /* --- SLIDE A: RE-ESTRUCTURACIÓN DE COMPONENTES --- */
+  .enzo-step.step-2 .presentation-slide {
+    padding: 40px 24px 20px 24px !important;
+  }
+
+  .enzo-step.step-2 .step-2-base-content {
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
     width: 100% !important;
+    height: 100% !important;
+    gap: 15px !important;
   }
 
-  .enzo-step h1 { font-size: 2.2rem !important; }
-  .lead-text { font-size: 1.3rem !important; line-height: 1.4 !important; }
-
-  .enzo-step p { 
-    font-size: 1.05rem !important;
-    padding-left: 0 !important;
-    text-align: justify !important;
-    line-height: 1.5 !important;
-    color: #cccccc;
-  }
-
-  /* ==========================================================================
-     ELEMENTOS VISUALES ESPECÍFICOS - ACTO 1
-     ========================================================================== */
-  .img-frame-1 {
+  .enzo-step.step-2 .img-column {
     position: relative !important;
-    bottom: auto !important;
-    margin: 20px 0 !important;
     width: 100% !important;
-    height: 220px !important;
+    max-width: 320px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
   }
 
-  .main-hero-video {
-    width: 100% !important;
-    padding-left: 0 !important;
-    margin: 20px 0 !important;
-    height: auto !important;
-    aspect-ratio: 16 / 9;
-  }
-
-  .secondary-videos-row {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    width: 100% !important;
-    padding-left: 0 !important;
-    gap: 10px !important;
-    height: auto !important;
-  }
-
-  /* Tarjetas literarias del acto 1 adaptadas al flujo continuo */
-  .card-literary-1, .card-literary-2, .card-multimedia {
-    position: relative !important;
-    transform: none !important;
-    top: auto !important;
-    margin: 15px 0 !important;
-    width: 100% !important;
-  }
-
-  /* ==========================================================================
-     ELEMENTOS VISUALES ESPECÍFICOS - ACTO 2
-     ========================================================================== */
-  
-  /* El riel lateral ahora se despliega como una sección de lectura tradicional */
-  .enzo-step.step-2 .horizontal-track {
-    display: block !important; 
-    width: 100% !important; 
-    height: auto !important;
-    transform: none !important;
-  }
-
-  .enzo-step.step-2 .slide, .enzo-step.step-2 .slide-card {
-    width: 100% !important;
-    height: auto !important; 
-    padding: 25px 0 !important;
-    position: relative !important;
-    border-bottom: 1px solid rgba(226, 180, 100, 0.1);
-  }
-
+  /* Blindaje del marco fotográfico del Acto 2 contra el general */
   .enzo-step.step-2 .img-frame.img-frame-2 {
     width: 100% !important;
-    height: 200px !important;
+    height: 28vh !important; 
+    min-height: 140px;
+    max-width: 320px !important;
+    margin: 0 auto !important;
     position: relative !important;
-    bottom: auto !important;
-    margin: 20px 0 !important;
+    left: auto !important;
+    bottom: 50px !important;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.7);
+  }
+
+  /* Reseteo estricto de paddings heredados del Acto 1 en textos */
+  .enzo-step.step-2 .enzo-accent-title {
+    padding-left: 0 !important; /* Anula los 400px del Acto 1 */
+    text-align: center !important;
+    font-size: 0.8rem !important;
+    letter-spacing: 0.3em !important;
+    margin-bottom: 12px !important;
+  }
+
+  .enzo-step.step-2 h1 {
+    padding-left: 0 !important; /* Anula los 220px del Acto 1 */
+    text-align: center !important;
+    font-size: clamp(1.8rem, 5.5vw, 2.5rem) !important;
+    margin-bottom: 10px !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  .enzo-step.step-2 .lead-text {
+    padding-left: 0 !important; /* Anula los 220px del Acto 1 */
+    text-align: center !important;
+    font-size: 1.4rem !important;
+    line-height: 1.3 !important;
+    margin-bottom: 2px !important;
+    color: #e2b464 !important;
+  }
+
+  .enzo-step.step-2 p {
+    padding-left: 0 !important; /* Anula los 220px del Acto 1 */
+    text-align: justify !important;
+    font-size: 1.08rem !important;
+    line-height: 1.3 !important;
+    color: #cccccc !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Epígrafe flotante e Imperial Seal independientes */
+  .enzo-step.step-2 .enzo-legend-floating {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    max-width: 280px !important;
+    font-size: 1.2rem !important;
+    line-height: 1 !important;
+    padding: 8px 12px !important;
+    margin-top: -58px !important;
+    background: rgba(5, 5, 5, 0.95) !important;
+    border-left: 2px solid var(--gold) !important;
   }
 
   .enzo-step.step-2 .enzo-imperial-seal {
     position: absolute !important;
-    top: 5% !important;
-    right: -10px !important;
-    width: 140px !important;
-    height: 140px !important;
-    z-index: 1 !important;
-    pointer-events: none;
-    opacity: 0.15 !important; /* Forzamos visualización neoclasicista sutil */
+    top: -20px !important;
+    right: -100px !important;
+    width: 250px !important;
+    height: 250px !important;
+    z-index: 20 !important;
   }
 
+  /* --- SLIDES B y C: RE-ESTRUCTURACIÓN DE TEXTOS EN VIEWPORTS INDEPENDIENTES --- */
+  .enzo-step.step-2 .information-slide {
+    width: 100vw !important;
+    height: 100vh !important;
+    box-sizing: border-box !important;
+    padding: 50px 24px 30px 24px !important; 
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    bottom: 52px;
+  }
+
+  /* Corregido: Limpiamos por completo el layout de dos columnas de escritorio en móvil. 
+     Cada slide informativa ahora contiene un contenedor vertical simple que nunca colapsará. */
   .enzo-step.step-2 .information-slide .two-columns-text {
     display: flex !important;
     flex-direction: column !important;
     width: 100% !important;
-    gap: 20px !important;
+    max-width: 480px !important;
+    height: auto !important;
+    max-height: 100vh !important;
+    gap: 0 !important;
+    overflow-y: auto !important; /* Scroll de emergencia por si el texto es muy largo en pantallas chicas */
+    -webkit-overflow-scrolling: touch !important;
+   
   }
 
+  /* Cada columna se comporta como un bloque vertical simple acoplado a su contenedor */
   .enzo-step.step-2 .information-slide .two-columns-text .column {
     width: 100% !important;
-    height: auto !important;
+    height: 880px !important;
+    overflow: visible !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
   }
 
-  /* Contenedor de expediente histórico integrado */
+  /* Ajustes tipográficos para la rejilla simétrica del móvil */
+  .enzo-step.step-2 .information-slide .enzo-accent-title,
+  .enzo-step.step-2 .two-columns-text .column .enzo-accent-title {
+    text-align: left !important;
+    font-size: 0.85rem !important;
+    letter-spacing: 0.2em !important;
+    color: #e2b464 !important;
+    width: fit-content !important;
+  }
+
+  .enzo-step.step-2 .information-slide p,
+  .enzo-step.step-2 .two-columns-text .column p {
+    display: block !important;
+    overflow: visible !important;
+    font-size: 1.05rem !important;
+    line-height: 1.15 !important;
+    text-align: justify !important;
+    color: #ffffff !important;
+  }
+
+  .enzo-step.step-2 .information-slide p:last-child,
+  .enzo-step.step-2 .two-columns-text .column p:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  /* Anulamos bordes separadores verticales de Desktop */
+  .enzo-step.step-2 .two-columns-text .column:first-child {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* --- CAPA DEL EXPEDIENTE DE-CLASIFICADO --- */
   .enzo-step.step-2 .document-overlay-layer {
-    padding: 40px 0 !important;
-    background: #0b0b0b !important;
-    opacity: 1 !important;
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 5000 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-end !important;
+    box-sizing: border-box;
+    padding: 20px 12px 0 12px !important;
   }
 
   .enzo-step.step-2 .intelligence-folder {
     width: 100% !important;
-    height: auto !important;
+    max-width: 460px !important;
+    height: calc(100vh - 40px) !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .enzo-step.step-2 .folder-tab {
+    position: relative !important;
+    top: 1px !important;
+    left: 15px !important;
+    width: 160px !important;
+    padding: 8px 10px !important;
+    font-size: 0.6rem !important;
+    letter-spacing: 1px !important;
+    border-radius: 8px 30px 0 0 !important;
   }
 
   .enzo-step.step-2 .paper-sheet {
-    padding: 30px 15px !important;
-    height: auto !important;
-    overflow: visible !important;
+    flex: 1 !important;
+    height: 100% !important;
+    padding: 25px 20px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 0 4px 4px 4px !important;
+    box-sizing: border-box;
   }
 
-  /* ==========================================================================
-     ELEMENTOS VISUALES ESPECÍFICOS - ACTO 3 Y CAPA FÁCTICA
-     ========================================================================== */
-  .enzo-step.step-3 .profile-layout-grid {
+  .enzo-step.step-2 .paper-header {
     display: flex !important;
     flex-direction: column !important;
-    height: auto !important;
-    gap: 20px;
+    gap: 15px !important;
+    margin-bottom: 20px !important;
   }
 
-  .enzo-step.step-3 .left-side, .enzo-step.step-3 .right-side {
-    width: 100% !important;
+  .enzo-step.step-2 .archive-stamp-red {
     position: relative !important;
-    left: auto !important;
+    top: auto !important;
     right: auto !important;
+    align-self: flex-start !important;
+    font-size: 0.95rem !important;
+    padding: 4px 10px !important;
+    letter-spacing: 1.5px !important;
+    border-width: 2px !important;
+    margin-bottom: 5px !important;
   }
 
-  .enzo-step.step-3 .central-avatar {
-    margin: 30px auto !important;
-    width: 180px !important;
-    height: 180px !important;
+  .enzo-step.step-2 .metadata-grid {
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+    font-size: 0.75rem !important;
+    padding-bottom: 15px !important;
+    margin-bottom: 15px !important;
+  }
+
+  .enzo-step.step-2 .typewriter-title {
+    font-size: 1.15rem !important;
+    margin-bottom: 15px !important;
+    line-height: 1.2 !important;
+  }
+
+  .enzo-step.step-2 .typewriter-text {
+    padding-left: 0 !important;
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .enzo-step.step-2 .typewriter-list {
+    margin: 15px 0 !important;
+  }
+
+  .enzo-step.step-2 .typewriter-list li {
+    font-size: 0.85rem !important;
+    line-height: 1.35 !important;
+    margin-bottom: 12px !important;
+    padding-left: 25px !important;
+  }
+
+  .enzo-step.step-2 .historical-quote {
+    padding: 15px 20px !important;
+    margin: 20px 0 !important;
+    font-size: 1.05rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .enzo-step.step-2 .archive-footer {
+    margin-top: 25px !important;
+    padding-top: 15px !important;
+    padding-bottom: 10px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 20px !important;
+  }
+}
+/* --- 1. SECCIÓN ORIGINAL (TRÍPTICO RE-ESTRUCTURADO) --- */
+  
+  /* El contenedor maestro debe absorber las transformaciones espaciales de GSAP */
+  .enzo-step.step-3.layout-triptych {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow-y: auto !important; /* Permite scroll si el texto excede pantallas pequeñas */
+    -webkit-overflow-scrolling: touch;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    box-sizing: border-box;
+    background: #050505 !important;
+
+  }
+
+  /* Desarmamos el layout horizontal del tríptico a flujo vertical */
+  .enzo-step.step-3 .step-text-content.side-block {
     position: relative !important;
-    bottom: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    padding: 24px 20px !important;
+    box-sizing: border-box !important;
+    transform: none; /* Dejamos que GSAP maneje su x del timeline sobre este flujo */
+    bottom: 180px;
+  }
+
+  /* Forzamos limpieza absoluta de paddings heredados de otros actos */
+  .enzo-step.step-3 .enzo-accent-title {
+    padding-left: 0 !important;
+    text-align: center !important;
+    display: block !important;
+    font-size: 0.85rem !important;
+    letter-spacing: 0.2em !important;
+    margin-bottom: 10px !important;
+  }
+
+  .enzo-step.step-3 h1 {
+    padding-left: 0 !important;
+    text-align: center !important;
+    font-size: clamp(1.8rem, 6vw, 2.3rem) !important;
+    line-height: 1.1 !important;
+    margin-bottom: 15px !important;
+  }
+
+  /* Estructura del span animado por GSAP (y: 0) */
+  .enzo-step.step-3 h1 span {
+    display: block !important;
+  }
+
+  .enzo-step.step-3 .lead-text {
+    padding-left: 0 !important;
+    text-align: center !important;
+    font-size: 1.5rem !important;
+    line-height: 1.1 !important;
+    margin-bottom: 15px !important;
+    color: #e2b464 !important;
+  }
+
+  .enzo-step.step-3 p {
+    padding-left: 0 !important;
+    text-align: justify !important;
+    font-size: 1.05rem !important;
+    line-height: 1.3 !important;
+    color: #ffffff !important;
+    margin-top: 1px !important;
+  }
+
+  /* --- AVATAR CENTRAL (LISANDRO DE LA TORRE) --- */
+  /* Redimensionamiento proporcional para que coexista con los bloques de texto verticales */
+  .enzo-step.step-3 .central-avatar {
+    position: relative !important;
+    width: 100% !important;
+    max-width: 260px !important;
+    height: auto !important;
+    margin: 20px auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    top: 10px;
   }
 
   .enzo-step.step-3 .ornamental-frame {
+    width: 180px !important;
+    height: 230px !important;
+    position: relative !important;
+    margin: 0 auto !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+    bottom: 35px;
+  }
+
+  .enzo-step.step-3 .ornamental-frame img {
     width: 100% !important;
     height: 100% !important;
+    object-fit: cover !important;
+    top: 50px;
   }
 
-  /* Desactivación de la superposición de la placa animada en mobile para evitar bloqueos del DOM */
-  .enzo-step.step-3 .enzo-placa-anim {
-    display: none !important;
-  }
-
-  /* Sección de Datos Fácticos */
-  .step-3-factive {
+  /* Placa de bronce animada por GSAP */
+  .enzo-step.step-3 .placa-final.enzo-placa-anim {
     position: relative !important;
     width: 100% !important;
-    height: auto !important;
-    padding: 40px 20px !important;
-    box-sizing: border-box;
-    opacity: 1 !important;
-    visibility: visible !important;
+    max-width: 240px !important;
+    height: 320px !important;
+    margin-top: -220px !important;
+    margin-right: 80px;
+    z-index: 10 !important;
   }
 
-  .step-3-factive .factive-container {
-    width: 100% !important;
+  .enzo-step.step-3 .placa-fondo-img {
+    width: 300px !important;
+    height: 300px !important;
+    
   }
 
-  .step-3-factive .factive-grid {
+
+  /* --- 2. SECCIÓN FÁCTICA (TRANSICIÓN SIN SOLAPAMIENTO) --- */
+  
+  /* Aseguramos que responda exactamente a las propiedades de GSAP (yPercent: 100 a 0) */
+  .enzo-step.step-3-factive {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow-y: auto !important; /* Absorbe el exceso de texto fáctico de forma independiente */
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box !important;
+    background: #050505 !important;
+  }
+
+  /* Forzado de columnas a una sola línea vertical */
+  .enzo-step.step-3-factive .two-columns-factive-content {
     display: flex !important;
     flex-direction: column !important;
-    gap: 20px !important;
-  }
-
-  .step-3-factive .factive-node {
     width: 100% !important;
-    box-sizing: border-box;
+    max-width: 100% !important;
+    padding: 60px 20px 80px 20px !important; /* Espacio superior para resguardar cabeceras móviles */
+    box-sizing: border-box !important;
+    gap: 30px !important;
   }
 
-  /* ==========================================================================
-     SECCIONES FINALES (ACTOS IV A VIII)
-     ========================================================================== */
-  .img-frame-4, .img-frame-5, .img-frame-6, .img-frame-7, .img-frame-8 {
+  .enzo-step.step-3-factive .column {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .enzo-step.step-3-factive .column .enzo-accent-title {
+    padding-left: 0 !important;
+    text-align: left !important;
+    font-size: 0.85rem !important;
+    letter-spacing: 0.15em !important;
+    margin-bottom: 12px !important;
+    border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+    padding-bottom: 6px !important;
+    width: 100% !important;
+  }
+
+  .enzo-step.step-3-factive .column p {
+    padding-left: 0 !important;
+    text-align: justify !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    color: #d1d1d1 !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* --- IMAGEN DEL BUQUE "NORMAN STAR" --- */
+  .enzo-step.step-3-factive .img-norman-star {
     position: relative !important;
     width: 100% !important;
-    height: 240px !important;
-    margin: 20px 0 !important;
-    opacity: 1 !important; /* Garantizamos visibilidad sin depender estrictamente de la carga total en JS */
+    max-width: 320px !important;
+    height: auto !important;
+    margin: 20px auto 0 auto !important;
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.8);
+    overflow: hidden !important;
   }
 
-  .blood-title {
-    font-size: 2rem !important;
+  .enzo-step.step-3-factive .img-norman-star img {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    object-fit: cover !important;
   }
 }
