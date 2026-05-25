@@ -61,7 +61,7 @@ export default function EnzoBordabehereArticle() {
     };
 
     let ctx = gsap.context(() => {
-     const playShot = () => {
+      const playShot = () => {
         if (audioRef.current) {
           // 1. Clonamos el nodo base para permitir ráfagas de disparos superpuestas
           const shotClone = audioRef.current.cloneNode();
@@ -85,242 +85,281 @@ export default function EnzoBordabehereArticle() {
       window.addEventListener("mousemove", moveCursor);
 
       const announceAct = (number, title) => {
-  const actTl = gsap.timeline();
-  
-  actTl
-    // 1. Reset total del estado (Limpieza de actos previos)
-    .set(".enzo-act-announcer", { display: "flex", opacity: 0, filter: "blur(0px)", scale: 1 })
-    .set([".announcer-number", ".announcer-text"], { opacity: 0, y: 30 })
-    .set(".announcer-line", { scaleX: 0 })
-    // 2. Inyectar contenido
-    .set(".announcer-number", { textContent: number })
-    .set(".announcer-text", { textContent: title })
-    // 3. Aparición (Fade In)
-    .to(".enzo-act-announcer", { opacity: 1, duration: 1.5, ease: "power2.inOut" })
-    // 4. Animación de los textos
-    .to(".announcer-number", { y: 0, opacity: 1, duration: 1.2, ease: "expo.out" }, "-=0.5")
-    .to(".announcer-text", { y: 0, opacity: 1, duration: 1.2, ease: "expo.out" }, "-=1")
-    .to(".announcer-line", { scaleX: 1, duration: 1.5, ease: "power4.inOut" }, "-=1")
-    // 5. Salida Cinematográfica (Aquí es donde evitamos que se vea borroso después)
-    .to(".enzo-act-announcer", { 
-        opacity: 0, 
-        scale: 1.1, 
-        filter: "blur(20px)", 
-        duration: 1.5, 
-        ease: "power2.in" 
-    }, "+=1.5") 
-    // 6. Cierre técnico: Escondemos el div para que no interfiera con el mouse/scroll
-    .set(".enzo-act-announcer", { display: "none" });
-    
-  return actTl;
-};
+        const actTl = gsap.timeline();
+        
+        actTl
+          // 1. Reset total del estado (Limpieza de actos previos)
+          .set(".enzo-act-announcer", { display: "flex", opacity: 0, filter: "blur(0px)", scale: 1 })
+          .set([".announcer-number", ".announcer-text"], { opacity: 0, y: 30 })
+          .set(".announcer-line", { scaleX: 0 })
+          // 2. Inyectar contenido
+          .set(".announcer-number", { textContent: number })
+          .set(".announcer-text", { textContent: title })
+          // 3. Aparición (Fade In)
+          .to(".enzo-act-announcer", { opacity: 1, duration: 1.5, ease: "power2.inOut" })
+          // 4. Animación de los textos
+          .to(".announcer-number", { y: 0, opacity: 1, duration: 1.2, ease: "expo.out" }, "-=0.5")
+          .to(".announcer-text", { y: 0, opacity: 1, duration: 1.2, ease: "expo.out" }, "-=1")
+          .to(".announcer-line", { scaleX: 1, duration: 1.5, ease: "power4.inOut" }, "-=1")
+          // 5. Salida Cinematográfica (Aquí es donde evitamos que se vea borroso después)
+          .to(".enzo-act-announcer", { 
+              opacity: 0, 
+              scale: 1.1, 
+              filter: "blur(20px)", 
+              duration: 1.5, 
+              ease: "power2.in" 
+          }, "+=1.5") 
+          // 6. Cierre técnico: Escondemos el div para que no interfiera con el mouse/scroll
+          .set(".enzo-act-announcer", { display: "none" });
+          
+        return actTl;
+      };
 
-      // --- TIMELINE PRINCIPAL ---
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "+=150000", // Aumentado para dar espacio a los intertítulos
-          pin: true,
-          scrub: 1.2,
-        }
+      // --- INTERCEPTOR DE ENTORNOS SIMÉTRICOS (MATCHMEDIA) ---
+      let mm = gsap.matchMedia();
+      let tl;
+
+      // 💻 UNIVERSO DESKTOP: Mantiene la experiencia inmersiva e intacta
+      mm.add("(min-width: 769px)", () => {
+        tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: "+=150000",
+            pin: true,
+            scrub: 1.2,
+          }
+        });
+
+        // --- 0. INTRO MONUMENTAL ---
+        tl.addLabel("intro")
+          .from(".monumental-title .line-1", { z: -1000, opacity: 0, filter: "blur(40px)", scale: 0.8, duration: 4 }, "intro")
+          .from(".monumental-title .line-2", { z: 1000, opacity: 0, filter: "blur(40px)", scale: 1.2, duration: 4 }, "intro+=0.3")
+          .from(".line-divider", { scaleX: 0, transformOrigin: "center", duration: 2, ease: "expo.inOut" }, "intro+=1.5")
+          .to(".hero-title-container", { x: "random(-2, 2)", y: "random(-2, 2)", duration: 0.1, repeat: 10, yoyo: true }, "+=0.5")
+          .to(".enzo-hero-intro", { opacity: 0, scale: 2, filter: "blur(30px)", duration: 5, ease: "power2.in" }, "+=1")
+          .set(".enzo-hero-intro", { display: "none" });
+
+        // --- ACTO 1 (ESTRUCTURA ORIGINAL CON TELONES) ---
+        tl.add(announceAct("I", "EL ESCENARIO"))
+          .addLabel("acto1")
+          .to(".step-1", { opacity: 1, duration: 2 }, "acto1")
+          .to(".step-1 h1 span", { y: 0, duration: 2, ease: "expo.out" }, "acto1+=0.5")
+          .to(".img-frame-1", { clipPath: "inset(0% 0% 0% 0%)", scale: 1, duration: 3, ease: "power4.inOut" }, "acto1")
+          .to(".img-frame-1 img", { y: "15%", duration: 4, ease: "none" }, "acto1")
+          .addLabel("telones_acto1")
+          .to(".card-literary-1", { yPercent: -100, duration: 4, ease: "power2.inOut" }, "telones_acto1")
+          .to(".card-literary-2", { yPercent: -100, duration: 4, ease: "power2.inOut" }, "telones_acto1+=2")
+          .to(".card-multimedia", { yPercent: -100, duration: 4, ease: "power2.inOut" }, "telones_acto1+=4")
+          .to({}, { duration: 2 }) 
+          .to(".step-1", { opacity: 0, y: -100, duration: 2, ease: "power1.in" })
+          .set(".step-1", { display: "none" });
+
+        // --- ACTO 2: EL CONFLICTO Y EL RIEL HORIZONTAL ---
+        tl.add(announceAct("II", "EL CONFLICTO"))
+          .addLabel("acto2")
+          .to(".step-2", { opacity: 1, duration: 2 }, "acto2")
+          .to(".step-2 h1 span", { y: 0, duration: 2, ease: "expo.out" }, "acto2+=0.5")
+          .to(".img-frame-2", { clipPath: "inset(0% 0% 0% 0%)", duration: 3, ease: "power4.inOut" }, "acto2")
+          .to(".enzo-legend-floating", { opacity: 1, y: 10, duration: 2, ease: "power2.out" }, "acto2+=1.2")
+          .fromTo(".enzo-imperial-seal", 
+            { opacity: 0, x: 600, rotation: 45, scale: 2 }, 
+            { opacity: 1, x: 0, rotation: -15, scale: 1, duration: 1.2, ease: "back.out(1.2)" }, "acto2+=2.2")
+          .to(".img-frame-2 img", { y: "15%", duration: 4, ease: "none" }, "acto2")
+          .addLabel("acto2_horizontal")
+          .to(".horizontal-track", { xPercent: -50, duration: 8, ease: "power2.inOut" }, "+=1")
+          .addLabel("acto2_archivo")
+          .to(".horizontal-track", { opacity: 0.15, filter: "blur(20px)", scale: 0.9, duration: 3 }, "acto2_archivo")
+          .fromTo(".document-overlay-layer", { y: "110%", x: 80, rotation: 12 }, { y: "0%", x: 0, rotation: -3, duration: 5, ease: "power3.out" }, "acto2_archivo+=0.5")
+          .to(".paper-sheet", { boxShadow: "-25px 25px 100px rgba(0,0,0,0.8)", duration: 2 }, "-=2")
+          .to({}, { duration: 2 })
+          .to(".document-overlay-layer", { y: "-130%", rotation: -8, opacity: 0, duration: 4, ease: "power4.in" })
+          .to(".step-2", { opacity: 0, y: -100, duration: 2 }, "-=1")
+          .set(".step-2", { display: "none" });
+
+        // --- ACTO 3: EL FISCAL ---
+        tl.add(announceAct("III", "EL FISCAL"))
+          .addLabel("acto3")
+          .to(".step-3", { opacity: 1, duration: 2 }, "acto3")
+          .from(".central-avatar", { scale: 0.7, opacity: 0, rotation: -15, duration: 3, ease: "expo.out" }, "acto3")
+          .from(".left-side", { x: -80, opacity: 0, duration: 2 }, "acto3+=0.5")
+          .from(".right-side", { x: 80, opacity: 0, duration: 2 }, "acto3+=0.8")
+          .to(".step-3 h1 span", { y: 0, duration: 2, ease: "expo.out" }, "acto3+=1")
+          .from(".enzo-placa-anim", { y: 200, scale: 1.4, opacity: 0, duration: 2.5, ease: "power4.out" }, "acto3+=1.8")
+          .to(".placa-content-inner", { opacity: 1, duration: 1.5, ease: "power2.inOut" }, "acto3+=3.5")
+          .addLabel("transicion_factica")
+          .set(".step-3-factive", { yPercent: 100, opacity: 1, visibility: "visible", zIndex: 100 })
+          .to(".step-3", { yPercent: -100, duration: 6, ease: "power2.inOut" }, "+=4")
+          .to(".step-3-factive", { yPercent: 0, duration: 6, ease: "power2.inOut" }, "<")
+          .to({}, { duration: 2 }) 
+          .to(".step-3-factive", { opacity: 0, filter: "blur(15px)", scale: 1.05, duration: 2, ease: "power2.in" });
+
+        // --- ACTO 4 ---
+        tl.add(announceAct("IV", "EL ACECHO"))
+          .addLabel("acto4")
+          .to(".step-4", { opacity: 1, duration: 2 }, "acto4")
+          .to(".step-4 h1 span", { y: 0, duration: 2, ease: "expo.out" }, "acto4+=0.5")
+          .to(".img-frame-4", { clipPath: "inset(0% 0% 0% 0%)", duration: 3, ease: "power4.inOut" }, "acto4")
+          .to(".img-frame-4 img", { y: "15%", duration: 4, ease: "none" }, "acto4")
+          .to(".step-4, .img-frame-4", { opacity: 0, filter: "blur(20px)", duration: 3 }, "+=4");
+
+        // --- ACTO 5 ---
+        tl.add(announceAct("V", "EL SACRIFICIO"))
+          .addLabel("crimen")
+          .to(".enzo-bg-overlay", { filter: "grayscale(100%) brightness(0.1) contrast(3)", duration: 2 }, "crimen")
+          .call(playShot)
+          .to(".flash-impact", { opacity: 1, duration: 0.05 })
+          .to(containerRef.current, { x: "random(-20, 20)", y: "random(-10, 10)", rotation: "random(-1, 1)", duration: 0.05, repeat: 5, yoyo: true }, "-=0.05")
+          .to(".flash-impact", { opacity: 0.3, duration: 0.5 })
+          .call(playShot, null, "+=0.4")
+          .to(".flash-impact", { opacity: 1, duration: 0.05 })
+          .to(containerRef.current, { x: "random(-30, 30)", y: "random(-15, 15)", rotation: "random(-2, 2)", duration: 0.04, repeat: 8, yoyo: true }, "-=0.05")
+          .to(".flash-impact", { opacity: 0.4, duration: 0.8 })
+          .call(playShot, null, "+=0.6")
+          .to(".flash-impact", { backgroundColor: "rgba(180, 0, 0, 0.5)", opacity: 1, duration: 0.05 })
+          .to(containerRef.current, { x: "random(-40, 40)", y: "random(-20, 20)", scale: 1.03, duration: 0.04, repeat: 12, yoyo: true }, "-=0.05")
+          .add(() => {
+            const title = document.querySelector(".blood-title");
+            if (title && !title.querySelector('.blood-container')) {
+              const bloodCont = document.createElement("div");
+              bloodCont.className = "blood-container";
+              title.appendChild(bloodCont);
+              for (let i = 0; i < 8; i++) {
+                const drop = document.createElement("div");
+                drop.className = "blood-drop";
+                drop.style.left = `${10 + (i * 12)}%`; 
+                bloodCont.appendChild(drop);
+                gsap.to(drop, { opacity: 1, y: 280, scaleY: 25, scaleX: 0.6, duration: 4 + Math.random() * 2, ease: "power2.in", delay: Math.random() * 1 });
+              }
+            }
+          }, "crimen+=1.2")
+          .to(".flash-impact", { opacity: 0, duration: 6, ease: "power2.inOut" }, "+=0.2")
+          .to(".step-5", { opacity: 1, filter: "blur(0px)", duration: 4 }, "-=5.5")
+          .to(".step-5 h1 span", { y: 0, duration: 3 }, "-=5")
+          .to(".img-frame-5", { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, scale: 1, duration: 5 }, "-=6")
+          .to(".step-5, .img-frame-5", { opacity: 0, y: 50, filter: "blur(10px)", duration: 3 }, "+=2");
+
+        // --- ACTO 6 ---
+        tl.add(announceAct("VI", "EL OCASO"))
+          .addLabel("ocaso")
+          .to(".step-6", { opacity: 1, duration: 3 }, "ocaso")
+          .to(".step-6 h1 span", { y: 0, duration: 2.5 }, "ocaso+=0.5")
+          .to(".img-frame-6", { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, duration: 4 }, "ocaso")
+          .to(".img-frame-6 img", { scale: 1.2, filter: "grayscale(100%)", duration: 6 }, "ocaso")
+          .to(".step-6, .img-frame-6", { opacity: 0, y: 30, duration: 3 }, "+=3");
+
+        // --- ACTO 7 ---
+        tl.add(announceAct("VII", "EL DUELO"))
+          .addLabel("duelo")
+          .to(".step-7", { opacity: 1, duration: 3 }, "duelo")
+          .to(".step-7 h1 span", { y: 0, duration: 2.5 }, "duelo+=0.5")
+          .to(".img-frame-7", { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, scale: 0.9, duration: 4 }, "duelo")
+          .to(".step-7, .img-frame-7", { opacity: 0, filter: "blur(15px)", duration: 4 }, "+=3");
+
+        // --- ACTO 8 ---
+        tl.add(announceAct("VIII", "LA MEMORIA"))
+          .addLabel("final")
+          .to(".indigo-bg-overlay", { filter: "grayscale(100%) brightness(0.01)", duration: 5 }, "final")
+          .to(".step-8", { opacity: 1, duration: 4 }, "final+=1")
+          .to(".step-8 h1 span", { y: 0, duration: 4 }, "final+=2")
+          .to(".img-frame-8", { opacity: 1, clipPath: "inset(0% 0% 0% 0%)", duration: 6 }, "final")
+          .to(".img-frame-8 img", { scale: 1.05, filter: "grayscale(100%) brightness(0.4)", duration: 10 }, "final");
       });
 
-      // --- 0. INTRO MONUMENTAL ---
-      tl.addLabel("intro")
-        .from(".monumental-title .line-1", { z: -1000, opacity: 0, filter: "blur(40px)", scale: 0.8, duration: 4 }, "intro")
-        .from(".monumental-title .line-2", { z: 1000, opacity: 0, filter: "blur(40px)", scale: 1.2, duration: 4 }, "intro+=0.3")
-        .from(".line-divider", { scaleX: 0, transformOrigin: "center", duration: 2, ease: "expo.inOut" }, "intro+=1.5")
-        .to(".hero-title-container", { x: "random(-2, 2)", y: "random(-2, 2)", duration: 0.1, repeat: 10, yoyo: true }, "+=0.5")
-        .to(".enzo-hero-intro", { opacity: 0, scale: 2, filter: "blur(30px)", duration: 5, ease: "power2.in" }, "+=1")
-        .set(".enzo-hero-intro", { display: "none" });
-
-  // --- ACTO 1 (ESTRUCTURA ORIGINAL CON TELONES) ---
-tl.add(announceAct("I", "EL ESCENARIO"))
-  .addLabel("acto1")
-  .to(".step-1", { opacity: 1, duration: 2 }, "acto1")
-  .to(".step-1 h1 span", { y: 0, duration: 2, ease: "expo.out" }, "acto1+=0.5")
-  .to(".img-frame-1", { clipPath: "inset(0% 0% 0% 0%)", scale: 1, duration: 3, ease: "power4.inOut" }, "acto1")
-  .to(".img-frame-1 img", { y: "15%", duration: 4, ease: "none" }, "acto1")
-  .addLabel("telones_acto1")
-  // El primer telón sube (desde su posición top: 100% en CSS)
-  .to(".card-literary-1", { yPercent: -100, duration: 4, ease: "power2.inOut" }, "telones_acto1")
-  // El segundo telón sube sobre el anterior
-  .to(".card-literary-2", { yPercent: -100, duration: 4, ease: "power2.inOut" }, "telones_acto1+=2")
-  // El telón multimedia sube al final
-  .to(".card-multimedia", { yPercent: -100, duration: 4, ease: "power2.inOut" }, "telones_acto1+=4")
-  // Pausa dramática para lectura de las tarjetas
-  .to({}, { duration: 2 }) 
-  // Salida definitiva del Acto 1 para limpiar el DOM visual
-  .to(".step-1", { opacity: 0, y: -100, duration: 2, ease: "power1.in" })
-  .set(".step-1", { display: "none" }); // Crucial para no bloquear el Acto 2
-
-      // --- ACTO 2: EL CONFLICTO Y EL RIEZ HORIZONTAL ---
-      tl.add(announceAct("II", "EL CONFLICTO"))
-        .addLabel("acto2")
-        // 1. Entrada de la sección
-        .to(".step-2", { opacity: 1, duration: 2 }, "acto2")
-        // 2. Animación de la Presentación (Slide A)
-        .to(".step-2 h1 span", { y: 0, duration: 2, ease: "expo.out" }, "acto2+=0.5")
-        .to(".img-frame-2", { clipPath: "inset(0% 0% 0% 0%)", duration: 3, ease: "power4.inOut" }, "acto2")
-        .to(".enzo-legend-floating", { opacity: 1, y: 10, duration: 2, ease: "power2.out" }, "acto2+=1.2")
-        // 3. Impacto del Sello Imperial
-        .fromTo(".enzo-imperial-seal", 
-          { opacity: 0, x: 600, rotation: 45, scale: 2 }, 
-          { opacity: 1, x: 0, rotation: -15, scale: 1, duration: 1.2, ease: "back.out(1.2)" }, "acto2+=2.2")
-        .to(".img-frame-2 img", { y: "15%", duration: 4, ease: "none" }, "acto2")
-
-        // --- NUEVA PARTE: DESPLAZAMIENTO HORIZONTAL ---
-        .addLabel("acto2_horizontal")
-        .to(".horizontal-track", { 
-          xPercent: -50, // Mueve el track hacia la izquierda revelando el Slide B
-          duration: 8,   // Duración extendida para que el usuario pueda leer
-          ease: "power2.inOut" 
-        }, "+=1") // Pausa pequeña tras el sello antes de mover
-        // ----------------------------------------------
-        // 4. Surgimiento del Archivo/Expediente (Slide B ya está de fondo)
-        .addLabel("acto2_archivo")
-        // Difuminamos el track horizontal (ambas slides) para que resalte el papel
-        .to(".horizontal-track", { opacity: 0.15, filter: "blur(20px)", scale: 0.9, duration: 3 }, "acto2_archivo")
-        .fromTo(".document-overlay-layer", 
-          { y: "110%", x: 80, rotation: 12 }, 
-          { y: "0%", x: 0, rotation: -3, duration: 5, ease: "power3.out" }, 
-          "acto2_archivo+=0.5"
-        )
-        .to(".paper-sheet", { boxShadow: "-25px 25px 100px rgba(0,0,0,0.8)", duration: 2 }, "-=2")
-        
-        // Tiempo de lectura del expediente
-        .to({}, { duration: 2 })
-        // 5. Salida del Acto 2
-        .to(".document-overlay-layer", { y: "-130%", rotation: -8, opacity: 0, duration: 4, ease: "power4.in" })
-        .to(".step-2", { opacity: 0, y: -100, duration: 2 }, "-=1")
-        // Limpiamos estilos para el siguiente acto
-        .set(".step-2", { display: "none" });
-
-     // --- ACTO 3: EL FISCAL ---
-tl.add(announceAct("III", "EL FISCAL"))
-  .addLabel("acto3")
-  
-  // 1. Entrada de la sección original (Tríptico)
-  .to(".step-3", { opacity: 1, duration: 2 }, "acto3")
-  .from(".central-avatar", { scale: 0.7, opacity: 0, rotation: -15, duration: 3, ease: "expo.out" }, "acto3")
-  .from(".left-side", { x: -80, opacity: 0, duration: 2 }, "acto3+=0.5")
-  .from(".right-side", { x: 80, opacity: 0, duration: 2 }, "acto3+=0.8")
-  .to(".step-3 h1 span", { y: 0, duration: 2, ease: "expo.out" }, "acto3+=1")
-  .from(".enzo-placa-anim", { y: 200, scale: 1.4, opacity: 0, duration: 2.5, ease: "power4.out" }, "acto3+=1.8")
-  .to(".placa-content-inner", { opacity: 1, duration: 1.5, ease: "power2.inOut" }, "acto3+=3.5")
-
-  // --- TRANSICIÓN VERTICAL: LAS DOS SECCIONES SE MUEVEN EN TÁNDEM ---
-  .addLabel("transicion_factica")
-  
-  // PREPARACIÓN: Forzamos que la sección fáctica esté lista abajo y con z-index alto
-  .set(".step-3-factive", { 
-    yPercent: 100, 
-    opacity: 1, 
-    visibility: "visible",
-    zIndex: 100 
-  })
-
-  // Ejecución del movimiento sincronizado
-  .to(".step-3", { 
-    yPercent: -100, // La sección original sube y sale de pantalla
-    duration: 6, 
-    ease: "power2.inOut" 
-  }, "+=4") // Pausa de lectura del tríptico
-  
-  .to(".step-3-factive", { 
-    yPercent: 0, // La nueva sección sube a su posición de centrado
-    duration: 6, 
-    ease: "power2.inOut" 
-  }, "<") // "<" indica inicio simultáneo con el movimiento anterior
-
-  // Tiempo de lectura para los datos fácticos
-  .to({}, { duration: 2 }) 
-  
-  // Salida final cinematográfica del Acto 3
-  .to(".step-3-factive", { 
-    opacity: 0, 
-    filter: "blur(15px)", 
-    scale: 1.05,
-    duration: 2,
-    ease: "power2.in"
-  });
-      // --- ACTO 4 ---
-      tl.add(announceAct("IV", "EL ACECHO"))
-        .addLabel("acto4")
-        .to(".step-4", { opacity: 1, duration: 2 }, "acto4")
-        .to(".step-4 h1 span", { y: 0, duration: 2, ease: "expo.out" }, "acto4+=0.5")
-        .to(".img-frame-4", { clipPath: "inset(0% 0% 0% 0%)", duration: 3, ease: "power4.inOut" }, "acto4")
-        .to(".img-frame-4 img", { y: "15%", duration: 4, ease: "none" }, "acto4")
-        .to(".step-4, .img-frame-4", { opacity: 0, filter: "blur(20px)", duration: 3 }, "+=4");
-
-      // --- ACTO 5 ---
-      tl.add(announceAct("V", "EL SACRIFICIO"))
-        .addLabel("crimen")
-        .to(".enzo-bg-overlay", { filter: "grayscale(100%) brightness(0.1) contrast(3)", duration: 2 }, "crimen")
-        .call(playShot)
-        .to(".flash-impact", { opacity: 1, duration: 0.05 })
-        .to(containerRef.current, { x: "random(-20, 20)", y: "random(-10, 10)", rotation: "random(-1, 1)", duration: 0.05, repeat: 5, yoyo: true }, "-=0.05")
-        .to(".flash-impact", { opacity: 0.3, duration: 0.5 })
-        .call(playShot, null, "+=0.4")
-        .to(".flash-impact", { opacity: 1, duration: 0.05 })
-        .to(containerRef.current, { x: "random(-30, 30)", y: "random(-15, 15)", rotation: "random(-2, 2)", duration: 0.04, repeat: 8, yoyo: true }, "-=0.05")
-        .to(".flash-impact", { opacity: 0.4, duration: 0.8 })
-        .call(playShot, null, "+=0.6")
-        .to(".flash-impact", { backgroundColor: "rgba(180, 0, 0, 0.5)", opacity: 1, duration: 0.05 })
-        .to(containerRef.current, { x: "random(-40, 40)", y: "random(-20, 20)", scale: 1.03, duration: 0.04, repeat: 12, yoyo: true }, "-=0.05")
-        .add(() => {
-          const title = document.querySelector(".blood-title");
-          if (title && !title.querySelector('.blood-container')) {
-            const bloodCont = document.createElement("div");
-            bloodCont.className = "blood-container";
-            title.appendChild(bloodCont);
-            for (let i = 0; i < 8; i++) {
-              const drop = document.createElement("div");
-              drop.className = "blood-drop";
-              drop.style.left = `${10 + (i * 12)}%`; 
-              bloodCont.appendChild(drop);
-              gsap.to(drop, { opacity: 1, y: 280, scaleY: 25, scaleX: 0.6, duration: 4 + Math.random() * 2, ease: "power2.in", delay: Math.random() * 1 });
-            }
+      // 📱 UNIVERSO MOBILE: Rendimiento optimizado sin perder la lógica dramática de las transiciones
+      mm.add("(max-width: 768px)", () => {
+        tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: "+=16000", 
+            pin: true,
+            scrub: 0.6,
           }
-        }, "crimen+=1.2")
-        .to(".flash-impact", { opacity: 0, duration: 6, ease: "power2.inOut" }, "+=0.2")
-        .to(".step-5", { opacity: 1, filter: "blur(0px)", duration: 4 }, "-=5.5")
-        .to(".step-5 h1 span", { y: 0, duration: 3 }, "-=5")
-        .to(".img-frame-5", { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, scale: 1, duration: 5 }, "-=6")
-        .to(".step-5, .img-frame-5", { opacity: 0, y: 50, filter: "blur(10px)", duration: 3 }, "+=2");
+        });
 
-      // --- ACTO 6 ---
-      tl.add(announceAct("VI", "EL OCASO"))
-        .addLabel("ocaso")
-        .to(".step-6", { opacity: 1, duration: 3 }, "ocaso")
-        .to(".step-6 h1 span", { y: 0, duration: 2.5 }, "ocaso+=0.5")
-        .to(".img-frame-6", { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, duration: 4 }, "ocaso")
-        .to(".img-frame-6 img", { scale: 1.2, filter: "grayscale(100%)", duration: 6 }, "ocaso")
-        .to(".step-6, .img-frame-6", { opacity: 0, y: 30, duration: 3 }, "+=3");
+        // --- 0. INTRO MONUMENTAL MOBILE ---
+        tl.addLabel("intro")
+          .from(".monumental-title .line-1", { opacity: 0, y: -30, duration: 3 }, "intro")
+          .from(".monumental-title .line-2", { opacity: 0, y: 30, duration: 3 }, "intro+=0.3")
+          .to(".enzo-hero-intro", { opacity: 0, duration: 3, ease: "power2.in" }, "+=1")
+          .set(".enzo-hero-intro", { display: "none" });
 
-      // --- ACTO 7 ---
-      tl.add(announceAct("VII", "EL DUELO"))
-        .addLabel("duelo")
-        .to(".step-7", { opacity: 1, duration: 3 }, "duelo")
-        .to(".step-7 h1 span", { y: 0, duration: 2.5 }, "duelo+=0.5")
-        .to(".img-frame-7", { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, scale: 0.9, duration: 4 }, "duelo")
-        .to(".step-7, .img-frame-7", { opacity: 0, filter: "blur(15px)", duration: 4 }, "+=3");
+        // --- ACTO 1 MOBILE ---
+        tl.add(announceAct("I", "EL ESCENARIO"))
+          .to(".step-1", { opacity: 1, duration: 2 })
+          .to(".step-1 h1 span", { y: 0, duration: 1.5 })
+          .to(".card-literary-1", { yPercent: -100, duration: 3 })
+          .to(".card-literary-2", { yPercent: -100, duration: 3 })
+          .to(".card-multimedia", { yPercent: -100, duration: 3 })
+          .to(".step-1", { opacity: 0, duration: 1.5 })
+          .set(".step-1", { display: "none" });
 
-      // --- ACTO 8 ---
-      tl.add(announceAct("VIII", "LA MEMORIA"))
-        .addLabel("final")
-        .to(".enzo-bg-overlay", { filter: "grayscale(100%) brightness(0.01)", duration: 5 }, "final")
-        .to(".step-8", { opacity: 1, duration: 4 }, "final+=1")
-        .to(".step-8 h1 span", { y: 0, duration: 4 }, "final+=2")
-        .to(".img-frame-8", { opacity: 1, clipPath: "inset(0% 0% 0% 0%)", duration: 6 }, "final")
-        .to(".img-frame-8 img", { scale: 1.05, filter: "grayscale(100%) brightness(0.4)", duration: 10 }, "final");
+        // --- ACTO 2 MOBILE ---
+        tl.add(announceAct("II", "EL CONFLICTO"))
+          .to(".step-2", { opacity: 1, duration: 2 })
+          .to(".step-2 h1 span", { y: 0, duration: 1.5 })
+          .to(".horizontal-track", { xPercent: -66.66, duration: 8, ease: "power1.inOut" }, "+=1") 
+          .to(".horizontal-track", { opacity: 0.2, duration: 2 })
+          .fromTo(".document-overlay-layer", { y: "110%" }, { y: "0%", duration: 4, ease: "power2.out" })
+          .to({}, { duration: 2 })
+          .to(".document-overlay-layer", { y: "-110%", opacity: 0, duration: 3 })
+          .to(".step-2", { opacity: 0, duration: 1.5 })
+          .set(".step-2", { display: "none" });
 
-      gsap.to(".img-frame", { y: (i) => (i % 2 === 0 ? -30 : 30), ease: "none", scrollTrigger: { trigger: containerRef.current, start: "top top", end: "bottom bottom", scrub: true } });
+        // --- ACTO 3 MOBILE ---
+        tl.add(announceAct("III", "EL FISCAL"))
+          .to(".step-3", { opacity: 1, duration: 2 })
+          .to(".step-3 h1 span", { y: 0, duration: 1.5 })
+          .set(".step-3-factive", { yPercent: 100, opacity: 1, visibility: "visible", zIndex: 100 })
+          .to(".step-3", { yPercent: -100, duration: 4, ease: "power2.inOut" }, "+=2")
+          .to(".step-3-factive", { yPercent: 0, duration: 4, ease: "power2.inOut" }, "<")
+          .to({}, { duration: 2 })
+          .to(".step-3-factive", { opacity: 0, duration: 1.5 });
+
+        // --- ACTO 4 MOBILE ---
+        tl.add(announceAct("IV", "EL ACECHO"))
+          .to(".step-4", { opacity: 1, duration: 2 })
+          .to(".step-4 h1 span", { y: 0, duration: 1.5 })
+          .to(".step-4", { opacity: 0, duration: 1.5 }, "+=2");
+
+        // --- ACTO 5 MOBILE ---
+        tl.add(announceAct("V", "EL SACRIFICIO"))
+          .to(".enzo-bg-overlay", { filter: "brightness(0.1)", duration: 1 })
+          .call(playShot)
+          .to(".flash-impact", { opacity: 1, duration: 0.05 })
+          .to(".flash-impact", { opacity: 0, duration: 0.4 })
+          .to(".step-5", { opacity: 1, duration: 2 })
+          .to(".step-5 h1 span", { y: 0, duration: 1.5 })
+          .to(".step-5", { opacity: 0, duration: 1.5 }, "+=2");
+
+        // --- ACTO 6 MOBILE ---
+        tl.add(announceAct("VI", "EL OCASO"))
+          .to(".step-6", { opacity: 1, duration: 2 })
+          .to(".step-6 h1 span", { y: 0, duration: 1.5 })
+          .to(".step-6", { opacity: 0, duration: 1.5 }, "+=2");
+
+        // --- ACTO 7 MOBILE ---
+        tl.add(announceAct("VII", "EL DUELO"))
+          .to(".step-7", { opacity: 1, duration: 2 })
+          .to(".step-7 h1 span", { y: 0, duration: 1.5 })
+          .to(".step-7", { opacity: 0, duration: 1.5 }, "+=2");
+
+        // --- ACTO 8 MOBILE ---
+        tl.add(announceAct("VIII", "LA MEMORIA"))
+          .to(".step-8", { opacity: 1, duration: 2 })
+          .to(".step-8 h1 span", { y: 0, duration: 2 });
+      });
+
+      // Efecto de paralaje: Exclusivo para Desktop para proteger los FPS del hilo móvil
+      if (window.innerWidth > 768) {
+        gsap.to(".img-frame", { y: (i) => (i % 2 === 0 ? -30 : 30), ease: "none", scrollTrigger: { trigger: containerRef.current, start: "top top", end: "bottom bottom", scrub: true } });
+      }
     }, containerRef);
 
     return () => { ctx.revert(); window.removeEventListener("mousemove", moveCursor); };
   }, []);
+
 
   return (
     <div ref={containerRef} className="enzo-full-wrapper">
