@@ -26,12 +26,17 @@ export default function EnzoBordabehereArticle() {
       wheelMultiplier: 1,
       infinite: false,
     });
-    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-    requestAnimationFrame(raf);
+
+    // Sincronización estricta de fotogramas entre Lenis y el Ticker de GSAP
+    const updateLenisTimeline = (time) => {
+      lenis.raf(time * 1000);
+    };
+
     lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    gsap.ticker.add(updateLenisTimeline);
     gsap.ticker.lagSmoothing(0);
 
+    // Configuración del búfer de audio base
     const audio = new Audio('/disparo.mp3');
     audio.preload = "auto";
     audio.volume = 0.8;
@@ -47,10 +52,11 @@ export default function EnzoBordabehereArticle() {
       window.removeEventListener('click', unlockAudio);
     };
     window.addEventListener('click', unlockAudio);
+
     return () => {
       lenis.destroy();
       window.removeEventListener('click', unlockAudio);
-      gsap.ticker.remove(lenis.raf);
+      gsap.ticker.remove(updateLenisTimeline);
     };
   }, []);
 
@@ -76,8 +82,8 @@ export default function EnzoBordabehereArticle() {
           shotClone.onended = () => {
             shotClone.pause();
             shotClone.src = "";     // Corta la descarga y limpia el buffer
-            shotClone.load();    // Fuerza el reseteo del elemento multimedia
-            shotClone.remove();  // Lo remueve por completo de la memoria del DOM
+            shotClone.load();       // Fuerza el reseteo del elemento multimedia
+            shotClone.remove();     // Lo remueve por completo de la memoria del DOM
           };
         }
       };
@@ -101,7 +107,7 @@ export default function EnzoBordabehereArticle() {
           .to(".announcer-number", { y: 0, opacity: 1, duration: 1.2, ease: "expo.out" }, "-=0.5")
           .to(".announcer-text", { y: 0, opacity: 1, duration: 1.2, ease: "expo.out" }, "-=1")
           .to(".announcer-line", { scaleX: 1, duration: 1.5, ease: "power4.inOut" }, "-=1")
-          // 5. Salida Cinematográfica (Aquí es donde evitamos que se vea borroso después)
+          // 5. Salida Cinematográfica
           .to(".enzo-act-announcer", { 
               opacity: 0, 
               scale: 1.1, 
@@ -357,10 +363,12 @@ export default function EnzoBordabehereArticle() {
       }
     }, containerRef);
 
-    return () => { ctx.revert(); window.removeEventListener("mousemove", moveCursor); };
+    return () => { 
+      ctx.revert(); 
+      window.removeEventListener("mousemove", moveCursor); 
+    };
   }, []);
-
-
+  
   return (
     <div ref={containerRef} className="enzo-full-wrapper">
       {/* CAPA ANUNCIADORA DE ACTOS */}
