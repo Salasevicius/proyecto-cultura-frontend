@@ -15,7 +15,7 @@ export default function EnzoBordabehereArticle() {
   const audioRef = useRef(null);
   const navigate = useNavigate();
 
-  // 1. INICIALIZACIÓN UNIFICADA DE LENIS Y AUDIO (Evita condiciones de carrera)
+  // 1. GESTIÓN DE AUDIO Y SMOOTH SCROLL (LENIS)
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.4,
@@ -26,24 +26,12 @@ export default function EnzoBordabehereArticle() {
       wheelMultiplier: 1,
       infinite: false,
     });
-
-    let rafId;
-    function raf(time) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-    rafId = requestAnimationFrame(raf);
-
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
     lenis.on('scroll', ScrollTrigger.update);
-    
-    // Conexión del ticker de GSAP al render de Lenis
-    const gsapTickerFn = (time) => {
-      lenis.raf(time * 1000);
-    };
-    gsap.ticker.add(gsapTickerFn);
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
     gsap.ticker.lagSmoothing(0);
 
-    // Configuración del audio base
     const audio = new Audio('/disparo.mp3');
     audio.preload = "auto";
     audio.volume = 0.8;
@@ -54,49 +42,42 @@ export default function EnzoBordabehereArticle() {
         audioRef.current.play().then(() => {
           audioRef.current.pause();
           audioRef.current.currentTime = 0;
-        }).catch(e => console.log("Audio intermitente listo para interacción"));
+        }).catch(e => console.log("Audio ready"));
       }
       window.removeEventListener('click', unlockAudio);
     };
     window.addEventListener('click', unlockAudio);
-
     return () => {
-      cancelAnimationFrame(rafId);
       lenis.destroy();
       window.removeEventListener('click', unlockAudio);
-      gsap.ticker.remove(gsapTickerFn);
+      gsap.ticker.remove(lenis.raf);
     };
   }, []);
 
-  // 2. TIMELINES CINEMATOGRÁFICOS Y CURSOR PERSONALIZADO
   useLayoutEffect(() => {
-    const cursor = containerRef.current.querySelector(".custom-cursor");
-    
+    const cursor = document.querySelector(".custom-cursor");
     const moveCursor = (e) => {
-      if (cursor) {
-        gsap.to(cursor, { 
-          x: e.clientX, 
-          y: e.clientY, 
-          duration: 0.6, 
-          ease: "power3.out" 
-        });
-      }
+      gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.6, ease: "power3.out" });
     };
 
     let ctx = gsap.context(() => {
-      const playShot = () => {
+     const playShot = () => {
         if (audioRef.current) {
+          // 1. Clonamos el nodo base para permitir ráfagas de disparos superpuestas
           const shotClone = audioRef.current.cloneNode();
           shotClone.volume = 0.6;
           
+          // 2. Ejecutamos la reproducción protegiendo el flujo ante bloqueos del navegador
           shotClone.play().catch((err) => {
             console.warn("Disparo bloqueado o interrumpido:", err);
           });
 
+          // 3. Mecanismo de recolección de basura (Garbage Collection) explícito
           shotClone.onended = () => {
             shotClone.pause();
-            shotClone.src = "about:blank"; // Método seguro para liberar buffers de red en MediaElements
-            shotClone.remove();
+            shotClone.src = "";     // Corta la descarga y limpia el buffer
+            shotClone.load();    // Fuerza el reseteo del elemento multimedia
+            shotClone.remove();  // Lo remueve por completo de la memoria del DOM
           };
         }
       };
@@ -104,36 +85,42 @@ export default function EnzoBordabehereArticle() {
       window.addEventListener("mousemove", moveCursor);
 
       const announceAct = (number, title) => {
-        const actTl = gsap.timeline();
-        
-        actTl
-          .set(".enzo-act-announcer", { display: "flex", opacity: 0, filter: "blur(0px)", scale: 1 })
-          .set([".announcer-number", ".announcer-text"], { opacity: 0, y: 30 })
-          .set(".announcer-line", { scaleX: 0 })
-          .set(".announcer-number", { textContent: number })
-          .set(".announcer-text", { textContent: title })
-          .to(".enzo-act-announcer", { opacity: 1, duration: 1.5, ease: "power2.inOut" })
-          .to(".announcer-number", { y: 0, opacity: 1, duration: 1.2, ease: "expo.out" }, "-=0.5")
-          .to(".announcer-text", { y: 0, opacity: 1, duration: 1.2, ease: "expo.out" }, "-=1")
-          .to(".announcer-line", { scaleX: 1, duration: 1.5, ease: "power4.inOut" }, "-=1")
-          .to(".enzo-act-announcer", { 
-              opacity: 0, 
-              scale: 1.1, 
-              filter: "blur(20px)", 
-              duration: 1.5, 
-              ease: "power2.in" 
-          }, "+=1.5") 
-          .set(".enzo-act-announcer", { display: "none" });
-          
-        return actTl;
-      };
+  const actTl = gsap.timeline();
+  
+  actTl
+    // 1. Reset total del estado (Limpieza de actos previos)
+    .set(".enzo-act-announcer", { display: "flex", opacity: 0, filter: "blur(0px)", scale: 1 })
+    .set([".announcer-number", ".announcer-text"], { opacity: 0, y: 30 })
+    .set(".announcer-line", { scaleX: 0 })
+    // 2. Inyectar contenido
+    .set(".announcer-number", { textContent: number })
+    .set(".announcer-text", { textContent: title })
+    // 3. Aparición (Fade In)
+    .to(".enzo-act-announcer", { opacity: 1, duration: 1.5, ease: "power2.inOut" })
+    // 4. Animación de los textos
+    .to(".announcer-number", { y: 0, opacity: 1, duration: 1.2, ease: "expo.out" }, "-=0.5")
+    .to(".announcer-text", { y: 0, opacity: 1, duration: 1.2, ease: "expo.out" }, "-=1")
+    .to(".announcer-line", { scaleX: 1, duration: 1.5, ease: "power4.inOut" }, "-=1")
+    // 5. Salida Cinematográfica (Aquí es donde evitamos que se vea borroso después)
+    .to(".enzo-act-announcer", { 
+        opacity: 0, 
+        scale: 1.1, 
+        filter: "blur(20px)", 
+        duration: 1.5, 
+        ease: "power2.in" 
+    }, "+=1.5") 
+    // 6. Cierre técnico: Escondemos el div para que no interfiera con el mouse/scroll
+    .set(".enzo-act-announcer", { display: "none" });
+    
+  return actTl;
+};
 
       // --- TIMELINE PRINCIPAL ---
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: "+=150000",
+          end: "+=150000", // Aumentado para dar espacio a los intertítulos
           pin: true,
           scrub: 1.2,
         }
@@ -148,39 +135,52 @@ export default function EnzoBordabehereArticle() {
         .to(".enzo-hero-intro", { opacity: 0, scale: 2, filter: "blur(30px)", duration: 5, ease: "power2.in" }, "+=1")
         .set(".enzo-hero-intro", { display: "none" });
 
-      // --- ACTO 1: EL ESCENARIO ---
-      tl.add(announceAct("I", "EL ESCENARIO"))
-        .addLabel("acto1")
-        .to(".step-1", { opacity: 1, duration: 2 }, "acto1")
-        .to(".step-1 h1 span", { y: 0, duration: 2, ease: "expo.out" }, "acto1+=0.5")
-        .to(".img-frame-1", { clipPath: "inset(0% 0% 0% 0%)", scale: 1, duration: 3, ease: "power4.inOut" }, "acto1")
-        .to(".img-frame-1 img", { y: "15%", duration: 4, ease: "none" }, "acto1")
-        .addLabel("telones_acto1")
-        .to(".card-literary-1", { yPercent: -100, duration: 4, ease: "power2.inOut" }, "telones_acto1")
-        .to(".card-literary-2", { yPercent: -100, duration: 4, ease: "power2.inOut" }, "telones_acto1+=2")
-        .to(".card-multimedia", { yPercent: -100, duration: 4, ease: "power2.inOut" }, "telones_acto1+=4")
-        .to({}, { duration: 2 }) 
-        .to(".step-1", { opacity: 0, y: -100, duration: 2, ease: "power1.in" })
-        .set(".step-1", { display: "none" });
+  // --- ACTO 1 (ESTRUCTURA ORIGINAL CON TELONES) ---
+tl.add(announceAct("I", "EL ESCENARIO"))
+  .addLabel("acto1")
+  .to(".step-1", { opacity: 1, duration: 2 }, "acto1")
+  .to(".step-1 h1 span", { y: 0, duration: 2, ease: "expo.out" }, "acto1+=0.5")
+  .to(".img-frame-1", { clipPath: "inset(0% 0% 0% 0%)", scale: 1, duration: 3, ease: "power4.inOut" }, "acto1")
+  .to(".img-frame-1 img", { y: "15%", duration: 4, ease: "none" }, "acto1")
+  .addLabel("telones_acto1")
+  // El primer telón sube (desde su posición top: 100% en CSS)
+  .to(".card-literary-1", { yPercent: -100, duration: 4, ease: "power2.inOut" }, "telones_acto1")
+  // El segundo telón sube sobre el anterior
+  .to(".card-literary-2", { yPercent: -100, duration: 4, ease: "power2.inOut" }, "telones_acto1+=2")
+  // El telón multimedia sube al final
+  .to(".card-multimedia", { yPercent: -100, duration: 4, ease: "power2.inOut" }, "telones_acto1+=4")
+  // Pausa dramática para lectura de las tarjetas
+  .to({}, { duration: 2 }) 
+  // Salida definitiva del Acto 1 para limpiar el DOM visual
+  .to(".step-1", { opacity: 0, y: -100, duration: 2, ease: "power1.in" })
+  .set(".step-1", { display: "none" }); // Crucial para no bloquear el Acto 2
 
-      // --- ACTO 2: EL CONFLICTO Y EL RIEL HORIZONTAL ---
+      // --- ACTO 2: EL CONFLICTO Y EL RIEZ HORIZONTAL ---
       tl.add(announceAct("II", "EL CONFLICTO"))
         .addLabel("acto2")
+        // 1. Entrada de la sección
         .to(".step-2", { opacity: 1, duration: 2 }, "acto2")
+        // 2. Animación de la Presentación (Slide A)
         .to(".step-2 h1 span", { y: 0, duration: 2, ease: "expo.out" }, "acto2+=0.5")
         .to(".img-frame-2", { clipPath: "inset(0% 0% 0% 0%)", duration: 3, ease: "power4.inOut" }, "acto2")
         .to(".enzo-legend-floating", { opacity: 1, y: 10, duration: 2, ease: "power2.out" }, "acto2+=1.2")
+        // 3. Impacto del Sello Imperial
         .fromTo(".enzo-imperial-seal", 
           { opacity: 0, x: 600, rotation: 45, scale: 2 }, 
           { opacity: 1, x: 0, rotation: -15, scale: 1, duration: 1.2, ease: "back.out(1.2)" }, "acto2+=2.2")
         .to(".img-frame-2 img", { y: "15%", duration: 4, ease: "none" }, "acto2")
+
+        // --- NUEVA PARTE: DESPLAZAMIENTO HORIZONTAL ---
         .addLabel("acto2_horizontal")
         .to(".horizontal-track", { 
-          xPercent: -50, 
-          duration: 8,   
+          xPercent: -50, // Mueve el track hacia la izquierda revelando el Slide B
+          duration: 8,   // Duración extendida para que el usuario pueda leer
           ease: "power2.inOut" 
-        }, "+=1") 
+        }, "+=1") // Pausa pequeña tras el sello antes de mover
+        // ----------------------------------------------
+        // 4. Surgimiento del Archivo/Expediente (Slide B ya está de fondo)
         .addLabel("acto2_archivo")
+        // Difuminamos el track horizontal (ambas slides) para que resalte el papel
         .to(".horizontal-track", { opacity: 0.15, filter: "blur(20px)", scale: 0.9, duration: 3 }, "acto2_archivo")
         .fromTo(".document-overlay-layer", 
           { y: "110%", x: 80, rotation: 12 }, 
@@ -188,59 +188,73 @@ export default function EnzoBordabehereArticle() {
           "acto2_archivo+=0.5"
         )
         .to(".paper-sheet", { boxShadow: "-25px 25px 100px rgba(0,0,0,0.8)", duration: 2 }, "-=2")
+        
+        // Tiempo de lectura del expediente
         .to({}, { duration: 2 })
+        // 5. Salida del Acto 2
         .to(".document-overlay-layer", { y: "-130%", rotation: -8, opacity: 0, duration: 4, ease: "power4.in" })
         .to(".step-2", { opacity: 0, y: -100, duration: 2 }, "-=1")
+        // Limpiamos estilos para el siguiente acto
         .set(".step-2", { display: "none" });
 
-      // --- ACTO 3: EL FISCAL Y LA SECCIÓN FÁCTICA ---
-      tl.add(announceAct("III", "EL FISCAL"))
-        .addLabel("acto3")
-        .to(".step-3", { opacity: 1, duration: 2 }, "acto3")
-        .from(".central-avatar", { scale: 0.7, opacity: 0, rotation: -15, duration: 3, ease: "expo.out" }, "acto3")
-        .from(".left-side", { x: -80, opacity: 0, duration: 2 }, "acto3+=0.5")
-        .from(".right-side", { x: 80, opacity: 0, duration: 2 }, "acto3+=0.8")
-        .to(".step-3 h1 span", { y: 0, duration: 2, ease: "expo.out" }, "acto3+=1")
-        .from(".enzo-placa-anim", { y: 200, scale: 1.4, opacity: 0, duration: 2.5, ease: "power4.out" }, "acto3+=1.8")
-        .to(".placa-content-inner", { opacity: 1, duration: 1.5, ease: "power2.inOut" }, "acto3+=3.5")
-        .addLabel("transicion_factica")
-        .set(".step-3-factive", { 
-          yPercent: 100, 
-          opacity: 1, 
-          visibility: "visible",
-          zIndex: 100 
-        })
-        .to(".step-3", { 
-          yPercent: -100, 
-          duration: 6, 
-          ease: "power2.inOut" 
-        }, "+=4") 
-        .to(".step-3-factive", { 
-          yPercent: 0, 
-          duration: 6, 
-          ease: "power2.inOut" 
-        }, "<") 
-        .to({}, { duration: 2 }) 
-        .to(".step-3-factive", { 
-          opacity: 0, 
-          filter: "blur(15px)", 
-          scale: 1.05,
-          duration: 2,
-          ease: "power2.in"
-        })
-        .set(".step-3-factive", { display: "none" });
+     // --- ACTO 3: EL FISCAL ---
+tl.add(announceAct("III", "EL FISCAL"))
+  .addLabel("acto3")
+  
+  // 1. Entrada de la sección original (Tríptico)
+  .to(".step-3", { opacity: 1, duration: 2 }, "acto3")
+  .from(".central-avatar", { scale: 0.7, opacity: 0, rotation: -15, duration: 3, ease: "expo.out" }, "acto3")
+  .from(".left-side", { x: -80, opacity: 0, duration: 2 }, "acto3+=0.5")
+  .from(".right-side", { x: 80, opacity: 0, duration: 2 }, "acto3+=0.8")
+  .to(".step-3 h1 span", { y: 0, duration: 2, ease: "expo.out" }, "acto3+=1")
+  .from(".enzo-placa-anim", { y: 200, scale: 1.4, opacity: 0, duration: 2.5, ease: "power4.out" }, "acto3+=1.8")
+  .to(".placa-content-inner", { opacity: 1, duration: 1.5, ease: "power2.inOut" }, "acto3+=3.5")
 
-      // --- ACTO 4: EL ACECHO ---
+  // --- TRANSICIÓN VERTICAL: LAS DOS SECCIONES SE MUEVEN EN TÁNDEM ---
+  .addLabel("transicion_factica")
+  
+  // PREPARACIÓN: Forzamos que la sección fáctica esté lista abajo y con z-index alto
+  .set(".step-3-factive", { 
+    yPercent: 100, 
+    opacity: 1, 
+    visibility: "visible",
+    zIndex: 100 
+  })
+
+  // Ejecución del movimiento sincronizado
+  .to(".step-3", { 
+    yPercent: -100, // La sección original sube y sale de pantalla
+    duration: 6, 
+    ease: "power2.inOut" 
+  }, "+=4") // Pausa de lectura del tríptico
+  
+  .to(".step-3-factive", { 
+    yPercent: 0, // La nueva sección sube a su posición de centrado
+    duration: 6, 
+    ease: "power2.inOut" 
+  }, "<") // "<" indica inicio simultáneo con el movimiento anterior
+
+  // Tiempo de lectura para los datos fácticos
+  .to({}, { duration: 2 }) 
+  
+  // Salida final cinematográfica del Acto 3
+  .to(".step-3-factive", { 
+    opacity: 0, 
+    filter: "blur(15px)", 
+    scale: 1.05,
+    duration: 2,
+    ease: "power2.in"
+  });
+      // --- ACTO 4 ---
       tl.add(announceAct("IV", "EL ACECHO"))
         .addLabel("acto4")
         .to(".step-4", { opacity: 1, duration: 2 }, "acto4")
         .to(".step-4 h1 span", { y: 0, duration: 2, ease: "expo.out" }, "acto4+=0.5")
         .to(".img-frame-4", { clipPath: "inset(0% 0% 0% 0%)", duration: 3, ease: "power4.inOut" }, "acto4")
         .to(".img-frame-4 img", { y: "15%", duration: 4, ease: "none" }, "acto4")
-        .to(".step-4, .img-frame-4", { opacity: 0, filter: "blur(20px)", duration: 3 }, "+=4")
-        .set(".step-4", { display: "none" });
+        .to(".step-4, .img-frame-4", { opacity: 0, filter: "blur(20px)", duration: 3 }, "+=4");
 
-      // --- ACTO 5: EL SACRIFICIO (ESCENA DEL CRIMEN) ---
+      // --- ACTO 5 ---
       tl.add(announceAct("V", "EL SACRIFICIO"))
         .addLabel("crimen")
         .to(".enzo-bg-overlay", { filter: "grayscale(100%) brightness(0.1) contrast(3)", duration: 2 }, "crimen")
@@ -250,11 +264,11 @@ export default function EnzoBordabehereArticle() {
         .to(".flash-impact", { opacity: 0.3, duration: 0.5 })
         .call(playShot, null, "+=0.4")
         .to(".flash-impact", { opacity: 1, duration: 0.05 })
-        .to(containerRef.current, { x: "random(-30, 30)", y: "random(-15, 15)", rotation: "random(-2, 2)", duration: 0.04, repeat: 8, yoyo: true }, "-=0.04")
+        .to(containerRef.current, { x: "random(-30, 30)", y: "random(-15, 15)", rotation: "random(-2, 2)", duration: 0.04, repeat: 8, yoyo: true }, "-=0.05")
         .to(".flash-impact", { opacity: 0.4, duration: 0.8 })
         .call(playShot, null, "+=0.6")
         .to(".flash-impact", { backgroundColor: "rgba(180, 0, 0, 0.5)", opacity: 1, duration: 0.05 })
-        .to(containerRef.current, { x: "random(-40, 40)", y: "random(-20, 20)", scale: 1.03, duration: 0.04, repeat: 12, yoyo: true }, "-=0.04")
+        .to(containerRef.current, { x: "random(-40, 40)", y: "random(-20, 20)", scale: 1.03, duration: 0.04, repeat: 12, yoyo: true }, "-=0.05")
         .add(() => {
           const title = document.querySelector(".blood-title");
           if (title && !title.querySelector('.blood-container')) {
@@ -274,29 +288,26 @@ export default function EnzoBordabehereArticle() {
         .to(".step-5", { opacity: 1, filter: "blur(0px)", duration: 4 }, "-=5.5")
         .to(".step-5 h1 span", { y: 0, duration: 3 }, "-=5")
         .to(".img-frame-5", { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, scale: 1, duration: 5 }, "-=6")
-        .to(".step-5, .img-frame-5", { opacity: 0, y: 50, filter: "blur(10px)", duration: 3 }, "+=2")
-        .set(".step-5", { display: "none" });
+        .to(".step-5, .img-frame-5", { opacity: 0, y: 50, filter: "blur(10px)", duration: 3 }, "+=2");
 
-      // --- ACTO 6: EL OCASO ---
+      // --- ACTO 6 ---
       tl.add(announceAct("VI", "EL OCASO"))
         .addLabel("ocaso")
         .to(".step-6", { opacity: 1, duration: 3 }, "ocaso")
         .to(".step-6 h1 span", { y: 0, duration: 2.5 }, "ocaso+=0.5")
         .to(".img-frame-6", { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, duration: 4 }, "ocaso")
         .to(".img-frame-6 img", { scale: 1.2, filter: "grayscale(100%)", duration: 6 }, "ocaso")
-        .to(".step-6, .img-frame-6", { opacity: 0, y: 30, duration: 3 }, "+=3")
-        .set(".step-6", { display: "none" });
+        .to(".step-6, .img-frame-6", { opacity: 0, y: 30, duration: 3 }, "+=3");
 
-      // --- ACTO 7: EL DUELO ---
+      // --- ACTO 7 ---
       tl.add(announceAct("VII", "EL DUELO"))
         .addLabel("duelo")
         .to(".step-7", { opacity: 1, duration: 3 }, "duelo")
         .to(".step-7 h1 span", { y: 0, duration: 2.5 }, "duelo+=0.5")
         .to(".img-frame-7", { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, scale: 0.9, duration: 4 }, "duelo")
-        .to(".step-7, .img-frame-7", { opacity: 0, filter: "blur(15px)", duration: 4 }, "+=3")
-        .set(".step-7", { display: "none" });
+        .to(".step-7, .img-frame-7", { opacity: 0, filter: "blur(15px)", duration: 4 }, "+=3");
 
-      // --- ACTO 8: LA MEMORIA ---
+      // --- ACTO 8 ---
       tl.add(announceAct("VIII", "LA MEMORIA"))
         .addLabel("final")
         .to(".enzo-bg-overlay", { filter: "grayscale(100%) brightness(0.01)", duration: 5 }, "final")
@@ -305,24 +316,10 @@ export default function EnzoBordabehereArticle() {
         .to(".img-frame-8", { opacity: 1, clipPath: "inset(0% 0% 0% 0%)", duration: 6 }, "final")
         .to(".img-frame-8 img", { scale: 1.05, filter: "grayscale(100%) brightness(0.4)", duration: 10 }, "final");
 
-      // Parallax general de las imágenes
-      gsap.to(".img-frame", { 
-        y: (i) => (i % 2 === 0 ? -30 : 30), 
-        ease: "none", 
-        scrollTrigger: { 
-          trigger: containerRef.current, 
-          start: "top top", 
-          end: "bottom bottom", 
-          scrub: true 
-        } 
-      });
-
+      gsap.to(".img-frame", { y: (i) => (i % 2 === 0 ? -30 : 30), ease: "none", scrollTrigger: { trigger: containerRef.current, start: "top top", end: "bottom bottom", scrub: true } });
     }, containerRef);
 
-    return () => { 
-      ctx.revert(); 
-      window.removeEventListener("mousemove", moveCursor); 
-    };
+    return () => { ctx.revert(); window.removeEventListener("mousemove", moveCursor); };
   }, []);
 
   return (

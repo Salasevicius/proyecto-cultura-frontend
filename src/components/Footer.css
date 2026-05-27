@@ -207,4 +207,48 @@
     gap: 20px; 
     text-align: center; 
   }
+
+  @media (max-width: 480px) {
+  .footer-container { 
+    padding: 0 35px; 
+    overflow: hidden; /* Evita que el viewport general rompa el ancho */
+  }
+  
+
+  /* Forzamos el comportamiento de carrusel horizontal */
+  .footer-matrix {
+    display: flex !important; /* Cambiamos grid por flex horizontal */
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    /* Activamos el scroll horizontal táctil nativo */
+    overflow-x: auto !important; 
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch; /* Suavidad extrema en iOS */
+    gap: 40px !important; /* Espacio real para que respiren */
+    padding-bottom: 20px; /* Margen para que no tape la barra de scroll móvil */
+    margin-bottom: 20px;
+  }
+
+  /* Ocultamos la barra de scroll visual para que quede ultra limpio (opcional) */
+  .footer-matrix::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Cada una de las 3 secciones de la matriz */
+  .footer-matrix > div {
+    flex: 0 0 75%; /* Cada columna ocupa el 75% del ancho de la pantalla */
+    scroll-snap-align: start; /* Se imanta al inicio al deslizar */
+  }
+
+  .matrix-label {
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    white-space: nowrap; /* Evita que el título se parta en dos líneas */
+  }
+
+  .matrix-links a {
+    font-size: 0.9rem;
+    white-space: nowrap; /* Mantiene la horizontalidad del texto */
+  }
+}
 }
