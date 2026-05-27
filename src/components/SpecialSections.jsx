@@ -136,7 +136,6 @@ export default function SpecialSections() {
         </div>
       </div>
 
-      <div className="background-watermark">HISTORIA</div>
     </section>
   );
 }
