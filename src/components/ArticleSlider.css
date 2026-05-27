@@ -116,6 +116,7 @@ body::before {
   margin-bottom: 0 !important;
   display: block !important;
   overflow: visible !important;
+  text-align: justify;
 }
 
 .author-name-card {
@@ -238,6 +239,7 @@ body::before {
     display: -webkit-box !important;
     -webkit-box-orient: vertical;
     overflow: hidden !important;
+    text-align: justify;
   }
 
   .slider-item article .btn-read {
