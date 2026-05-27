@@ -102,11 +102,13 @@
 
 .letra {
   display: inline-block;
-  font-size: clamp(4rem, 18vw, 12rem); /* Escala Masiva */
+  font-size: clamp(4rem, 18vw, 8rem); /* Escala Masiva */
   font-weight: 900;
   color: var(--ros-blanco); /* Comienza en Blanco puro */
-  letter-spacing: -8px;
+  letter-spacing: 12px;
   transition: color 3s ease;
+  padding-bottom: 8px;
+
 }
 
 /* "CULTURA" comienza en Naranja para choque visual inicial */
@@ -156,7 +158,7 @@
 }
 
 @media (max-width: 768px) {
-  .letra { font-size: 4.5rem; letter-spacing: -3px; }
+  .letra { font-size: 3rem; letter-spacing: 2px; }
   .svg-monumento { width: 45vh; }
   .barra-progreso { width: 100%; }
 }
