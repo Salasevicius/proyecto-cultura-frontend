@@ -16,7 +16,14 @@
   overflow: hidden;
   font-family: 'Inter', sans-serif;
   /* El cambio de background-color lo maneja GSAP lentamente */
+  /* Optimizaciones de renderizado para transiciones complejas */
+  /* ESTADO INICIAL: Rectángulo perfecto (cubre las 4 esquinas de la pantalla) */
+  /* ESTADO INICIAL PLANO: 10 puntos preparados en la base al 100% */
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 90% 100%, 75% 100%, 55% 100%, 40% 100%, 25% 100%, 12% 100%, 0% 100%);
+  
+  will-change: transform, clip-path;
 }
+
 
 /* Textura de grano sutil para un acabado artístico */
 .capa-textura {

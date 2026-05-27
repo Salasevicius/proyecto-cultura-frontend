@@ -24,10 +24,18 @@ const CulturaPreloader = ({ onComplete }) => {
           // SALIDA FINAL: Muy lenta y elegante, hacia arriba
           gsap.to(scope.current, {
             yPercent: -100,
-            duration: 2,
+            duration: 2.5,
             ease: "expo.inOut",
+            // Creamos la curva cóncava masiva en la base mientras sube
+      clipPath: "polygon(0% 0%, 100% 0%, 100% 15%, 90% 5%, 75% 25%, 55% -5%, 40% 15%, 25% 0%, 12% 20%, 0% 8%)",
             onComplete
           });
+          gsap.to(".layout-art", {
+      opacity: 0,
+      y: -60,
+      duration: 0.8,
+      ease: "power2.in"
+    });
         }
       });
 
