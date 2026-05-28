@@ -107,12 +107,12 @@ export default function SpecialSections() {
         {/* Card 3: Crónica Inmersiva (Bordabehere) */}
         <div className="special-card inmersive-chronicle-card">
           <div className="card-image-wrapper">
-             <LazyImage src="/biblioteca-argentina.webp" alt="Bordabehere" className="card-parallax-bg" />
+             <LazyImage src="/inmersivo-pichincha.webp" alt="Bordabehere" className="card-parallax-bg" />
           </div>
           <div className="card-info">
             <span className="card-tag">Narrativa Cinematográfica</span>
             <h3>Crónicas Inmersivas</h3>
-            <p>Una experiencia inmersiva sobre el magnicidio que marcó la historia política local.</p>
+            <p>Una experiencia inmersiva e interactiva sobre hechos y procesos relacionados a la cultura rosarina.</p>
              <button 
   className="hub-btn" 
   onClick={() => navigate('/cronicas-hub')} // CAMBIO AQUÍ

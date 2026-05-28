@@ -2058,9 +2058,12 @@ a.button:hover {
 }
 
 /* 5. Optimización para Pantallas Ultra-pequeñas o "Split View" */
-@media (max-width: 350px) {
+@media (max-width: 360px) {
   .editor-header h3 { font-size: 0.6rem; letter-spacing: 1.5px; }
   .main-title-input { font-size: 1.3rem !important; }
+  #interactive-cta-layer {
+    margin-left: -12px;
+  }
 }
 
 /* 6. Ajuste para pantallas horizontales cortas (Landscape en móviles) */

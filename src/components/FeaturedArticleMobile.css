@@ -193,3 +193,9 @@
 
 .fam-item-cat { color: #e2b464; font-size: 0.7rem; font-weight: bold; }
 .fam-item-title { color: #f8fafc; font-size: 1rem; margin-top: 5px; line-height: 1.3; }
+
+@media (max-width: 360px) {
+  .fam-tag {
+    padding: 6px;
+  }
+}
