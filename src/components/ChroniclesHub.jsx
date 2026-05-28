@@ -9,7 +9,7 @@ const chronicles = [
     subtitle: 'Rosario, 1935',
     category: 'POLÍTICA',
     excerpt: 'Una reconstrucción cinematográfica del asesinato que sacudió al Senado de la Nación.',
-    image: '/inmersivo-bordabehere.png',
+    image: '/inmersivo-bordabehere.webp',
     duration: '12 min',
     featured: true
   },
@@ -19,7 +19,7 @@ const chronicles = [
     subtitle: 'Mafia y Prostitución',
     category: 'BAJOS FONDOS',
     excerpt: 'Crónica inmersiva por los pasillos del barrio que nunca dormía bajo el imperio de la Zwi Migdal.',
-    image: '/inmersivo-pichincha.png',
+    image: '/inmersivo-pichincha.webp',
     duration: '15 min',
     featured: false
   },
@@ -29,17 +29,17 @@ const chronicles = [
     subtitle: 'El Legado Inglés',
     category: 'URBANISMO',
     excerpt: 'El auge ferroviario que transformó a Rosario. Un viaje por terminales olvidadas.',
-    image: '/inmersivo-ferrocarril.png',
+    image: '/inmersivo-ferrocarril.webp',
     duration: '10 min',
     featured: false
   },
   {
     id: 'parana-misterioso',
-    title: 'Secretos del Gran Río',
-    subtitle: 'Leyendas del Agua',
-    category: 'MITOLOGÍA',
-    excerpt: 'Desde naufragios fantasmales hasta las islas que cambian de forma. El río cuenta su historia.',
-    image: '/assets/images/river-secrets.jpg',
+    title: 'El Día de la Comuna Rosarina',
+    subtitle: 'Luchas Obreras',
+    category: 'LUCHAS OBRERAS',
+    excerpt: '1921: Obreros y estudiantes anarquistas toman el Palacio de los Leones. Una jornada revolucionaria que desafió al poder municipal de Rosario.',
+    image: '/huelga-anarquista-rosario.webp',
     duration: '18 min',
     featured: true
   },
@@ -49,7 +49,7 @@ const chronicles = [
     subtitle: 'Crimen Organizado',
     category: 'HISTORIA NEGRA',
     excerpt: 'La disputa de poder entre Chicho Grande y Chicho Chico que marcó una era en la Chicago Argentina.',
-    image: '/assets/images/mafia.jpg',
+    image: '/guerra-de-chichos.webp',
     duration: '20 min',
     featured: false
   }
@@ -79,6 +79,14 @@ const ChroniclesHub = () => {
       <section className="chronicles-grid">
         {chronicles.map((item) => (
           <div key={item.id} className={`chronicle-card-item ${item.featured ? 'featured' : ''}`}>
+            
+            {/* NUEVA UBICACIÓN: El texto ahora se renderiza arriba de la tarjeta */}
+            <div className="card-text-content">
+              <span className="card-subtitle">{item.subtitle}</span>
+              <h2 className="card-title">{item.title}</h2>
+            </div>
+
+            {/* El contenedor visual y los overlays se mantienen debajo del texto */}
             <div className="card-visual-container">
               <img src={item.image} alt={item.title} className="card-img" />
               <div className="card-category-tag">{item.category}</div>
@@ -92,11 +100,7 @@ const ChroniclesHub = () => {
                 </Link>
               </div>
             </div>
-            
-            <div className="card-text-content">
-              <span className="card-subtitle">{item.subtitle}</span>
-              <h2 className="card-title">{item.title}</h2>
-            </div>
+
           </div>
         ))}
       </section>
