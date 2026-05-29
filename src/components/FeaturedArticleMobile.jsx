@@ -55,7 +55,7 @@ const FeaturedArticleMobile = ({ noticia, noticiasSecundarias }) => {
           className="fam-toggle" 
           onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }}
         >
-          <span>{isOpen ? '✕ CERRAR' : '→ CLICK PARA MÁS ARTÍCULOS DEL DÍA'}</span>
+          <span>{isOpen ? '✕ CERRAR' : '→ MÁS ARTÍCULOS DEL DÍA'}</span>
         </button>
       </div>
       
