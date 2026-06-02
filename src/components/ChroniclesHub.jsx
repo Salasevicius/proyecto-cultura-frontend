@@ -1,62 +1,83 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-import "./ChroniclesHub.css";
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import './ChroniclesHub.css';
 
 const chronicles = [
   {
-    id: "enzo-bordabehere",
-    title: "El Duelo de Bordabehere",
-    subtitle: "Rosario, 1935",
-    category: "POLÍTICA",
+    id: 'enzo-bordabehere',
+    title: 'El Duelo de Bordabehere',
+    subtitle: 'Rosario, 1935',
+    category: 'POLÍTICA',
     excerpt:
-      "Una reconstrucción cinematográfica del asesinato que sacudió al Senado de la Nación.",
-    image: "/inmersivo-bordabehere.webp",
-    duration: "12 min",
-    layout: "featured",
+      'Una reconstrucción cinematográfica del asesinato que sacudió al Senado de la Nación.',
+    image: '/inmersivo-bordabehere.webp',
+    duration: '12 min',
+    layout: 'xlarge',
   },
   {
-    id: "pichincha",
-    title: "Pichincha: La Noche Roja",
-    subtitle: "Mafia y Prostitución",
-    category: "BAJOS FONDOS",
+    id: 'pichincha',
+    title: 'Pichincha: La Noche Roja',
+    subtitle: 'Mafia y Prostitución',
+    category: 'BAJOS FONDOS',
     excerpt:
-      "Crónica inmersiva por los pasillos del barrio que nunca dormía bajo el imperio de la Zwi Migdal.",
-    image: "/inmersivo-pichincha.webp",
-    duration: "15 min",
-    layout: "tall",
+      'Crónica inmersiva por los pasillos del barrio que nunca dormía bajo el imperio de la Zwi Migdal.',
+    image: '/inmersivo-pichincha.webp',
+    duration: '15 min',
+    layout: 'medium',
   },
   {
-    id: "arquitectura-ferroviaria",
-    title: "Catedrales de Hierro",
-    subtitle: "El Legado Inglés",
-    category: "URBANISMO",
+    id: 'arquitectura-ferroviaria',
+    title: 'Catedrales de Hierro',
+    subtitle: 'El Legado Inglés',
+    category: 'URBANISMO',
     excerpt:
-      "El auge ferroviario que transformó a Rosario. Un viaje por terminales olvidadas.",
-    image: "/inmersivo-ferrocarril.webp",
-    duration: "10 min",
-    layout: "wide",
+      'El auge ferroviario que transformó a Rosario. Un viaje por terminales olvidadas.',
+    image: '/inmersivo-ferrocarril.webp',
+    duration: '10 min',
+    layout: 'xlarge',
   },
   {
-    id: "parana-misterioso",
-    title: "El Día de la Comuna Rosarina",
-    subtitle: "Luchas Obreras",
-    category: "LUCHAS OBRERAS",
+    id: 'parana-misterioso',
+    title: 'El Día de la Comuna Rosarina',
+    subtitle: 'Luchas Obreras',
+    category: 'LUCHAS OBRERAS',
     excerpt:
-      "1921: Obreros y estudiantes anarquistas toman el Palacio de los Leones. Una jornada revolucionaria que desafió al poder municipal de Rosario.",
-    image: "/huelga-anarquista-rosario.webp",
-    duration: "18 min",
-    layout: "wide",
+      '1921: Obreros y estudiantes anarquistas toman el Palacio de los Leones. Una jornada revolucionaria que desafió al poder municipal de Rosario.',
+    image: '/huelga-anarquista-rosario.webp',
+    duration: '18 min',
+    layout: 'small',
   },
   {
-    id: "mafia-rosarina",
-    title: "Guerra de Chichos",
-    subtitle: "Crimen Organizado",
-    category: "HISTORIA NEGRA",
+    id: 'mafia-rosarina',
+    title: 'Guerra de Chichos',
+    subtitle: 'Crimen Organizado',
+    category: 'HISTORIA NEGRA',
     excerpt:
-      "La disputa de poder entre Chicho Grande y Chicho Chico que marcó una era en la Chicago Argentina.",
-    image: "/guerra-de-chichos.webp",
-    duration: "20 min",
-    layout: "tall",
+      'La disputa de poder entre Chicho Grande y Chicho Chico que marcó una era en la Chicago Argentina.',
+    image: '/guerra-de-chichos.webp',
+    duration: '20 min',
+    layout: 'large',
+  },
+  {
+    id: 'campeon-rosarino',
+    title: 'Candidato a Maestro',
+    subtitle: 'Pase a los 2000 de elo',
+    category: 'HISTORIA NEGRA',
+    excerpt:
+      'La disputa entre Alan y un brazuca Candidato a Maestro, y el paso a 2000 de elo.',
+    image: '/equipo-ñuls.webp',
+    duration: '20 min',
+    layout: 'large',
+  },
+  {
+    id: 'el-trinche',
+    title: 'El trinche Carlovich',
+    subtitle: 'El inmortal doble caño',
+    category: 'HISTORIA NEGRA',
+    excerpt: 'Máximo exponente del arco lírico del fútbol argentino',
+    image: '/ferrocarril-central.webp',
+    duration: '20 min',
+    layout: 'large',
   },
 ];
 
@@ -90,7 +111,7 @@ const ChroniclesHub = () => {
 
       <section className="chronicles-grid">
         {chronicles.map((item) => {
-          const layoutClass = item.layout || "normal";
+          const layoutClass = item.layout || 'normal';
           return (
             <div key={item.id} className={`chronicle-card-item ${layoutClass}`}>
               {/* NUEVA UBICACIÓN: El texto ahora se renderiza arriba de la tarjeta */}
@@ -132,4 +153,3 @@ const ChroniclesHub = () => {
 };
 
 export default ChroniclesHub;
-
