@@ -8,7 +8,7 @@
   --transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
   min-height: 100vh;
   background-color: var(--dark);
-  padding: 160px 7% 100px;
+  padding: 160px 7% 50px;
   color: #fff;
   position: relative;
   overflow-x: hidden;
@@ -36,6 +36,20 @@
   text-decoration: none;
   z-index: 100;
   mix-blend-mode: difference;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity 0.4s ease,
+    visibility 0.4s ease;
+}
+
+.back-portal-btn.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .btn-line {
@@ -67,6 +81,13 @@
   background-color: #000000fa;
 }
 
+.archive-label,
+.hub-main-title,
+.hub-description {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
 .archive-label {
   font-family: 'Big Shoulders Display', sans-serif;
   letter-spacing: 0.8em;
@@ -75,7 +96,6 @@
   font-weight: bold;
   display: block;
   margin-bottom: 25px;
-  opacity: 0.8;
   text-align: center;
 }
 
@@ -304,9 +324,9 @@
 
 /* --- FOOTER DECORATIVO --- */
 .hub-footer-decoration {
-  margin-top: 180px;
+  margin-top: 100px;
   text-align: center;
-  padding-bottom: 80px;
+  padding-bottom: 50px;
 }
 
 .decor-line {
