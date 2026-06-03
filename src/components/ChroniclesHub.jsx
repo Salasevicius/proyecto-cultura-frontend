@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { gsap } from 'gsap';
 import './ChroniclesHub.css';
 
 const chronicles = [
@@ -23,7 +24,7 @@ const chronicles = [
       'Crónica inmersiva por los pasillos del barrio que nunca dormía bajo el imperio de la Zwi Migdal.',
     image: '/inmersivo-pichincha.webp',
     duration: '15 min',
-    layout: 'medium',
+    layout: 'xlarge',
   },
   {
     id: 'arquitectura-ferroviaria',
@@ -45,7 +46,7 @@ const chronicles = [
       '1921: Obreros y estudiantes anarquistas toman el Palacio de los Leones. Una jornada revolucionaria que desafió al poder municipal de Rosario.',
     image: '/huelga-anarquista-rosario.webp',
     duration: '18 min',
-    layout: 'small',
+    layout: 'large',
   },
   {
     id: 'mafia-rosarina',
@@ -56,7 +57,7 @@ const chronicles = [
       'La disputa de poder entre Chicho Grande y Chicho Chico que marcó una era en la Chicago Argentina.',
     image: '/guerra-de-chichos.webp',
     duration: '20 min',
-    layout: 'large',
+    layout: 'xlarge',
   },
   {
     id: 'campeon-rosarino',
@@ -67,7 +68,7 @@ const chronicles = [
       'La disputa entre Alan y un brazuca Candidato a Maestro, y el paso a 2000 de elo.',
     image: '/equipo-ñuls.webp',
     duration: '20 min',
-    layout: 'large',
+    layout: 'xlarge',
   },
   {
     id: 'el-trinche',
@@ -82,25 +83,109 @@ const chronicles = [
 ];
 
 const ChroniclesHub = () => {
+  const [isBtnVisible, setIsBtnVisible] = useState(false);
+
+  // Usamos Refs para persistir valores entre renders sin provocar re-renders
+  const lastScrollY = useRef(0);
+  const timeoutId = useRef(null);
+
+  // Creamos Refs para los elementos que vamos a animar
+  const archiveLabelRef = useRef(null);
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out', duration: 1 } });
+
+    tl.fromTo(
+      archiveLabelRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, delay: 0.2 }
+    )
+      .fromTo(
+        titleRef.current,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0 },
+        '-=0.7' // "Overlap": empieza 0.7 segundos antes de que termine la anterior para mayor fluidez
+      )
+      .fromTo(
+        descriptionRef.current,
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0 },
+        '-=0.6'
+      );
+
+    // Limpieza opcional de GSAP al desmontar para evitar animaciones huérfanas
+    return () => {
+      tl.kill();
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Margen de seguridad: No activar si estamos muy arriba (en el header)
+      if (currentScrollY < 150) {
+        setIsBtnVisible(false);
+        lastScrollY.current = currentScrollY;
+        return;
+      }
+
+      // Determinar dirección: ¿El usuario está scrolleando hacia arriba?
+      const isScrollingUp = currentScrollY < lastScrollY.current;
+
+      if (isScrollingUp) {
+        // Limpiamos cualquier temporizador previo para que no se oculte mientras siga subiendo
+        if (timeoutId.current) clearTimeout(timeoutId.current);
+
+        setIsBtnVisible(true);
+
+        // Setear el temporizador para ocultarlo después de 2.5 segundos de inactividad
+        timeoutId.current = setTimeout(() => {
+          setIsBtnVisible(false);
+        }, 2500);
+      } else {
+        // Si empieza a bajar de nuevo, lo ocultamos inmediatamente
+        setIsBtnVisible(false);
+        if (timeoutId.current) clearTimeout(timeoutId.current);
+      }
+
+      // Actualizamos la posición del scroll en la Ref
+      lastScrollY.current = currentScrollY;
+    };
+
+    // Escuchamos el evento de scroll nativo
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Limpieza imperativa de trinchera (Evita memory leaks y timers huérfanos)
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (timeoutId.current) clearTimeout(timeoutId.current);
+    };
   }, []);
 
   return (
     <main className="chronicles-hub-container">
       {/* Botón Volver - Respetando tu ruta al Portal */}
-      <Link to="/" className="back-portal-btn">
+      <Link
+        to="/"
+        className={`back-portal-btn ${isBtnVisible ? 'is-visible' : ''}`}
+      >
         <span className="btn-line"></span>
         <span className="btn-text">VOLVER AL PORTAL</span>
       </Link>
 
       <header className="hub-intro">
-        <span className="archive-label">ARCHIVO DE LA CIUDAD INVISIBLE</span>
-        <h1 className="hub-main-title">
+        <span className="archive-label" ref={archiveLabelRef}>
+          ARCHIVO DE LA CIUDAD INVISIBLE
+        </span>
+        <h1 className="hub-main-title" ref={titleRef}>
           Crónicas <br />
           <span>Inmersivas</span>
         </h1>
-        <div className="hub-description">
+        <div className="hub-description" ref={descriptionRef}>
           <p>
             Experiencias narrativas diseñadas para ser habitadas. Relatos donde
             el <strong>rigor histórico</strong> converge con la tecnología
