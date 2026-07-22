@@ -14,51 +14,112 @@ export default function TimelineMobile({ onOpenHito }) {
       const cards = gsap.utils.toArray('.mobile-hito-snap-card');
 
       cards.forEach((card, i) => {
-        // 1. Transición cromática de fondo existente
         const targetColor = i === 0 ? "#050507" : timelineData[i - 1]?.color;
 
+        // 1. Transición de color de fondo (Optimizada)
         ScrollTrigger.create({
           scroller: ".timeline-mobile-horizontal-scroll",
           trigger: card,
           horizontal: true,
-          start: "left 40%", 
-          end: "right 40%",
+          start: "left 50%", 
+          end: "right 50%",
           onToggle: (self) => {
             if (self.isActive && targetColor) {
               gsap.to('.mobile-bg-layer', {
                 backgroundColor: targetColor,
-                duration: 0.8,
-                ease: "power2.inOut",
+                duration: 0.4,
+                ease: "power1.out",
                 overwrite: "auto"
               });
             }
           }
         });
 
-        // 2. ANIMACIÓN DEL TRACEDO FLUVIAL SVG
+        // 2. Trazo SVG Animado (Optimizado sin scrub pesado)
         const path = card.querySelector('.river-path');
         if (path) {
           const pathLength = path.getTotalLength();
+          gsap.set(path, { strokeDasharray: pathLength, strokeDashoffset: pathLength });
 
-          // Estado inicial: Ocultar el trazo desplazando el offset al largo total
-          gsap.set(path, {
-            strokeDasharray: pathLength,
-            strokeDashoffset: pathLength,
-          });
-
-          // Animación acoplada al scroll horizontal (Scrub)
           gsap.to(path, {
             strokeDashoffset: 0,
-            ease: "none",
+            duration: 0.8,
+            ease: "power2.out",
+            force3D: true,
             scrollTrigger: {
               scroller: ".timeline-mobile-horizontal-scroll",
               trigger: card,
               horizontal: true,
-              start: "left 85%",
-              end: "right 15%",
-              scrub: 1, // Suavizado fluido mientras se desliza
+              start: "left 80%",
+              toggleActions: "play none none reverse"
             }
           });
+        }
+
+        // 3. Aparición de elementos (Disparo único en lugar de scrub)
+        if (i > 0) {
+          const visual = card.querySelector('.mobile-visual');
+          const textBlock = card.querySelector('.mobile-text');
+          const dateBlob = card.querySelector('.mobile-date-blob');
+
+          if (visual) {
+            gsap.fromTo(visual,
+              { opacity: 0, scale: 0.95 },
+              {
+                opacity: 1,
+                scale: 1,
+                duration: 0.5,
+                ease: "power2.out",
+                force3D: true,
+                scrollTrigger: {
+                  scroller: ".timeline-mobile-horizontal-scroll",
+                  trigger: card,
+                  horizontal: true,
+                  start: "left 75%",
+                  toggleActions: "play none none reverse"
+                }
+              }
+            );
+          }
+
+          if (textBlock) {
+            gsap.fromTo(textBlock,
+              { opacity: 0, y: 15 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.5,
+                delay: 0.1,
+                ease: "power2.out",
+                force3D: true,
+                scrollTrigger: {
+                  scroller: ".timeline-mobile-horizontal-scroll",
+                  trigger: card,
+                  horizontal: true,
+                  start: "left 70%",
+                  toggleActions: "play none none reverse"
+                }
+              }
+            );
+          }
+
+          if (dateBlob) {
+            gsap.fromTo(dateBlob,
+              { opacity: 0.1 },
+              {
+                opacity: 0.8,
+                duration: 0.6,
+                ease: "power1.out",
+                scrollTrigger: {
+                  scroller: ".timeline-mobile-horizontal-scroll",
+                  trigger: card,
+                  horizontal: true,
+                  start: "left 85%",
+                  toggleActions: "play none none reverse"
+                }
+              }
+            );
+          }
         }
       });
     }, containerRef);
@@ -71,8 +132,6 @@ export default function TimelineMobile({ onOpenHito }) {
       <div className="mobile-bg-layer"></div>
 
       <div className="timeline-mobile-horizontal-scroll">
-        
-        {/* Intro Móvil */}
         <div className="mobile-hito-snap-card mobile-intro-center">
           <span className="eyebrow">Crónica de Rosario</span>
           <h2 className="title">Línea del Tiempo</h2>
@@ -81,28 +140,37 @@ export default function TimelineMobile({ onOpenHito }) {
           </div>
         </div>
 
-        {/* Tarjetas de Hito */}
         {timelineData.map((hito, i) => (
           <article key={i} className="mobile-hito-snap-card">
-            
-            {/* 1. Monolito del Año */}
             <div className="mobile-date-blob">{hito.year}</div>
 
-            {/* 2. Guía fluvial SVG más lineal y atenuada */}
-<div className="river-svg-track">
-  <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path 
-      className="river-path"
-      /* Trazado con ondas muy suaves (desviación de apenas 3-4% en Y) */
-      d="M 0,50 Q 25,47 50,50 T 100,48" 
-      fill="none" 
-      stroke="rgba(226, 180, 100, 0.45)" 
-      strokeWidth="1.2" 
-    />
-  </svg>
-</div>
+            <div className="river-svg-track">
+              <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <defs>
+                  <marker
+                    id="river-arrow"
+                    viewBox="0 0 10 10"
+                    refX="6"
+                    refY="5"
+                    markerWidth="4"
+                    markerHeight="4"
+                    orient="auto-start-reverse"
+                  >
+                    <path d="M 0 1 L 8 5 L 0 9 z" fill="rgba(226, 180, 100, 0.85)" />
+                  </marker>
+                </defs>
 
-            {/* 3. Contenido de la Tarjeta */}
+                <path 
+                  className="river-path"
+                  d="M 0,50 Q 25,47 50,50 T 100,48" 
+                  fill="none" 
+                  stroke="rgba(226, 180, 100, 0.45)" 
+                  strokeWidth="1.2" 
+                  markerEnd="url(#river-arrow)"
+                />
+              </svg>
+            </div>
+
             <div className="mobile-card-inner">
               <div className="mobile-visual">
                 <LazyImage src={hito.img} alt={hito.title} />
@@ -117,17 +185,14 @@ export default function TimelineMobile({ onOpenHito }) {
                 </button>
               </div>
             </div>
-
           </article>
         ))}
 
-        {/* Cierre Móvil */}
         <div className="mobile-hito-snap-card mobile-intro-center">
           <p className="font-serif text-2xl" style={{ color: 'var(--gold-primary)' }}>
             El hilo de la historia continúa...
           </p>
         </div>
-
       </div>
     </div>
   );

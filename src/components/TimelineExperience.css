@@ -721,7 +721,7 @@ body {
   /* ---- AÑO MONUMENTAL AL PIE DE LA IMAGEN ---- */
   .mobile-date-blob {
     position: absolute;
-    top: 58%;
+    top: 48%;
     right: 20px;
     transform: translateY(-50%);
     font-family: var(--font-serif);
@@ -745,7 +745,7 @@ body {
   position: absolute;
   top: 38%;
   left: 0;
-  width: 100%;
+  width: 80%;
   height: 30%;
   z-index: 2;
   pointer-events: none;
@@ -754,7 +754,20 @@ body {
 .river-path {
   will-change: stroke-dashoffset;
   /* Brillo dorado opcional para reforzar el estilo cinemático */
-  filter: drop-shadow(0px 0px 4px rgba(226, 180, 100, 0.4));
+}
+/* 2. Indicar al navegador qué capas promover a aceleración por GPU */
+.mobile-hito-snap-card,
+.mobile-visual,
+.mobile-text,
+.mobile-date-blob {
+  will-change: transform, opacity;
+  transform: translateZ(0); /* Promueve a capa compite por GPU */
+}
+
+/* 3. Desplazamiento fluido nativo */
+.timeline-mobile-horizontal-scroll {
+  -webkit-overflow-scrolling: touch; /* Scroll inercial suave en iOS */
+  scroll-behavior: smooth;
 }
 
   /* ---- ESTRUCTURA DE CONTENIDO EDITORIAL CONTINUO ---- */
