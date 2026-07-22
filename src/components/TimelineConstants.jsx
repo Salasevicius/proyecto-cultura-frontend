@@ -182,7 +182,7 @@ export const timelineData = [
   { 
     year: "1884", 
     title: "La Gran Inmigración", 
-    desc: "Llegan los primeros grandes contingentes de italianos y españoles, transformando el tejido social y cultural. Si bien es cierto que en esta época llegan otros contigentes de diversas nacionalidades...", 
+    desc: "Llegan los primeros grandes contingentes de italianos y españoles, transformando el tejido social y cultural.", 
     img: "/gran-inmigracion.webp", 
     tag: "Social",
     color: "#38234e",

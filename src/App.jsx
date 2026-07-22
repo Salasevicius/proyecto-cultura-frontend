@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -10,12 +10,13 @@ import Pagination from './components/Pagination';
 import Footer from './components/Footer';
 import ArticleDetail from './components/ArticleDetail';
 import ArticleSlider from './components/ArticleSlider';
-import SpecialSections from './components/SpecialSections'; 
-import TimelineExperience from './components/TimelineExperience'; 
-import CulturaPreloader from './components/CulturaPreloader'; 
+import SpecialSections from './components/SpecialSections';
+import TimelineExperience from './components/TimelineExperience';
+import CulturaPreloader from './components/CulturaPreloader';
+import ScrollToTop from './components/ScrollToTop';
 import './components/ArticleSlider.css';
 import ScrollDotNav from './components/ScrollDotNav';
-import ChroniclesHub from './components/ChroniclesHub'; // Importa el nuevo componente
+import ChroniclesHub from './components/ChroniclesHub';
 import './styles/index.css';
 import { API_URL } from './config';
 import SkeletonCard from './components/SkeletonCard';
@@ -29,7 +30,7 @@ gsap.registerPlugin(ScrollTrigger);
 function AppContent() {
   const [noticias, setNoticias] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [preloaderActive, setPreloaderActive] = useState(true); 
+  const [preloaderActive, setPreloaderActive] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
   const [userName, setUserName] = useState(localStorage.getItem('userName') || '');
   const [showLogin, setShowLogin] = useState(false);
@@ -37,22 +38,27 @@ function AppContent() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [articleToEdit, setArticleToEdit] = useState(null);
-  const [globalScroll, setGlobalScroll] = useState(0);
 
   const location = useLocation();
-  
-  // Detectar si estamos en una crónica para ocultar UI global
+  const mainRef = useRef(null);
+
+  // Detectar si estamos en una experiencia inmersiva para ocultar Navbar/Footer
   const isInmersiveRoute = location.pathname.startsWith('/cronica/');
-  location.pathname === '/cronicas-hub';
 
   useEffect(() => {
     const handleScroll = () => {
+      const scrollY = window.scrollY;
       if (window.innerWidth > 768) {
-        setGlobalScroll(window.scrollY);
+        if (mainRef.current) {
+          mainRef.current.style.setProperty('--global-scroll', `${scrollY}px`);
+        }
       } else {
-        setGlobalScroll(0);
+        if (mainRef.current) {
+          mainRef.current.style.setProperty('--global-scroll', '0px');
+        }
       }
     };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -63,31 +69,55 @@ function AppContent() {
     { id: 'anchor-especiales', label: 'Especiales' },
   ];
 
-  const fetchData = async () => {
-    setLoading(true); 
+  const fetchData = useCallback(async () => {
+    setLoading(true);
     try {
       const queryParams = new URLSearchParams(location.search);
       const category = queryParams.get('category');
       const search = queryParams.get('search');
       const apiParams = new URLSearchParams();
       let url = `${API_URL}/api/articles`;
+      
       if (category) apiParams.append('category', category);
       if (search) apiParams.append('search', search);
       if (apiParams.toString()) url += `?${apiParams.toString()}`;
+      
       const response = await fetch(url);
       const result = await response.json();
-      if (result.success) setNoticias(result.data); 
+      if (result.success) setNoticias(result.data);
     } catch (error) {
       console.error("Error al cargar noticias:", error);
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchData();
   }, [location.search]);
 
+  useEffect(() => {
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const queryParams = new URLSearchParams(location.search);
+      const category = queryParams.get('category');
+      const search = queryParams.get('search');
+      const apiParams = new URLSearchParams();
+      let url = `${API_URL}/api/articles`;
+      
+      if (category) apiParams.append('category', category);
+      if (search) apiParams.append('search', search);
+      if (apiParams.toString()) url += `?${apiParams.toString()}`;
+      
+      const response = await fetch(url);
+      const result = await response.json();
+      if (result.success) setNoticias(result.data);
+    } catch (err) {
+      console.error("Error al cargar noticias:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchData();
+}, [location.search]);
   const handlePreloaderComplete = () => {
     setPreloaderActive(false);
     setTimeout(() => { ScrollTrigger.refresh(); }, 200);
@@ -123,7 +153,7 @@ function AppContent() {
               <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
             </header>
           )}
-          
+
           <Routes>
             <Route path="/" element={
               <>
@@ -138,11 +168,11 @@ function AppContent() {
                     onRegisterClick={() => openAuthModal(true)}
                     onLogout={handleLogout}
                     onCreateClick={() => setShowCreateModal(true)}
-                    isFiltered={location.search.length > 0} 
+                    isFiltered={location.search.length > 0}
                   />
                 </div>
 
-                <main style={{ position: 'relative', overflow: 'visible', '--global-scroll': `${globalScroll}px` }}>
+                <main ref={mainRef} style={{ position: 'relative', overflow: 'visible' }}>
                   {loading && !location.search && <SkeletonCard type="featured" />}
                   {!location.search && !loading && noticias.length > 0 && (
                     <FeaturedArticle noticia={noticias[0]} noticiasSecundarias={noticias.slice(1, 5)} />
@@ -150,8 +180,8 @@ function AppContent() {
 
                   <div id="anchor-articulos" style={{ position: 'absolute', top: location.search ? '-100px' : '-200px', height: '1px', width: '100%', pointerEvents: 'none' }}></div>
 
-                  <ArticleSlider 
-                    noticias={location.search ? noticias : noticias.slice(1)} 
+                  <ArticleSlider
+                    noticias={location.search ? noticias : noticias.slice(1)}
                     loading={loading}
                     isLoggedIn={isLoggedIn}
                     fetchData={fetchData}
@@ -170,7 +200,6 @@ function AppContent() {
 
             {/* RUTAS INDEPENDIENTES */}
             <Route path="/cronologia" element={<TimelineExperience />} />
-            {/* RUTA DEL HUB DE CRÓNICAS */}
             <Route path="/cronicas-hub" element={<ChroniclesHub />} />
             <Route path="/cronica/enzo-bordabehere" element={<EnzoBordabehereArticle />} />
             <Route path="/articulo/:id" element={<ArticleDetail />} />
@@ -178,17 +207,17 @@ function AppContent() {
 
           {/* FOOTER CONDICIONAL */}
           {!isInmersiveRoute && (
-            <Footer 
-              isLoggedIn={isLoggedIn} 
-              onLoginClick={() => openAuthModal(false)} 
-              onRegisterClick={() => openAuthModal(true)} 
-              onCreateClick={() => setShowCreateModal(true)} 
+            <Footer
+              isLoggedIn={isLoggedIn}
+              onLoginClick={() => openAuthModal(false)}
+              onRegisterClick={() => openAuthModal(true)}
+              onCreateClick={() => setShowCreateModal(true)}
             />
           )}
         </div>
       )}
 
-      {/* MODALES (Permanecen igual) */}
+      {/* MODALES */}
       {showLogin && (
         <AuthModal
           initialRegister={isRegisterMode}
@@ -201,7 +230,13 @@ function AppContent() {
         />
       )}
       {showCreateModal && <CreateArticleModal onClose={() => setShowCreateModal(false)} onSuccess={fetchData} />}
-      {showEditModal && articleToEdit && <EditArticleModal noticia={articleToEdit} onClose={() => { setShowEditModal(false); setArticleToEdit(null); }} onSuccess={fetchData} />}
+      {showEditModal && articleToEdit && (
+        <EditArticleModal 
+          noticia={articleToEdit} 
+          onClose={() => { setShowEditModal(false); setArticleToEdit(null); }} 
+          onSuccess={fetchData} 
+        />
+      )}
     </>
   );
 }
@@ -209,20 +244,19 @@ function AppContent() {
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <AppContent />
     </Router>
   );
 }
 
-/* --- Los componentes internos de soporte (AuthModal, CreateArticleModal, EditArticleModal) se mantienen idénticos abajo --- */
+/* --- COMPONENTES DE SOPORTE --- */
 
 function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
   const [isRegister, setIsRegister] = useState(initialRegister);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  
-  // Nuevo estado para la visibilidad de la contraseña
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -253,9 +287,11 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
       } else {
         alert("Error: " + (result.error || "Verifica los datos"));
       }
-    } catch (error) {
-      alert("No se pudo conectar con el servidor");
-    }
+      } catch (err) {
+  console.error("Auth error:", err);
+  alert("No se pudo conectar con el servidor");
+}
+    
   };
 
   return (
@@ -264,41 +300,41 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
         <h3>{isRegister ? 'Crear Cuenta' : 'Iniciar Sesión'}</h3>
         <form onSubmit={handleSubmit}>
           {isRegister && (
-            <input 
-              type="text" 
-              placeholder="Nombre de usuario" 
-              value={username} 
-              onChange={(e) => setUsername(e.target.value)} 
-              required 
+            <input
+              type="text"
+              placeholder="Nombre de usuario"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
             />
           )}
-          <input 
-            type="email" 
-            placeholder="Email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-            required 
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
-          
+
           <div style={{ position: 'relative', width: '100%' }}>
-            <input 
-              type={showPassword ? "text" : "password"} 
-              placeholder="Contraseña" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              required 
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               style={{
                 position: 'absolute',
-                right: '-10px',
-                top: '40%',
+                right: '12px',
+                top: '50%',
                 transform: 'translateY(-50%)',
                 background: 'none',
                 border: 'none',
-                color: '#e2b464', // Tu dorado principal
+                color: '#e2b464',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -306,7 +342,7 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
                 opacity: 0.8
               }}
             >
-              {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
 
@@ -325,38 +361,39 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
 
 function CreateArticleModal({ onClose, onSuccess }) {
   const [formData, setFormData] = useState({
-    title: '', 
-    author: '', 
-    description: '', 
-    content: '', 
-    category: 'Destacados', 
+    title: '',
+    author: '',
+    description: '',
+    content: '',
+    category: 'Destacados',
     imageUrl: ''
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-    
+
     try {
       const response = await fetch(`${API_URL}/api/articles`, {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${token}` 
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(formData) 
+        body: JSON.stringify(formData)
       });
       const result = await response.json();
       if (result.success) {
         alert("¡Artículo publicado!");
         onSuccess();
         onClose();
-      } else { 
-        alert("Error al publicar: " + (result.error?.message || "Verifica los datos")); 
+      } else {
+        alert("Error al publicar: " + (result.error?.message || "Verifica los datos"));
       }
-    } catch (error) { 
-      alert("Error de conexión con el servidor"); 
-    }
+    } catch (err) {
+  console.error("Create article error:", err);
+  alert("Error de conexión con el servidor");
+}
   };
 
   return (
@@ -366,50 +403,50 @@ function CreateArticleModal({ onClose, onSuccess }) {
           <h3>Nueva Crónica Rosarina</h3>
           <button className="close-x" onClick={onClose}>×</button>
         </div>
-        
+
         <form onSubmit={handleSubmit} className="modern-editor-form">
-          <input 
-            type="text" 
+          <input
+            type="text"
             className="main-title-input"
-            placeholder="Título de la crónica..." 
+            placeholder="Título de la crónica..."
             value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })} 
-            required 
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            required
           />
 
-          <input 
-            type="text" 
+          <input
+            type="text"
             className="author-input-v2"
             style={{ width: '100%', marginBottom: '15px', padding: '10px', background: '#1a1a2e', border: '1px solid #e2b464', color: 'white', borderRadius: '4px' }}
-            placeholder="Nombre del autor..." 
+            placeholder="Nombre del autor..."
             value={formData.author}
-            onChange={(e) => setFormData({ ...formData, author: e.target.value })} 
-            required 
+            onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+            required
           />
 
           <div className="editor-grid">
             <div className="writing-zone">
-              <textarea 
-                className="desc-area-v2" 
-                placeholder="Copete o introducción breve..." 
+              <textarea
+                className="desc-area-v2"
+                placeholder="Copete o introducción breve..."
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })} 
-                required 
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                required
               />
-              <textarea 
-                className="content-area-v2" 
-                placeholder="Escribe aquí el cuerpo de la historia..." 
+              <textarea
+                className="content-area-v2"
+                placeholder="Escribe aquí el cuerpo de la historia..."
                 value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })} 
-                required 
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                required
               />
             </div>
 
             <div className="meta-zone">
               <div className="input-group">
                 <label>Categoría</label>
-                <select 
-                  value={formData.category} 
+                <select
+                  value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 >
                   <option value="Destacados">Destacados</option>
@@ -419,15 +456,15 @@ function CreateArticleModal({ onClose, onSuccess }) {
                   <option value="Opinión">Opinión</option>
                 </select>
               </div>
-              
+
               <div className="input-group">
                 <label>Ruta de Imagen</label>
-                <input 
-                  type="text" 
-                  placeholder="/ejemplo.webp" 
+                <input
+                  type="text"
+                  placeholder="/ejemplo.webp"
                   value={formData.imageUrl}
-                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} 
-                  required 
+                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                  required
                 />
               </div>
 
@@ -445,12 +482,12 @@ function CreateArticleModal({ onClose, onSuccess }) {
 
 function EditArticleModal({ noticia, onClose, onSuccess }) {
   const [formData, setFormData] = useState({
-    title: noticia.title, 
-    author: noticia.author || '', 
-    description: noticia.description, 
-    content: noticia.content, 
-    category: noticia.category, 
-    imageUrl: noticia.imageUrl
+    title: noticia?.title || '',
+    author: noticia?.author || '',
+    description: noticia?.description || '',
+    content: noticia?.content || '',
+    category: noticia?.category || 'Destacados',
+    imageUrl: noticia?.imageUrl || ''
   });
 
   const handleSubmit = async (e) => {
@@ -460,23 +497,24 @@ function EditArticleModal({ noticia, onClose, onSuccess }) {
     try {
       const response = await fetch(`${API_URL}/api/articles/${noticia._id}`, {
         method: 'PATCH',
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${token}` 
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(formData) 
+        body: JSON.stringify(formData)
       });
       const result = await response.json();
       if (result.success) {
         alert("¡Artículo actualizado!");
         onSuccess();
         onClose();
-      } else { 
-        alert("Error al actualizar: " + (result.error || "Intenta nuevamente")); 
+      } else {
+        alert("Error al actualizar: " + (result.error || "Intenta nuevamente"));
       }
-    } catch (error) { 
-      alert("Error de conexión"); 
-    }
+    } catch (err) {
+  console.error("Edit article error:", err);
+  alert("Error de conexión");
+}
   };
 
   return (
@@ -486,49 +524,49 @@ function EditArticleModal({ noticia, onClose, onSuccess }) {
           <h3>Editando Crónica</h3>
           <button className="close-x" onClick={onClose}>×</button>
         </div>
-        
+
         <form onSubmit={handleSubmit} className="modern-editor-form">
-          <input 
-            type="text" 
+          <input
+            type="text"
             className="main-title-input"
-            placeholder="Título de la crónica..." 
+            placeholder="Título de la crónica..."
             value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })} 
-            required 
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            required
           />
 
-          <input 
-            type="text" 
-            className="author-input-v2" 
-            placeholder="Nombre del autor..." 
+          <input
+            type="text"
+            className="author-input-v2"
+            placeholder="Nombre del autor..."
             value={formData.author}
-            onChange={(e) => setFormData({ ...formData, author: e.target.value })} 
-            required 
+            onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+            required
           />
 
           <div className="editor-grid">
             <div className="writing-zone">
-              <textarea 
-                className="desc-area-v2" 
-                placeholder="Copete o introducción breve..." 
+              <textarea
+                className="desc-area-v2"
+                placeholder="Copete o introducción breve..."
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })} 
-                required 
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                required
               />
-              <textarea 
-                className="content-area-v2" 
-                placeholder="Escribe aquí el cuerpo de la historia..." 
+              <textarea
+                className="content-area-v2"
+                placeholder="Escribe aquí el cuerpo de la historia..."
                 value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })} 
-                required 
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                required
               />
             </div>
 
             <div className="meta-zone">
               <div className="input-group">
                 <label>Categoría</label>
-                <select 
-                  value={formData.category} 
+                <select
+                  value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 >
                   <option value="Destacados">Destacados</option>
@@ -538,15 +576,15 @@ function EditArticleModal({ noticia, onClose, onSuccess }) {
                   <option value="Opinión">Opinión</option>
                 </select>
               </div>
-              
+
               <div className="input-group">
                 <label>Ruta de Imagen</label>
-                <input 
-                  type="text" 
-                  placeholder="/ejemplo.webp" 
+                <input
+                  type="text"
+                  placeholder="/ejemplo.webp"
                   value={formData.imageUrl}
-                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })} 
-                  required 
+                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                  required
                 />
               </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import TimelineDesktop from './TimelineDesktop';
 import TimelineMobile from './TimelineMobile';
 import './TimelineExperience.css';
@@ -6,6 +6,9 @@ import './TimelineExperience.css';
 export default function TimelineExperience() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
   const [selectedHito, setSelectedHito] = useState(null);
+  
+  // Referencia para ajustar el scroll sobre el contenedor principal
+  const experienceRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 1024);
@@ -13,12 +16,20 @@ export default function TimelineExperience() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Encuadre inicial al montar el componente
+  useEffect(() => {
+    if (experienceRef.current) {
+      // Ajuste suave alineado al inicio del contenedor
+      experienceRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, []);
+
   const handleCloseDrawer = () => {
     setSelectedHito(null);
   };
 
   return (
-    <div className="experience-container">
+    <div ref={experienceRef} className="experience-container">
       {/* Selector dinámico de viewport basado en breakpoints unificados */}
       {isMobile ? (
         <TimelineMobile onOpenHito={setSelectedHito} />
