@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import ArticlesView from './components/ArticlesView';
+import EncyclopediaHome from './components/EncyclopediaHome';
 import Navbar from './components/Navbar';
 import CreatorCTA from './components/CreatorCTA';
 import HeaderHero from './components/HeaderHero';
@@ -44,6 +46,8 @@ function AppContent() {
 
   // Detectar si estamos en una experiencia inmersiva para ocultar Navbar/Footer
   const isInmersiveRoute = location.pathname.startsWith('/cronica/');
+  const isHomeRoute = location.pathname === '/';
+const hideNavbar = isInmersiveRoute || isHomeRoute;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -148,57 +152,50 @@ function AppContent() {
       {!preloaderActive && (
         <div className="fade-in-site">
           {/* HEADER CONDICIONAL */}
-          {!isInmersiveRoute && (
-            <header>
-              <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-            </header>
-          )}
+          {/* HEADER CONDICIONAL */}
+{!hideNavbar && (
+  <header>
+    <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+  </header>
+)}
 
-          <Routes>
-            <Route path="/" element={
-              <>
-                <ScrollDotNav sections={sections} />
-                <div style={{ position: 'relative' }}>
-                  <div id="anchor-top" style={{ position: 'absolute', top: 0, height: '1px', width: '100%', pointerEvents: 'none' }}></div>
-                  <HeaderHero />
-                  <CreatorCTA
-                    isLoggedIn={isLoggedIn}
-                    userName={userName}
-                    onLoginClick={() => openAuthModal(false)}
-                    onRegisterClick={() => openAuthModal(true)}
-                    onLogout={handleLogout}
-                    onCreateClick={() => setShowCreateModal(true)}
-                    isFiltered={location.search.length > 0}
-                  />
-                </div>
+         <Routes>
 
-                <main ref={mainRef} style={{ position: 'relative', overflow: 'visible' }}>
-                  {loading && !location.search && <SkeletonCard type="featured" />}
-                  {!location.search && !loading && noticias.length > 0 && (
-                    <FeaturedArticle noticia={noticias[0]} noticiasSecundarias={noticias.slice(1, 5)} />
-                  )}
+          <Route path="/" element={
+  <EncyclopediaHome 
+    noticias={noticias}
+    loading={loading}
+    isLoggedIn={isLoggedIn}
+    userName={userName}
+    openAuthModal={openAuthModal}
+    handleLogout={handleLogout}
+    setShowCreateModal={setShowCreateModal}
+    fetchData={fetchData}
+    handleEditClick={handleEditClick}
+    locationSearch={location.search}
+    mainRef={mainRef}
+  />
+} />
 
-                  <div id="anchor-articulos" style={{ position: 'absolute', top: location.search ? '-100px' : '-200px', height: '1px', width: '100%', pointerEvents: 'none' }}></div>
-
-                  <ArticleSlider
-                    noticias={location.search ? noticias : noticias.slice(1)}
-                    loading={loading}
-                    isLoggedIn={isLoggedIn}
-                    fetchData={fetchData}
-                    handleEditClick={handleEditClick}
-                  />
-
-                  {!location.search && (
-                    <div id="anchor-especiales" style={{ position: 'relative' }}>
-                      <SpecialSections />
-                    </div>
-                  )}
-                  {!loading && <Pagination />}
-                </main>
-              </>
+            {/* 2. SUBPORTADA DE ARTÍCULOS Y PRENSA (Lo que antes estaba en la raíz) */}
+            <Route path="/articulos" element={
+              <ArticlesView
+                noticias={noticias}
+                loading={loading}
+                isLoggedIn={isLoggedIn}
+                userName={userName}
+                openAuthModal={openAuthModal}
+                handleLogout={handleLogout}
+                setShowCreateModal={setShowCreateModal}
+                fetchData={fetchData}
+                handleEditClick={handleEditClick}
+                locationSearch={location.search}
+                mainRef={mainRef}
+                sections={sections}
+              />
             } />
 
-            {/* RUTAS INDEPENDIENTES */}
+            {/* RUTAS INDEPENDIENTES (Sin cambios) */}
             <Route path="/cronologia" element={<TimelineExperience />} />
             <Route path="/cronicas-hub" element={<ChroniclesHub />} />
             <Route path="/cronica/enzo-bordabehere" element={<EnzoBordabehereArticle />} />

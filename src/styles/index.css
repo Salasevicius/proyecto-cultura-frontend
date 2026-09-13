@@ -416,80 +416,140 @@ nav .logo:hover::before {
   z-index: 1;
 }
 
-/* --- ESTILOS PARA LA SECCION DE CREADORES --- */
+/* --- SECCIÓN CREADORES (ESTILO NEOCLÁSICO / CINEMÁTICO) --- */
 .creator-cta-section {
-  background-color: #1a1a2e;
-  padding: 1px 0; 
-  padding-bottom: 50px;
-  border-bottom: none; 
+  background: linear-gradient(180deg, rgba(10, 14, 23, 0.95) 0%, #0d111a 100%);
+  padding: 1.3rem 0 3rem 0;
+  border-top: 5px solid rgba(226, 180, 100, 0.2); /* Sutil divisor de coronación */
+  border-bottom: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10; 
-  transition: padding-bottom 0.6s ease; /* Transición para suavizar el cambio */
+  z-index: 10;
+  position: relative;
+  transition: padding-bottom 0.6s ease;
 }
 
-/* MEJORA: Expansión de fondo en categorías para permitir solapamiento */
+/* Expansión de fondo en categorías para solapamiento */
 .creator-cta-section.is-filtered-cta {
-  padding-bottom: 150px; /* Expandimos el color hacia abajo */
+  padding-bottom: 150px;
 }
 
 .creator-cta-container {
   width: 90%;
   max-width: 1200px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 50x;
+  gap: 2rem;
+}
+
+/* TEXTOS Y TIPOGRAFÍA */
+.creator-cta-text {
+  flex: 1;
+  min-width: 300px;
 }
 
 .creator-cta-text h3 {
-  color: #ffffff;
-  margin: 0;
-  font-size: 1.5rem;
+  color: #e2b464;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: 1px;
   text-transform: uppercase;
-  font-weight: bold;
+  margin: 0 0 0.4rem 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .creator-cta-text p {
-  color: #c8c8c8;
-  margin-top: 2px;
-  font-size: 1.15rem;
-  font-weight: bold;
-  text-align: center;
+  color: #c5c8d0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0;
+  text-align: left; /* Alineado a la izquierda para mejor lectura en desktop */
 }
 
-.btn-creator-login, .btn-create-news, .btn-creator-logout, .btn-creator-register {
-  flex: 1;
-  color: #e2b464;
-  border: 3px solid rgb(226, 180, 100);
-  background: transparent;
-  padding: 8px 12px; /* Padding vertical consistente */
-  border-radius: 25px; /* Un poco más redondeados para suavizar el set */
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  text-align: center; /* Centrado perfecto del texto */
+/* CAPA DE ACCIÓN Y BOTONES */
+.creator-cta-action {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 40px;
+  gap: 1.2rem;
+  flex-wrap: wrap;
 }
 
-.btn-creator-login:hover, .btn-create-news:hover, .btn-creator-logout:hover, .btn-creator-register:hover {
-  background: rgba(226, 180, 100, 0.1);
-  transform: scale(1.05);;
+.btn-creator-login, 
+.btn-create-news, 
+.btn-creator-logout, 
+.btn-creator-register {
+  color: #e2b464;
+  background: rgba(15, 20, 30, 0.6);
+  border: 1px solid rgba(226, 180, 100, 0.5);
+  padding: 10px 22px;
+  border-radius: 25px;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  margin-bottom: 0; /* Eliminado el margen inferior para alineación fluida */
+}
+
+/* BOTÓN SECUNDARIO (Registrarse / Cerrar Sesión) CON MATIZ DIFERENCIADO */
+.btn-creator-register,
+.btn-creator-logout {
+  color: #c5c8d0;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* HOVER EFFECTS */
+.btn-creator-login:hover, 
+.btn-create-news:hover {
+  background: rgba(226, 180, 100, 0.15);
+  border-color: #e2b464;
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(226, 180, 100, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-creator-register:hover,
+.btn-creator-logout:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(226, 180, 100, 0.4);
+  color: #e2b464;
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {
   .creator-cta-container {
     flex-direction: column;
     text-align: center;
+    gap: 1.5rem;
+  }
+  .creator-cta-text p {
+    text-align: center;
+  }
+
+  .creator-cta-action {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .btn-creator-login, 
+  .btn-create-news, 
+  .btn-creator-logout, 
+  .btn-creator-register {
+    width: 100%;
   }
 }
 
@@ -1266,6 +1326,50 @@ a.button:hover {
 }
 
 @media (max-width: 768px) {
+
+.creator-cta-section {
+    padding: 2rem 1rem; /* Asegura espacio de resguardo a los costados */
+    box-sizing: border-box;
+  }
+  .creator-cta-container {
+    width: 100%;
+    max-width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1.5rem;
+    box-sizing: border-box;
+  }
+
+  .creator-cta-text p {
+    text-align: center;
+  }
+
+  /* Capa contenedora de los botones */
+  .creator-cta-action {
+    width: 100%;
+    max-width: 320px; /* Ancho máximo contenedor para los botones */
+    flex-direction: column;
+    align-items: stretch; /* Permite que los botones tengan el mismo ancho */
+    justify-content: center;
+    margin: 0 auto;
+    gap: 0.8rem;
+    box-sizing: border-box;
+  }
+
+  /* Ajuste a botones en móviles */
+  .btn-creator-login, 
+  .btn-create-news, 
+  .btn-creator-logout, 
+  .btn-creator-register {
+    width: 100%;
+    white-space: normal; /* Permite salto de línea si la pantalla es muy angosta */
+    padding: 10px 16px;
+    box-sizing: border-box;
+    margin: 0;
+  }
+
   nav ul {
     flex-direction: column;
     align-items: center;
@@ -1307,11 +1411,11 @@ a.button:hover {
   }
 
   .btn-creator-login {
-    margin-left: 75px;
+    margin-left: 0px;
   }
 
   .btn-creator-register {
-    margin-left: 44px;
+    margin-left: 0px;
   }
   .h2negronaranjanegro {
     font-size: 3.2rem;
