@@ -214,8 +214,8 @@
 
 .orbital-ring-outer {
   position: absolute;
-  width: 546px;
-  height: 546px;
+  width: 500px;
+  height:500px;
   border: 1px dashed rgba(226, 180, 100, 0.25);
   border-radius: 50%;
   pointer-events: none;
