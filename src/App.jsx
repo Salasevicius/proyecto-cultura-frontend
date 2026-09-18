@@ -24,6 +24,9 @@ import { API_URL } from './config';
 import SkeletonCard from './components/SkeletonCard';
 import { Eye, EyeOff } from 'lucide-react';
 
+// IMPORTACIÓN DE LA SALA TEMÁTICA (ARTE Y CULTURA)
+import ThematicRoom from './components/ThematicRoom/ThematicRoom';
+
 // IMPORTACIÓN DE LA CRÓNICA
 import EnzoBordabehereArticle from './components/EnzoBordabehereArticle';
 
@@ -44,10 +47,11 @@ function AppContent() {
   const location = useLocation();
   const mainRef = useRef(null);
 
-  // Detectar si estamos en una experiencia inmersiva para ocultar Navbar/Footer
+  // Detectar si estamos en una experiencia inmersiva o sala temática para ocultar Navbar
   const isInmersiveRoute = location.pathname.startsWith('/cronica/');
+  const isThematicRoomRoute = location.pathname.startsWith('/temas/');
   const isHomeRoute = location.pathname === '/';
-const hideNavbar = isInmersiveRoute || isHomeRoute;
+  const hideNavbar = isInmersiveRoute || isHomeRoute || isThematicRoomRoute;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -97,31 +101,32 @@ const hideNavbar = isInmersiveRoute || isHomeRoute;
   }, [location.search]);
 
   useEffect(() => {
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const queryParams = new URLSearchParams(location.search);
-      const category = queryParams.get('category');
-      const search = queryParams.get('search');
-      const apiParams = new URLSearchParams();
-      let url = `${API_URL}/api/articles`;
-      
-      if (category) apiParams.append('category', category);
-      if (search) apiParams.append('search', search);
-      if (apiParams.toString()) url += `?${apiParams.toString()}`;
-      
-      const response = await fetch(url);
-      const result = await response.json();
-      if (result.success) setNoticias(result.data);
-    } catch (err) {
-      console.error("Error al cargar noticias:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const queryParams = new URLSearchParams(location.search);
+        const category = queryParams.get('category');
+        const search = queryParams.get('search');
+        const apiParams = new URLSearchParams();
+        let url = `${API_URL}/api/articles`;
+        
+        if (category) apiParams.append('category', category);
+        if (search) apiParams.append('search', search);
+        if (apiParams.toString()) url += `?${apiParams.toString()}`;
+        
+        const response = await fetch(url);
+        const result = await response.json();
+        if (result.success) setNoticias(result.data);
+      } catch (err) {
+        console.error("Error al cargar noticias:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchData();
-}, [location.search]);
+    fetchData();
+  }, [location.search]);
+
   const handlePreloaderComplete = () => {
     setPreloaderActive(false);
     setTimeout(() => { ScrollTrigger.refresh(); }, 200);
@@ -152,30 +157,33 @@ const hideNavbar = isInmersiveRoute || isHomeRoute;
       {!preloaderActive && (
         <div className="fade-in-site">
           {/* HEADER CONDICIONAL */}
-          {/* HEADER CONDICIONAL */}
-{!hideNavbar && (
-  <header>
-    <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-  </header>
-)}
+          {!hideNavbar && (
+            <header>
+              <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+            </header>
+          )}
 
-         <Routes>
+          <Routes>
+            <Route path="/" element={
+              <EncyclopediaHome 
+                noticias={noticias}
+                loading={loading}
+                isLoggedIn={isLoggedIn}
+                userName={userName}
+                openAuthModal={openAuthModal}
+                handleLogout={handleLogout}
+                setShowCreateModal={setShowCreateModal}
+                fetchData={fetchData}
+                handleEditClick={handleEditClick}
+                locationSearch={location.search}
+                mainRef={mainRef}
+              />
+            } />
 
-          <Route path="/" element={
-  <EncyclopediaHome 
-    noticias={noticias}
-    loading={loading}
-    isLoggedIn={isLoggedIn}
-    userName={userName}
-    openAuthModal={openAuthModal}
-    handleLogout={handleLogout}
-    setShowCreateModal={setShowCreateModal}
-    fetchData={fetchData}
-    handleEditClick={handleEditClick}
-    locationSearch={location.search}
-    mainRef={mainRef}
-  />
-} />
+            {/* RUTA DE SALAS TEMÁTICAS (ARTE Y CULTURA Y FUTURAS SUBPÁGINAS) */}
+            <Route path="/temas/:slug" element={
+              <ThematicRoom noticias={noticias} loading={loading} />
+            } />
 
             {/* 2. SUBPORTADA DE ARTÍCULOS Y PRENSA (Lo que antes estaba en la raíz) */}
             <Route path="/articulos" element={
@@ -284,11 +292,10 @@ function AuthModal({ onClose, onLoginSuccess, initialRegister }) {
       } else {
         alert("Error: " + (result.error || "Verifica los datos"));
       }
-      } catch (err) {
-  console.error("Auth error:", err);
-  alert("No se pudo conectar con el servidor");
-}
-    
+    } catch (err) {
+      console.error("Auth error:", err);
+      alert("No se pudo conectar con el servidor");
+    }
   };
 
   return (
@@ -388,9 +395,9 @@ function CreateArticleModal({ onClose, onSuccess }) {
         alert("Error al publicar: " + (result.error?.message || "Verifica los datos"));
       }
     } catch (err) {
-  console.error("Create article error:", err);
-  alert("Error de conexión con el servidor");
-}
+      console.error("Create article error:", err);
+      alert("Error de conexión con el servidor");
+    }
   };
 
   return (
@@ -509,9 +516,9 @@ function EditArticleModal({ noticia, onClose, onSuccess }) {
         alert("Error al actualizar: " + (result.error || "Intenta nuevamente"));
       }
     } catch (err) {
-  console.error("Edit article error:", err);
-  alert("Error de conexión");
-}
+      console.error("Edit article error:", err);
+      alert("Error de conexión");
+    }
   };
 
   return (

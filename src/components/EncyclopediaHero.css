@@ -325,7 +325,7 @@
   font-size: 0.74rem;
   font-weight: 600;
   color: #c5c9d3;
-  margin-top: 6px;
+  margin-top: 12px;
   white-space: nowrap;
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
@@ -486,7 +486,7 @@
     width: 100%;
     box-sizing: border-box;
     /* FONDO CON LEVE OSCURIDAD Y CRISTAL CINEMÁTICO */
-  background: rgb(8, 9, 12); /* Negro/Azul noche al 45% de opacidad */
+  background: rgba(8, 9, 12, 0.353); /* Negro/Azul noche al 45% de opacidad */
   backdrop-filter: blur(2px);       /* Desenfoca suavemente la foto de fondo que pasa por detrás */
   -webkit-backdrop-filter: blur(8px); /* Soporte para Safari */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.346);
@@ -576,14 +576,74 @@
   }
   @media (max-width: 900px) {
   .orbital-info-panel-vertical {
+    margin-top: 6rem;
     position: relative;
     z-index: 20; /* Asegura prioridad táctil sobre los elementos de fondo */
   }
+  /* SYSTEM AMPLIADO (+5%) */
+
 
   .panel-action-btn {
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     padding: 0.9rem 1.4rem; /* Tap target óptimo para dedos */
+  }
+}
+/* ==========================================================================
+   OPTIMIZACIÓN VERTICAL Y ANTI-DESBORDE PARA MÓVILES (Max 768px)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Contenedor principal del hero un poco más ajustado en altura */
+  .orbital-hero-section {
+    min-height: auto !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  /* Layout principal sin gaps excesivos */
+  .orbital-main-layout {
+    padding: 0.5rem 1rem !important;
+    gap: 1rem !important;
+  }
+
+  .orbital-system-large {
+    width: 330px !important;
+    height: 350px !important; /* Altura compacta para que no estire de más la página */
+    margin: 0 auto !important;
+  }
+  
+
+  .orbital-ring-outer {
+    width: 280px !important;
+    height: 280px !important;
+  }
+
+  .orbital-ring-inner {
+    width: 190px !important;
+    height: 190px !important;
+  }
+
+  /* Radio equilibrado de 140px para que los botones tengan espacio sin desbordar el ancho */
+  .node-orbital-item {
+    transform: translate(calc(140px * cos(var(--angle))), calc(150px * sin(var(--angle)))) !important;
+  }
+
+  /* Control absoluto del Info Panel para evitar que baje demasiado */
+  .orbital-info-panel-vertical {
+    margin-top: 1rem !important; /* Margen controlado para que fluya de inmediato */
+    position: relative;
+    z-index: 20;
+  }
+
+  /* Compactamos sutilmente la tarjeta del panel en móvil para que no sea tan alta */
+  .panel-body-content {
+    padding: 0.5rem !important;
+  }
+
+  .panel-description {
+    font-size: 0.78rem !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.4 !important;
   }
 }
 }
